@@ -1,4 +1,7 @@
 <template name="monitor">
   <h2>Monitoring</h2>
+  {{#each projects}}
+  <p>{{ this.name }}</p>
+  {{/each}}
   <a href="/method">Method</a>
 </template>
