@@ -1,7 +1,23 @@
 <template name="monitor">
-  <h2>Monitoring</h2>
-  {{#each arrayify myobject}}
-  	<p>{{name}}</p>
-  {{/each}}
-  <a href="/method">Method</a>
+  	<h2>Monitoring</h2>
+  	{{#each arrayify alphas}}
+	  	<div>
+	  		<input class="accordionitem" type="radio" />
+	  		<label class="alphas" id="{{this.name}}">{{this.name}}</label>
+	  		 
+	  			<article class="{{this.name}}">
+	  				<ul>
+		  				{{#each arrayify this.value.states}}
+		  					<li class="states" id="{{this.name}}" name="{{this.name}}">{{this.name}}</li>
+		  					<ul>
+		  						{{#each this.value.checklists}}
+		  							<li>{{this}}</li>
+		  						{{/each}}
+		  					</ul>
+		  				{{/each}}
+		  			</ul>
+		  		</article>
+		</div>
+	{{/each}}
+  	<a href="/method">Method</a>
 </template>
