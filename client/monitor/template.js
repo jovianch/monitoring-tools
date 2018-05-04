@@ -14,7 +14,10 @@ Meteor.subscribe('Projects');
 Template.monitor.helpers({
 	alphas : function() {
 		return Projects.findOne().alphas
-	}
+	},
+    activities : function() {
+        return Projects.findOne().activityspaces
+    }
 });
 
 Template.registerHelper('arrayify',function(obj){
@@ -38,8 +41,21 @@ Template.monitor.events({
     	var fields = {}
     	var appendString = "alphas.Opportunity.states." + states + ".result";
     	fields[appendString] = "true";
+        var appendString = "alphas.Opportunity.states." + states + ".timestamp";
+        fields[appendString] = new Date();
     	console.log(appendString);
-    	Projects.update({_id:"CyctMixX7iiThhNvW"}, {$set : fields});
+    	Projects.update({_id:"iwjTMn3i67J4Tn6yK"}, {$set : fields});
+    },
+    'click .activities': function(event) {
+        Session.set('activity', event.currentTarget.id);
+        var activity = Session.get('activity');
+        var completionCriteria = activity + ".completioncriteria";
+        var project = Projects.findOne();
+        var completionCriteria = project.activityspaces.ExplorePossibilities['completioncriteria'];
+        completionCriteria.forEach(function(entry) {
+            var streetaddress = entry.split('::')[1]; //o sbelum, 1 sesudah
+            console.log(streetaddress);
+        });
     }
 
 });

@@ -1,18 +1,18 @@
 import { Meteor } from 'meteor/meteor';
 
 Meteor.startup(() => {
-    // Meteor.call('removeAllProject');
+ //    Meteor.call('removeAllProject');
 
-    // var data = JSON.parse(Assets.getText("SCRUM.json"));
+ //    var data = JSON.parse(Assets.getText("SCRUM_2.json"));
 
-    // data.forEach(function (item, index, array) {
-    //     Projects.insert(item);
-    // })
+ //    data.forEach(function (item, index, array) {
+ //        Projects.insert(item);
+ //    })
 	// Meteor.call('newProject');
 });
 
 Meteor.publish('Projects', function () {
-	return Projects.find({_id:"CyctMixX7iiThhNvW"});
+	return Projects.find({_id:"iwjTMn3i67J4Tn6yK"});
 });
 
 // Meteor.publish('Alphas', function () {
