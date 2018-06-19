@@ -8,6 +8,7 @@
 	  		 
 	  			<article class="{{this.name}}">
 	  				<ul>
+	  					<input id="alphas" type="hidden" name="alphas" value="{{this.name}}">
 		  				{{#each arrayify this.value.states}}
 		  					<li class="states" id="{{this.name}}" name="{{this.name}}">{{this.name}}</li>
 		  					<ul>
@@ -24,12 +25,13 @@
 	{{#each arrayify activities}}
 	  	<div>
 	  		<input class="accordionitem" type="radio" />
-	  		<label class="activities" id="{{this.name}}">{{this.name}}</label>
+	  		<label class="activity_spaces" id="{{this.name}}">{{this.name}}</label>
 	  		 
 	  			<article class="{{this.name}}">
 	  				<ul>
+	  					<input id="activity_spaces" type="hidden" name="activity_spaces" value="{{this.name}}">
 		  				{{#each this.value.activities}}
-		  					<li class="activity" id="{{this.name}}" name="{{this.name}}">{{this.name}}</li>
+		  					<li class="activities" id="{{this.name}}" name="{{this.name}}">{{this.name}}</li>
 		  				{{/each}}
 		  			</ul>
 		  		</article>
