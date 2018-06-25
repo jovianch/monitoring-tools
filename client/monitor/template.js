@@ -131,17 +131,28 @@ Template.monitor.events({
 
 });
 
-function asArray(obj){
-    var result = [];
-    for (var key in obj){
-        if (obj[key].hasOwnProperty('order'))
-            result.push({name:key,value:obj[key],order:obj[key].order});
-        else
-            result.push({name:key,value:obj[key]});
-    }
+Meteor.startup(function () {
 
-    if (result != null && result[0].hasOwnProperty('order'))
-            return result.sort(function(a,b) { return parseFloat(a.order) - parseFloat(b.order) } );
-        else
-            return result;
-    }
+    chart = {
+      target: 'chart1',
+      type: 'BarChart',
+      columns: [
+        ['string', 'Topping'],
+        ['number', 'Slices']
+      ],
+      rows: [
+        ['Mushrooms', 3],
+        ['Onions', 1],
+        ['Olives', 1],
+        ['Zucchini', 1],
+        ['Pepperoni', 2]
+      ],
+      options: {
+        'title':'How Much Pizza I Ate Last Night',
+        'width':400,
+        'height':300
+      }
+    };
+
+    drawChart(chart);
+});
