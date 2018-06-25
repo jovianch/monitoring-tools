@@ -17,7 +17,8 @@ Template.monitor.helpers({
 		return Projects.findOne({_id:id}).alphas
 	},
     activities : function() {
-        return Projects.findOne().activityspaces
+        var id = Session.get('project');
+        return Projects.findOne({_id:id}).activityspaces
     }
 });
 
@@ -30,6 +31,30 @@ Template.registerHelper('arrayify',function(obj){
 Template.monitor.events({
 	'click': function(){
         console.log("You clicked something");
+    },
+    'click .bar': function(event) {
+        var columns = [
+        ['string', 'Alphas'],
+        ['number', 'Progress'],
+        ];
+
+        var data = [
+        ['Opportunity', 1],
+        ['Stakeholders', 2]
+        ];
+        chart = {
+      target: 'chart1',
+      type: 'BarChart',
+      columns: columns,
+      rows: data,
+      options: {
+        'title':'How Much Pizza I Ate Last Night',
+        'width':400,
+        'height':300
+      }
+    };
+
+    drawChart(chart);
     },
     'click .alphas': function(event) {
     	Session.set('states', event.currentTarget.id);
@@ -130,30 +155,4 @@ Template.monitor.events({
         Projects.update({_id:"bNkP9pQLQTvocamnS"}, {$set : fields});
     }
 
-});
-
-Meteor.startup(function () {
-
-    chart = {
-      target: 'chart1',
-      type: 'BarChart',
-      columns: [
-        ['string', 'Topping'],
-        ['number', 'Slices']
-      ],
-      rows: [
-        ['Mushrooms', 3],
-        ['Onions', 1],
-        ['Olives', 1],
-        ['Zucchini', 1],
-        ['Pepperoni', 2]
-      ],
-      options: {
-        'title':'How Much Pizza I Ate Last Night',
-        'width':400,
-        'height':300
-      }
-    };
-
-    drawChart(chart);
 });

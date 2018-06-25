@@ -20,6 +20,12 @@ Meteor.startup(() => {
     // data.forEach(function (item, index, array) {
     //     Projects.insert(item);
     // })
+
+    // var data = JSON.parse(Assets.getText("SCRUM_6.json"));
+
+    // data.forEach(function (item, index, array) {
+    //     Projects.insert(item);
+    // })
 	// Meteor.call('newProject');
 });
 
