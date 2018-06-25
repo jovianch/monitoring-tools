@@ -13,7 +13,8 @@ Meteor.subscribe('Projects');
 
 Template.monitor.helpers({
 	alphas : function() {
-		return Projects.findOne().alphas
+        var id = Session.get('project');
+		return Projects.findOne({_id:id}).alphas
 	},
     activities : function() {
         return Projects.findOne().activityspaces

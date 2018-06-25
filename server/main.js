@@ -3,7 +3,19 @@ import { Meteor } from 'meteor/meteor';
 Meteor.startup(() => {
     // Meteor.call('removeAllProject');
 
-    // var data = JSON.parse(Assets.getText("SCRUM_3.json"));
+    // var data = JSON.parse(Assets.getText("SCRUM.json"));
+
+    // data.forEach(function (item, index, array) {
+    //     Projects.insert(item);
+    // })
+
+    //  var data = JSON.parse(Assets.getText("SCRUM_2.json"));
+
+    // data.forEach(function (item, index, array) {
+    //     Projects.insert(item);
+    // })
+
+    //  var data = JSON.parse(Assets.getText("SCRUM_3.json"));
 
     // data.forEach(function (item, index, array) {
     //     Projects.insert(item);
@@ -12,12 +24,12 @@ Meteor.startup(() => {
 });
 
 Meteor.publish('Projects', function () {
-	return Projects.find({_id:"bNkP9pQLQTvocamnS"});
+	// return Projects.find({_id:"bNkP9pQLQTvocamnS"});
 });
 
-// Meteor.publish('Alphas', function () {
-//     return Projects.findOne().alphas;
-// });
+Meteor.publish('AllProject', function () {
+    return Projects.find({});
+});
 
 newProject = function() {
     var alphasClient = {
