@@ -28,6 +28,12 @@ Template.registerHelper('arrayify',function(obj){
     return result;
 });
 
+function arrayify(obj) {
+    var result = [];
+    for (var key in obj) result.push({name:key,value:obj[key]});
+    return result;
+}
+
 Template.monitor.events({
 	'click': function(){
         console.log("You clicked something");
@@ -38,8 +44,65 @@ Template.monitor.events({
         ['number', 'Progress'],
         ];
 
+        //get data from database for every alphas
+        var id = Session.get('project');
+        var alphas = Projects.findOne({_id:id}).alphas;
+        var arr_alphas = arrayify(alphas);
+        // console.log(arr_alphas)
+        var total_alpha_customer = 0;
+        var total_alpha_solution = 0;
+        var total_alpha_endeavor = 0;
+        var total_states_customer = 0;
+        var total_states_solution = 0;
+        var total_states_endeavor = 0;
+        var alpha_customer = [];
+        var alpha_solution = [];
+        var alpha_endeavor = [];
+        arr_alphas.forEach(function(alpha) {
+            console.log(alpha.value.concern)
+            if (alpha.value.concern == "Customer") {
+                var alpha_states = arrayify(alpha.value.states)
+                var total_states = alpha_states.length;
+                total_states_customer = total_states_customer + total_states;
+                total_alpha_customer = total_alpha_customer + 1;
+                // console.log(total_customer);
+                alpha_customer.push(alpha);
+            } else if (alpha.value.concern == "Solution") {
+                var alpha_states = arrayify(alpha.value.states)
+                var total_states = alpha_states.length;
+                total_states_solution = total_states_solution + total_states;
+                total_alpha_solution = total_alpha_customer + 1;
+                alpha_solution.push(alpha);
+            } else if (alpha.value.concern == "Endeavor") {
+                var alpha_states = arrayify(alpha.value.states)
+                var total_states = alpha_states.length;
+                total_states_endeavor = total_states_endeavor + total_states;
+                total_alpha_endeavor = total_alpha_endeavor + 1;
+                alpha_endeavor.push(alpha);
+            }
+        });
+        
+        var id_customer = 0;
+        var latest_customer = 0;
+        var flag_customer = false;
+        for (var i = 0; i < total_alpha_customer; i++) {
+            var arr_states = arrayify(alpha_customer[i].value.states);
+            console.log(arr_states);
+            for (var j = 0; j < arr_states.length; j++) {
+                console.log(arr_states[j]);
+                if (arr_states[j].value.result == "true") {
+                    flag_customer = true;
+                    id_customer = latest_customer + j + 1;
+                }
+
+                if (j == arr_states.length - 1) {
+                    latest_customer = latest_customer + arr_states.length;
+                }
+            }
+        }
+
         var data = [
-        ['Opportunity', 1],
+        ['Customer', id_customer/total_states_customer],
         ['Stakeholders', 2]
         ];
         chart = {
@@ -63,16 +126,17 @@ Template.monitor.events({
     },
     'click .states': function(event) {
     	Session.set('states', event.currentTarget.id);
-        var alphas = document.getElementById('alphas').value;
-        console.log(alphas);
     	var states = Session.get('states');
+        var string_alphas = 'alpha' + states;
+        var alphas = document.getElementById(string_alphas).value;
     	var fields = {}
     	var appendString = "alphas." + alphas + ".states." + states + ".result";
     	fields[appendString] = "true";
         var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
         fields[appendString] = new Date();
-    	// console.log(fields);
-    	Projects.update({_id:"bNkP9pQLQTvocamnS"}, {$set : fields});
+        console.log(fields)
+        var id = Session.get('project')
+    	Projects.update({_id:id}, {$set : fields});
     },
     'click .activity_spaces': function(event) {
         Session.set('activity', event.currentTarget.id);

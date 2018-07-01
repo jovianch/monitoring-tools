@@ -13,9 +13,9 @@
 	  		 
 	  			<article class="{{this.name}}">
 	  				<ul>
-	  					<input id="alphas" type="hidden" name="alphas" value="{{this.name}}">
 		  				{{#each arrayify this.value.states}}
 		  					<li class="states" id="{{this.name}}" name="{{this.name}}">{{this.name}}</li>
+		  					<input id="alpha{{this.name}}" type="hidden" name="alphas" value="{{this.value.alpha}}">
 		  					<ul>
 		  						{{#each this.value.checklists}}
 		  							<li>{{this}}</li>
@@ -44,4 +44,8 @@
 	{{/each}}
 
   	<a href="/method">Method</a>
+
+  	<script>
+  		document.getElementById("mytext").value = "My value";
+  	</script>
 </template>
