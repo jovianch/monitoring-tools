@@ -17,8 +17,8 @@
 		  					<li class="states" id="{{this.name}}" name="{{this.name}}">{{this.name}}</li>
 		  					<input id="alpha{{this.name}}" type="hidden" name="alphas" value="{{this.value.alpha}}">
 		  					<ul>
-		  						{{#each this.value.checklists}}
-		  							<li>{{this}}</li>
+		  						{{#each arrayify this.value.checklists}}
+		  							<li class="checklists" id="{{this.name}}" name="{{this.name}}" value="{{this.value.name}}">{{this.value.name}}</li>
 		  						{{/each}}
 		  					</ul>
 		  				{{/each}}
@@ -34,8 +34,8 @@
 	  		 
 	  			<article class="{{this.name}}">
 	  				<ul>
-	  					<input id="activity_spaces" type="hidden" name="activity_spaces" value="{{this.name}}">
 		  				{{#each this.value.activities}}
+		  					<input id="activity_spaces{{this.name}}" type="hidden" name="activity_spaces" value="{{this.name}}">
 		  					<li class="activities" id="{{this.name}}" name="{{this.name}}">{{this.name}}</li>
 		  				{{/each}}
 		  			</ul>

@@ -34,12 +34,8 @@ function arrayify(obj) {
     return result;
 }
 
-Template.monitor.events({
-	'click': function(){
-        console.log("You clicked something");
-    },
-    'click .bar': function(event) {
-        var columns = [
+function drawAlpha() {
+     var columns = [
         ['string', 'Alphas'],
         ['number', 'Progress'],
         ];
@@ -59,7 +55,6 @@ Template.monitor.events({
         var alpha_solution = [];
         var alpha_endeavor = [];
         arr_alphas.forEach(function(alpha) {
-            console.log(alpha.value.concern)
             if (alpha.value.concern == "Customer") {
                 var alpha_states = arrayify(alpha.value.states)
                 var total_states = alpha_states.length;
@@ -71,7 +66,7 @@ Template.monitor.events({
                 var alpha_states = arrayify(alpha.value.states)
                 var total_states = alpha_states.length;
                 total_states_solution = total_states_solution + total_states;
-                total_alpha_solution = total_alpha_customer + 1;
+                total_alpha_solution = total_alpha_solution+ 1;
                 alpha_solution.push(alpha);
             } else if (alpha.value.concern == "Endeavor") {
                 var alpha_states = arrayify(alpha.value.states)
@@ -87,9 +82,7 @@ Template.monitor.events({
         var flag_customer = false;
         for (var i = 0; i < total_alpha_customer; i++) {
             var arr_states = arrayify(alpha_customer[i].value.states);
-            console.log(arr_states);
             for (var j = 0; j < arr_states.length; j++) {
-                console.log(arr_states[j]);
                 if (arr_states[j].value.result == "true") {
                     flag_customer = true;
                     id_customer = latest_customer + j + 1;
@@ -101,9 +94,47 @@ Template.monitor.events({
             }
         }
 
+        var id_solution = 0;
+        var latest_solution = 0;
+        var flag_solution = false;
+        // console.log(alpha_solution);
+        for (var i = 0; i < total_alpha_solution; i++) {
+            var arr_states = arrayify(alpha_solution[i].value.states);
+            for (var j = 0; j < arr_states.length; j++) {
+                if (arr_states[j].value.result == "true") {
+                    flag_solution = true;
+                    id_solution = latest_solution + j + 1;
+                }
+
+                if (j == arr_states.length - 1) {
+                    latest_solution = latest_solution + arr_states.length;
+                }
+            }
+        }
+
+        var id_endeavor = 0;
+        var latest_endeavor = 0;
+        var flag_endeavor = false;
+        for (var i = 0; i < total_alpha_endeavor; i++) {
+            var arr_states = arrayify(alpha_endeavor[i].value.states);
+            for (var j = 0; j < arr_states.length; j++) {
+                if (arr_states[j].value.result == "true") {
+                    flag_endeavor = true;
+                    id_endeavor = latest_endeavor + j + 1;
+                }
+
+                if (j == arr_states.length - 1) {
+                    latest_endeavor = latest_endeavor + arr_states.length;
+                }
+            }
+        }
+        console.log(id_endeavor);
+
         var data = [
         ['Customer', id_customer/total_states_customer],
-        ['Stakeholders', 2]
+        ['Solution', id_solution/total_states_solution],
+        ['Endeavor', id_endeavor/total_states_endeavor]
+
         ];
         chart = {
       target: 'chart1',
@@ -111,13 +142,21 @@ Template.monitor.events({
       columns: columns,
       rows: data,
       options: {
-        'title':'How Much Pizza I Ate Last Night',
+        'title':'Progress per Alpha',
         'width':400,
         'height':300
       }
     };
 
     drawChart(chart);
+}
+
+Template.monitor.events({
+	'click': function(){
+        console.log("You clicked something");
+    },
+    'click .bar': function(event) {
+       drawAlpha();
     },
     'click .alphas': function(event) {
     	Session.set('states', event.currentTarget.id);
@@ -129,6 +168,7 @@ Template.monitor.events({
     	var states = Session.get('states');
         var string_alphas = 'alpha' + states;
         var alphas = document.getElementById(string_alphas).value;
+        alphas = alphas.replace(/\s/g,'');
     	var fields = {}
     	var appendString = "alphas." + alphas + ".states." + states + ".result";
     	fields[appendString] = "true";
@@ -137,6 +177,7 @@ Template.monitor.events({
         console.log(fields)
         var id = Session.get('project')
     	Projects.update({_id:id}, {$set : fields});
+        drawAlpha();
     },
     'click .activity_spaces': function(event) {
         Session.set('activity', event.currentTarget.id);
@@ -160,7 +201,8 @@ Template.monitor.events({
             var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
             fields[appendString] = new Date();
             console.log(fields);
-            Projects.update({_id:"bNkP9pQLQTvocamnS"}, {$set : fields});
+            var id = Session.get('project');
+            Projects.update({_id:id}, {$set : fields});
             // console.log(streetaddress);
         });
 
@@ -170,7 +212,8 @@ Template.monitor.events({
         fields[appendString] = "true";
         var appendString = "activityspaces." + activity + ".timestamp";
         fields[appendString] = new Date();
-        Projects.update({_id:"bNkP9pQLQTvocamnS"}, {$set : fields});
+        var id = Session.get('project');
+        Projects.update({_id:id}, {$set : fields});
     },
 
     //if click activities
