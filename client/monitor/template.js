@@ -220,21 +220,26 @@ Template.monitor.events({
     'click .activities': function(event) {
         Session.set('activity', event.currentTarget.id);
         var activity = Session.get('activity');
-        // console.log(activity);
-        var activity_spaces = "CoordinateActivity";
+        console.log(activity);
+        string_activity = 'activity_spaces' + activity;
+        var activity_spaces = document.getElementById(string_activity).value;
+        console.log(activity_spaces);
+        // var activity_spaces = "CoordinateActivity";
         // console.log(activity_spaces);
         // var completionCriteria = activity + ".completioncriteria";
-        var project = Projects.findOne();
+        var id = Session.get('project');
+        var project = Projects.findOne({_id:id});
         var activities = project.activityspaces[activity_spaces].activities;
+        console.log(activities);
         // console.log(activities.length);
-        var idx;
-        for (var i = 0; i < activities.length; i++) {
-            if (activities[i].name = "Daily Scrum") {
-                idx = i;
-            }
-        }
+        // var idx;
+        // for (var i = 0; i < activities.length; i++) {
+        //     if (activities[i].name = "Daily Scrum") {
+        //         idx = i;
+        //     }
+        // }
         // console.log(idx);
-        var completionCriteria = activities[idx].completioncriteria;
+        var completionCriteria = activities[activity].completioncriteria;
         // var completionCriteriaStr = 'project.activityspaces.' + activity + '.completioncriteria';
         // console.log(typeof(completionCriteriaStr));
         // var completionCriteria = JSON.parse(completionCriteriaStr);
@@ -249,17 +254,17 @@ Template.monitor.events({
             var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
             fields[appendString] = new Date();
             console.log(fields);
-            Projects.update({_id:"bNkP9pQLQTvocamnS"}, {$set : fields});
+            Projects.update({_id:id}, {$set : fields});
             // console.log(streetaddress);
         });
 
         //update activities -> ubah format
         var fields = {}
-        var appendString = "activityspaces.CoordinateActivity.activities[" + idx + "].result";
+        var appendString = "activityspaces.CoordinateActivity.activities." + activity + ".result";
         fields[appendString] = "true";
-        var appendString = "activityspaces.CoordinateActivity.activities[" + idx + "].timestamp";
+        var appendString = "activityspaces.CoordinateActivity.activities." + activity + ".timestamp";
         fields[appendString] = new Date();
-        Projects.update({_id:"bNkP9pQLQTvocamnS"}, {$set : fields});
+        Projects.update({_id:id}, {$set : fields});
     }
 
 });

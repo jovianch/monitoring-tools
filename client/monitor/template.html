@@ -34,9 +34,9 @@
 	  		 
 	  			<article class="{{this.name}}">
 	  				<ul>
-		  				{{#each this.value.activities}}
-		  					<input id="activity_spaces{{this.name}}" type="hidden" name="activity_spaces" value="{{this.name}}">
-		  					<li class="activities" id="{{this.name}}" name="{{this.name}}">{{this.name}}</li>
+		  				{{#each arrayify this.value.activities}}
+		  					<input id="activity_spaces{{this.name}}" type="hidden" name="activity_spaces" value="{{this.value.activity_space}}">
+		  					<li class="activities" id="{{this.name}}" name="{{this.name}}">{{this.value.name}}</li>
 		  				{{/each}}
 		  			</ul>
 		  		</article>
