@@ -28,19 +28,113 @@ Template.registerHelper('arrayify',function(obj){
     return result;
 });
 
-Template.monitor.events({
-	'click': function(){
-        console.log("You clicked something");
-    },
-    'click .bar': function(event) {
-        var columns = [
+function arrayify(obj) {
+    var result = [];
+    for (var key in obj) result.push({name:key,value:obj[key]});
+    return result;
+}
+
+function drawAlpha() {
+     var columns = [
         ['string', 'Alphas'],
         ['number', 'Progress'],
         ];
 
+        //get data from database for every alphas
+        var id = Session.get('project');
+        var alphas = Projects.findOne({_id:id}).alphas;
+        var arr_alphas = arrayify(alphas);
+        // console.log(arr_alphas)
+        var total_alpha_customer = 0;
+        var total_alpha_solution = 0;
+        var total_alpha_endeavor = 0;
+        var total_states_customer = 0;
+        var total_states_solution = 0;
+        var total_states_endeavor = 0;
+        var alpha_customer = [];
+        var alpha_solution = [];
+        var alpha_endeavor = [];
+        arr_alphas.forEach(function(alpha) {
+            if (alpha.value.concern == "Customer") {
+                var alpha_states = arrayify(alpha.value.states)
+                var total_states = alpha_states.length;
+                total_states_customer = total_states_customer + total_states;
+                total_alpha_customer = total_alpha_customer + 1;
+                // console.log(total_customer);
+                alpha_customer.push(alpha);
+            } else if (alpha.value.concern == "Solution") {
+                var alpha_states = arrayify(alpha.value.states)
+                var total_states = alpha_states.length;
+                total_states_solution = total_states_solution + total_states;
+                total_alpha_solution = total_alpha_solution+ 1;
+                alpha_solution.push(alpha);
+            } else if (alpha.value.concern == "Endeavor") {
+                var alpha_states = arrayify(alpha.value.states)
+                var total_states = alpha_states.length;
+                total_states_endeavor = total_states_endeavor + total_states;
+                total_alpha_endeavor = total_alpha_endeavor + 1;
+                alpha_endeavor.push(alpha);
+            }
+        });
+        
+        var id_customer = 0;
+        var latest_customer = 0;
+        var flag_customer = false;
+        for (var i = 0; i < total_alpha_customer; i++) {
+            var arr_states = arrayify(alpha_customer[i].value.states);
+            for (var j = 0; j < arr_states.length; j++) {
+                if (arr_states[j].value.result == "true") {
+                    flag_customer = true;
+                    id_customer = latest_customer + j + 1;
+                }
+
+                if (j == arr_states.length - 1) {
+                    latest_customer = latest_customer + arr_states.length;
+                }
+            }
+        }
+
+        var id_solution = 0;
+        var latest_solution = 0;
+        var flag_solution = false;
+        // console.log(alpha_solution);
+        for (var i = 0; i < total_alpha_solution; i++) {
+            var arr_states = arrayify(alpha_solution[i].value.states);
+            for (var j = 0; j < arr_states.length; j++) {
+                if (arr_states[j].value.result == "true") {
+                    flag_solution = true;
+                    id_solution = latest_solution + j + 1;
+                }
+
+                if (j == arr_states.length - 1) {
+                    latest_solution = latest_solution + arr_states.length;
+                }
+            }
+        }
+
+        var id_endeavor = 0;
+        var latest_endeavor = 0;
+        var flag_endeavor = false;
+        for (var i = 0; i < total_alpha_endeavor; i++) {
+            var arr_states = arrayify(alpha_endeavor[i].value.states);
+            for (var j = 0; j < arr_states.length; j++) {
+                if (arr_states[j].value.result == "true") {
+                    flag_endeavor = true;
+                    id_endeavor = latest_endeavor + j + 1;
+                }
+
+                if (j == arr_states.length - 1) {
+                    latest_endeavor = latest_endeavor + arr_states.length;
+                }
+            }
+        }
+        console.log(id_endeavor);
+
         var data = [
-        ['Opportunity', 1],
-        ['Stakeholders', 2]
+        ['Customer', id_customer/total_states_customer],
+        ['Solution', id_solution/total_states_solution],
+        ['Endeavor', id_endeavor/total_states_endeavor]
+
         ];
         chart = {
       target: 'chart1',
@@ -48,13 +142,141 @@ Template.monitor.events({
       columns: columns,
       rows: data,
       options: {
-        'title':'How Much Pizza I Ate Last Night',
+        'title':'Progress per Alpha',
         'width':400,
         'height':300
       }
     };
 
     drawChart(chart);
+}
+
+function drawActivity() {
+     var columns = [
+        ['string', 'Alphas'],
+        ['number', 'Progress'],
+        ];
+
+        //get data from database for every alphas
+        var id = Session.get('project');
+        var alphas = Projects.findOne({_id:id}).alphas;
+        var arr_alphas = arrayify(alphas);
+        // console.log(arr_alphas)
+        var total_alpha_customer = 0;
+        var total_alpha_solution = 0;
+        var total_alpha_endeavor = 0;
+        var total_states_customer = 0;
+        var total_states_solution = 0;
+        var total_states_endeavor = 0;
+        var alpha_customer = [];
+        var alpha_solution = [];
+        var alpha_endeavor = [];
+        arr_alphas.forEach(function(alpha) {
+            if (alpha.value.concern == "Customer") {
+                var alpha_states = arrayify(alpha.value.states)
+                var total_states = alpha_states.length;
+                total_states_customer = total_states_customer + total_states;
+                total_alpha_customer = total_alpha_customer + 1;
+                // console.log(total_customer);
+                alpha_customer.push(alpha);
+            } else if (alpha.value.concern == "Solution") {
+                var alpha_states = arrayify(alpha.value.states)
+                var total_states = alpha_states.length;
+                total_states_solution = total_states_solution + total_states;
+                total_alpha_solution = total_alpha_solution+ 1;
+                alpha_solution.push(alpha);
+            } else if (alpha.value.concern == "Endeavor") {
+                var alpha_states = arrayify(alpha.value.states)
+                var total_states = alpha_states.length;
+                total_states_endeavor = total_states_endeavor + total_states;
+                total_alpha_endeavor = total_alpha_endeavor + 1;
+                alpha_endeavor.push(alpha);
+            }
+        });
+        
+        var id_customer = 0;
+        var latest_customer = 0;
+        var flag_customer = false;
+        for (var i = 0; i < total_alpha_customer; i++) {
+            var arr_states = arrayify(alpha_customer[i].value.states);
+            for (var j = 0; j < arr_states.length; j++) {
+                if (arr_states[j].value.result == "true") {
+                    flag_customer = true;
+                    id_customer = latest_customer + j + 1;
+                }
+
+                if (j == arr_states.length - 1) {
+                    latest_customer = latest_customer + arr_states.length;
+                }
+            }
+        }
+
+        var id_solution = 0;
+        var latest_solution = 0;
+        var flag_solution = false;
+        // console.log(alpha_solution);
+        for (var i = 0; i < total_alpha_solution; i++) {
+            var arr_states = arrayify(alpha_solution[i].value.states);
+            for (var j = 0; j < arr_states.length; j++) {
+                if (arr_states[j].value.result == "true") {
+                    flag_solution = true;
+                    id_solution = latest_solution + j + 1;
+                }
+
+                if (j == arr_states.length - 1) {
+                    latest_solution = latest_solution + arr_states.length;
+                }
+            }
+        }
+
+        var id_endeavor = 0;
+        var latest_endeavor = 0;
+        var flag_endeavor = false;
+        for (var i = 0; i < total_alpha_endeavor; i++) {
+            var arr_states = arrayify(alpha_endeavor[i].value.states);
+            for (var j = 0; j < arr_states.length; j++) {
+                if (arr_states[j].value.result == "true") {
+                    flag_endeavor = true;
+                    id_endeavor = latest_endeavor + j + 1;
+                }
+
+                if (j == arr_states.length - 1) {
+                    latest_endeavor = latest_endeavor + arr_states.length;
+                }
+            }
+        }
+        console.log(id_endeavor);
+
+        var data = [
+        ['Customer', id_customer/total_states_customer],
+        ['Solution', id_solution/total_states_solution],
+        ['Endeavor', id_endeavor/total_states_endeavor]
+
+        ];
+        chart = {
+      target: 'chart2',
+      type: 'PieChart',
+      columns: columns,
+      rows: data,
+      options: {
+        'title':'Progress per Alpha',
+        'width':400,
+        'height':300
+      }
+    };
+
+    drawChart(chart);
+}
+
+Template.monitor.events({
+	'click': function(){
+        console.log("You clicked something");
+    },
+    'click .bar': function(event) {
+       drawAlpha();
+    },
+    'click .activity_bar': function(event) {
+       drawActivity();
     },
     'click .alphas': function(event) {
     	Session.set('states', event.currentTarget.id);
@@ -63,16 +285,20 @@ Template.monitor.events({
     },
     'click .states': function(event) {
     	Session.set('states', event.currentTarget.id);
-        var alphas = document.getElementById('alphas').value;
-        console.log(alphas);
     	var states = Session.get('states');
+        var string_alphas = 'alpha' + states;
+        var alphas = document.getElementById(string_alphas).value;
+        alphas = alphas.replace(/\s/g,'');
     	var fields = {}
     	var appendString = "alphas." + alphas + ".states." + states + ".result";
     	fields[appendString] = "true";
         var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
         fields[appendString] = new Date();
-    	// console.log(fields);
-    	Projects.update({_id:"bNkP9pQLQTvocamnS"}, {$set : fields});
+        console.log(fields)
+        var id = Session.get('project')
+    	Projects.update({_id:id}, {$set : fields});
+        drawAlpha();
+        drawActivity();
     },
     'click .activity_spaces': function(event) {
         Session.set('activity', event.currentTarget.id);
@@ -96,7 +322,8 @@ Template.monitor.events({
             var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
             fields[appendString] = new Date();
             console.log(fields);
-            Projects.update({_id:"bNkP9pQLQTvocamnS"}, {$set : fields});
+            var id = Session.get('project');
+            Projects.update({_id:id}, {$set : fields});
             // console.log(streetaddress);
         });
 
@@ -106,28 +333,37 @@ Template.monitor.events({
         fields[appendString] = "true";
         var appendString = "activityspaces." + activity + ".timestamp";
         fields[appendString] = new Date();
-        Projects.update({_id:"bNkP9pQLQTvocamnS"}, {$set : fields});
+        var id = Session.get('project');
+        Projects.update({_id:id}, {$set : fields});
+
+        drawAlpha();
+        drawActivity();
     },
 
     //if click activities
     'click .activities': function(event) {
         Session.set('activity', event.currentTarget.id);
         var activity = Session.get('activity');
-        // console.log(activity);
-        var activity_spaces = "CoordinateActivity";
+        console.log(activity);
+        string_activity = 'activity_spaces' + activity;
+        var activity_spaces = document.getElementById(string_activity).value;
+        console.log(activity_spaces);
+        // var activity_spaces = "CoordinateActivity";
         // console.log(activity_spaces);
         // var completionCriteria = activity + ".completioncriteria";
-        var project = Projects.findOne();
+        var id = Session.get('project');
+        var project = Projects.findOne({_id:id});
         var activities = project.activityspaces[activity_spaces].activities;
+        console.log(activities);
         // console.log(activities.length);
-        var idx;
-        for (var i = 0; i < activities.length; i++) {
-            if (activities[i].name = "Daily Scrum") {
-                idx = i;
-            }
-        }
+        // var idx;
+        // for (var i = 0; i < activities.length; i++) {
+        //     if (activities[i].name = "Daily Scrum") {
+        //         idx = i;
+        //     }
+        // }
         // console.log(idx);
-        var completionCriteria = activities[idx].completioncriteria;
+        var completionCriteria = activities[activity].completioncriteria;
         // var completionCriteriaStr = 'project.activityspaces.' + activity + '.completioncriteria';
         // console.log(typeof(completionCriteriaStr));
         // var completionCriteria = JSON.parse(completionCriteriaStr);
@@ -142,17 +378,30 @@ Template.monitor.events({
             var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
             fields[appendString] = new Date();
             console.log(fields);
-            Projects.update({_id:"bNkP9pQLQTvocamnS"}, {$set : fields});
+            Projects.update({_id:id}, {$set : fields});
             // console.log(streetaddress);
         });
 
         //update activities -> ubah format
         var fields = {}
-        var appendString = "activityspaces.CoordinateActivity.activities[" + idx + "].result";
+        var appendString = "activityspaces.CoordinateActivity.activities." + activity + ".result";
         fields[appendString] = "true";
-        var appendString = "activityspaces.CoordinateActivity.activities[" + idx + "].timestamp";
+        var appendString = "activityspaces.CoordinateActivity.activities." + activity + ".timestamp";
         fields[appendString] = new Date();
-        Projects.update({_id:"bNkP9pQLQTvocamnS"}, {$set : fields});
-    }
+        Projects.update({_id:id}, {$set : fields});
 
+        drawAlpha();
+        drawActivity();
+    },
+
+    // if click checklist
+    'click .checklists': function(event) {
+        Session.set('checklist', event.currentTarget.id);
+        var checklist = Session.get('checklist');
+        var id = Session.get('project');
+        var project = Projects.findOne({_id:id});
+
+        // var value = project.alphas.({}).states.({}).checklists[checklist];
+        // console.log(value);
+    }
 });
