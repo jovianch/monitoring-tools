@@ -30,6 +30,56 @@ Meteor.startup(() => {
     //     Projects.insert(item);
     // })
 
+    var dataText = Assets.getText("SCRUM.json");
+    dataText = dataText.replace(/\\n/g, "\\n"); 
+    dataText = dataText.replace(/\\'/g, "\\'");
+    dataText = dataText.replace(/\\"/g, '\\"');
+    dataText = dataText.replace(/\\&/g, "\\&");
+    dataText = dataText.replace(/\\r/g, "\\r");
+    dataText = dataText.replace(/\\t/g, "\\t");
+    dataText = dataText.replace(/\\b/g, "\\b");
+    dataText = dataText.replace(/\\f/g, "\\f");
+    // remove non-printable and other non-valid JSON chars
+    dataText = dataText.replace(/[\u0000-\u0019]+/g,""); 
+    // var dataText = Assets.getText('SCRUM_3.json').replace(/\n/g, "\\n");
+    // dataText = Assets.getText('SCRUM_3.json').replace(/\n/g, "\\r");
+    // dataText = Assets.getText('SCRUM_3.json').replace(/\n/g, "\\t");
+    // dataText = Assets.getText('SCRUM_3.json').replace(/\n/g, "\\f");
+    var data = JSON.parse(dataText);
+    // data = data.replace(/\n/g, "\\n");
+    // data = data.replace(/\r/g, "\\r");
+    // data = data.replace(/\t/g, "\\t");
+    // data = data.replace(/\f/g, "\\f");
+
+    data.forEach(function (item, index, array) {
+        Projects.insert(item);
+    })
+
+    var dataText = Assets.getText("SCRUM_2.json");
+    dataText = dataText.replace(/\\n/g, "\\n"); 
+    dataText = dataText.replace(/\\'/g, "\\'");
+    dataText = dataText.replace(/\\"/g, '\\"');
+    dataText = dataText.replace(/\\&/g, "\\&");
+    dataText = dataText.replace(/\\r/g, "\\r");
+    dataText = dataText.replace(/\\t/g, "\\t");
+    dataText = dataText.replace(/\\b/g, "\\b");
+    dataText = dataText.replace(/\\f/g, "\\f");
+    // remove non-printable and other non-valid JSON chars
+    dataText = dataText.replace(/[\u0000-\u0019]+/g,""); 
+    // var dataText = Assets.getText('SCRUM_3.json').replace(/\n/g, "\\n");
+    // dataText = Assets.getText('SCRUM_3.json').replace(/\n/g, "\\r");
+    // dataText = Assets.getText('SCRUM_3.json').replace(/\n/g, "\\t");
+    // dataText = Assets.getText('SCRUM_3.json').replace(/\n/g, "\\f");
+    var data = JSON.parse(dataText);
+    // data = data.replace(/\n/g, "\\n");
+    // data = data.replace(/\r/g, "\\r");
+    // data = data.replace(/\t/g, "\\t");
+    // data = data.replace(/\f/g, "\\f");
+
+    data.forEach(function (item, index, array) {
+        Projects.insert(item);
+    })
+
     var dataText = Assets.getText("SCRUM_3.json");
     dataText = dataText.replace(/\\n/g, "\\n"); 
     dataText = dataText.replace(/\\'/g, "\\'");
@@ -54,7 +104,7 @@ Meteor.startup(() => {
     data.forEach(function (item, index, array) {
         Projects.insert(item);
     })
-	Meteor.call('newProject');
+	// Meteor.call('newProject');
 });
 
 Meteor.publish('Projects', function () {

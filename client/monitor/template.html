@@ -1,9 +1,13 @@
 <template name="monitor">
   	<h2>Monitoring</h2>
 
-  	<h2>Chart 1 - Hello World</h2>
-  	<label class="bar">Show Bar</label>
+  	<h2>Progress Alpha</h2>
+  	<label class="bar">Show Alpha Bar</label>
   <div id="chart1" width="100%"></div>
+
+  <h2>Progress Activity</h2>
+  	<label class="activity_bar">Show Activity Bar</label>
+  <div id="chart2" width="100%"></div>
 
   	<h3>Alpha</h3>
   	{{#each arrayify alphas}}
@@ -44,8 +48,4 @@
 	{{/each}}
 
   	<a href="/method">Method</a>
-
-  	<script>
-  		document.getElementById("mytext").value = "My value";
-  	</script>
 </template>
