@@ -3,49 +3,12 @@
 
   	<h2>Progress Alpha</h2>
   	<label class="bar">Show Alpha Bar</label>
-  <div id="chart1" width="100%"></div>
+  	<div id="chart1" width="100%"></div>
 
-  <h2>Progress Activity</h2>
+  	<h2>Progress Activity</h2>
   	<label class="activity_bar">Show Activity Bar</label>
-  <div id="chart2" width="100%"></div>
-
-  	<h3>Alpha</h3>
-  	{{#each arrayify alphas}}
-	  	<div>
-	  		<input class="accordionitem" type="radio" />
-	  		<label class="alphas" id="{{this.name}}">{{this.name}}</label>
-	  		 
-	  			<article class="{{this.name}}">
-	  				<ul>
-		  				{{#each arrayify this.value.states}}
-		  					<li class="states" id="{{this.name}}" name="{{this.name}}">{{this.name}}</li>
-		  					<input id="alpha{{this.name}}" type="hidden" name="alphas" value="{{this.value.alpha}}">
-		  					<ul>
-		  						{{#each arrayify this.value.checklists}}
-		  							<li class="checklists" id="{{this.name}}" name="{{this.name}}" value="{{this.value.name}}">{{this.value.name}}</li>
-		  						{{/each}}
-		  					</ul>
-		  				{{/each}}
-		  			</ul>
-		  		</article>
-		</div>
-	{{/each}}
-	<h3>Activity</h3>
-	{{#each arrayify activities}}
-	  	<div>
-	  		<input class="accordionitem" type="radio" />
-	  		<label class="activity_spaces" id="{{this.name}}">{{this.name}}</label>
-	  		 
-	  			<article class="{{this.name}}">
-	  				<ul>
-		  				{{#each arrayify this.value.activities}}
-		  					<input id="activity_spaces{{this.name}}" type="hidden" name="activity_spaces" value="{{this.value.activity_space}}">
-		  					<li class="activities" id="{{this.name}}" name="{{this.name}}">{{this.value.name}}</li>
-		  				{{/each}}
-		  			</ul>
-		  		</article>
-		</div>
-	{{/each}}
+  	<div id="chart2" width="100%"></div>
 
   	<a href="/method">Method</a>
+  	<a href="/update">Update</a>
 </template>

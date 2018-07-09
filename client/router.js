@@ -11,3 +11,10 @@ FlowRouter.route('/method', {
     BlazeLayout.render('method', {});
   }
 });
+
+FlowRouter.route('/update', {
+  name: 'update',
+  action() {
+    BlazeLayout.render('update', {});
+  }
+});
