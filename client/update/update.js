@@ -63,8 +63,8 @@ Template.update.events({
         console.log(fields)
         var id = Session.get('project')
     	Projects.update({_id:id}, {$set : fields});
-        drawAlpha();
-        drawActivity();
+        // drawAlpha();
+        // drawActivity();
     },
     'click .activity_spaces': function(event) {
         Session.set('activity', event.currentTarget.id);
@@ -102,8 +102,8 @@ Template.update.events({
         var id = Session.get('project');
         Projects.update({_id:id}, {$set : fields});
 
-        drawAlpha();
-        drawActivity();
+        // drawAlpha();
+        // drawActivity();
     },
 
     //if click activities
@@ -156,8 +156,41 @@ Template.update.events({
         fields[appendString] = new Date();
         Projects.update({_id:id}, {$set : fields});
 
-        drawAlpha();
-        drawActivity();
+        // drawAlpha();
+        // drawActivity();
+    },
+
+    'mouseenter .states':function(event) {
+        // console.log('mouseenter');
+        document.getElementById("checklist").innerHTML = "";
+        Session.set('checklist', event.currentTarget.id);
+        var states = Session.get('checklist');
+        // console.log('states : ' + states);
+        var id = Session.get('project');
+        var project = Projects.findOne({_id:id});
+        var string_alphas = 'alpha' + states;
+        // console.log('string_alphas : ' + string_alphas);
+        var alphas = document.getElementById(string_alphas).value;
+        alphas = alphas.replace(/\s/g,'');
+        var checklist = project.alphas[alphas].states[states].checklists;
+        // console.log(checklist);
+
+        var tbody = document.getElementById('checklist');
+
+        var arr_checklist = arrayify(checklist);
+        // console.log(arr_checklist);
+
+        for (var i = 0; i < arr_checklist.length; i++) {
+            var tr = "<li>" + arr_checklist[i].name + "</li>";
+
+            console.log(arr_checklist[i]);
+
+            /* We add the table row to the table body */
+            tbody.innerHTML += tr;
+        }
+        // document.getElementById("checklist").innerHTML=
+        // ""
+        // "";
     },
 
     // if click checklist
@@ -165,6 +198,7 @@ Template.update.events({
         Session.set('checklist', event.currentTarget.id);
         var checklist = Session.get('checklist');
         var id = Session.get('project');
+
         var project = Projects.findOne({_id:id});
 
         // var value = project.alphas.({}).states.({}).checklists[checklist];

@@ -1,83 +1,85 @@
 <template name="update">
 	<head>
-	  <meta name="viewport" content="width=device-width, initial-scale=1">
-	  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	</head>
 
 	<div class="container">
-	  <h2>Dropdowns</h2>
-	  <p>The .dropdown class is used to indicate a dropdown menu.</p>
-	  <p>Use the .dropdown-menu class to actually build the dropdown menu.</p>
-	  <p>To open the dropdown menu, use a button or a link with a class of .dropdown-toggle and data-toggle="dropdown".</p>                                          
-	  <div class="dropdown">
-	    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
-	    <span class="caret"></span></button>
-	    <ul class="dropdown-menu">
-	      <li><a href="#">HTML</a></li>
-	      <li><a href="#">CSS</a></li>
-	      <li><a href="#">JavaScript</a></li>
-	    </ul>
-	  </div>
-
 	<h1>Update Your Project Progress</h1>
+	<div class="left">
+		<h3>Checklists</h3>
+		<div id="checklist">
+		</div>
+	</div>
+	<div class="center">
 	<h3>Alpha</h3>
-  	{{#each arrayify alphas}}
-	  	<div class="dropdown">
-	  		<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{this.name}}
-	   		<span class="caret"></span></button>
-	   		<ul class="dropdown-menu">
-	   		{{#each arrayify this.value.states}}
-		      <li class="states" id="{{this.name}}" name="{{this.name}}"><a href="">{{this.name}}</a></li>
-		      <input id="alpha{{this.name}}" type="hidden" name="alphas" value="{{this.value.alpha}}">
-		    {{/each}}
-		    </ul>
-		    <br><br>
-	  		<!-- <input class="accordionitem" type="radio" />
-	  		<label class="alphas" id="{{this.name}}">{{this.name}}</label> -->
-	  		 
-	  			<!-- <article class="{{this.name}}">
-	  				<ul>
-		  				{{#each arrayify this.value.states}}
-		  					<li class="states" id="{{this.name}}" name="{{this.name}}">{{this.name}}</li>
-		  					<input id="alpha{{this.name}}" type="hidden" name="alphas" value="{{this.value.alpha}}">
-		  					<ul>
-		  						{{#each arrayify this.value.checklists}}
-		  							<li class="checklists" id="{{this.name}}" name="{{this.name}}" value="{{this.value.name}}">{{this.value.name}}</li>
-		  						{{/each}}
-		  					</ul>
-		  				{{/each}}
-		  			</ul>
-		  		</article> -->
-		</div>
-	{{/each}}
-	<h3>Activity</h3>
-	{{#each arrayify activities}}
-		<div class="dropdown">
-	  		<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{this.name}}
-	   		<span class="caret"></span></button>
-	   		<ul class="dropdown-menu">
-	   		{{#each arrayify this.value.activities}}
-		      <li class="activities" id="{{this.name}}" name="{{this.name}}"><a href="">{{this.value.name}}</a></li>
-		      <input id="activity_spaces{{this.name}}" type="hidden" name="activity_spaces" value="{{this.value.activity_space}}">
-		    {{/each}}
-		    </ul>
-		    <br><br>
-	  	<!-- <div>
-	  		<input class="accordionitem" type="radio" />
-	  		<label class="activity_spaces" id="{{this.name}}">{{this.name}}</label>
-	  		 
-	  			<article class="{{this.name}}">
-	  				<ul>
-		  				{{#each arrayify this.value.activities}}
-		  					<input id="activity_spaces{{this.name}}" type="hidden" name="activity_spaces" value="{{this.value.activity_space}}">
-		  					<li class="activities" id="{{this.name}}" name="{{this.name}}">{{this.value.name}}</li>
-		  				{{/each}}
-		  			</ul>
-		  		</article> -->
-		</div>
-	{{/each}}
+	  	{{#each arrayify alphas}}
+		  	<div class="dropdown">
+		  		<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{this.name}}
+		   		<span class="caret"></span></button>
+		   		<ul class="dropdown-menu">
+		   		{{#each arrayify this.value.states}}
+			      	<li class="states" id="{{this.name}}" name="{{this.name}}"><a href="">{{this.name}}</a></li>
+			      	<input id="alpha{{this.name}}" type="hidden" name="alphas" value="{{this.value.alpha}}">
+			    {{/each}}
+			    </ul>
+			    <br><br>
+		  		<!-- <input class="accordionitem" type="radio" />
+		  		<label class="alphas" id="{{this.name}}">{{this.name}}</label> -->
+		  		 
+		  			<!-- <article class="{{this.name}}">
+		  				<ul>
+			  				{{#each arrayify this.value.states}}
+			  					<li class="states" id="{{this.name}}" name="{{this.name}}">{{this.name}}</li>
+			  					<input id="alpha{{this.name}}" type="hidden" name="alphas" value="{{this.value.alpha}}">
+			  					<ul>
+			  						{{#each arrayify this.value.checklists}}
+			  							<li class="checklists" id="{{this.name}}" name="{{this.name}}" value="{{this.value.name}}">{{this.value.name}}</li>
+			  						{{/each}}
+			  					</ul>
+			  				{{/each}}
+			  			</ul>
+			  		</article> -->
+			</div>
+		{{/each}}
+
+		<h3>Work Product</h3>
+		{{#each arrayify alphas}}
+			{{#each this.value.workproducts}}
+				<li>{{this.name}}</li>
+			{{/each}}
+		{{/each}}
+	</div>
+	<div class="right">
+		<h3>Activity</h3>
+		{{#each arrayify activities}}
+			<div class="dropdown">
+		  		<button class="btn btn-primary dropdown-toggle activity_spaces" type="button" data-toggle="dropdown" id="{{this.name}}">{{this.name}}
+		   		<span class="caret"></span></button>
+		   		<ul class="dropdown-menu">
+		   		{{#each arrayify this.value.activities}}
+			      	<li class="activities" id="{{this.name}}" name="{{this.name}}"><a href="">{{this.value.name}}</a></li>
+			      	<input id="activity_spaces{{this.name}}" type="hidden" name="activity_spaces" value="{{this.value.activity_space}}">
+			    {{/each}}
+			    </ul>
+			    <br><br>
+		  	<!-- <div>
+		  		<input class="accordionitem" type="radio" />
+		  		<label class="activity_spaces" id="{{this.name}}">{{this.name}}</label>
+		  		 
+		  			<article class="{{this.name}}">
+		  				<ul>
+			  				{{#each arrayify this.value.activities}}
+			  					<input id="activity_spaces{{this.name}}" type="hidden" name="activity_spaces" value="{{this.value.activity_space}}">
+			  					<li class="activities" id="{{this.name}}" name="{{this.name}}">{{this.value.name}}</li>
+			  				{{/each}}
+			  			</ul>
+			  		</article> -->
+			</div>
+		{{/each}}
+	</div>
 	<a href="/monitor">Monitor</a>
 	</div>
 </template>
