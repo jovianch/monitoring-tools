@@ -1,40 +1,18 @@
 <template name="method">
-  <h2>Choose Your Method</h2>
+    <h1>CASE Tool for Monitoring with Essence</h1>
 
-<!--   <script>
-function myFunction() {
-    var x = document.getElementById("myFile").value;
-    console.log(x);
+    <h2>Method</h2>
+    <input type="file" id="myFile">
+    <button class="open" id="open" name="open">Save</button>
 
-    HTTP.get(Meteor.absoluteUrl(x), function(err,result) {
-    console.log(result.data);
-    var data = JSON.parse(result.data);
-});
-    // x.disabled = true;
-    if(Meteor.isServer) {
-    var data = JSON.parse(Assets.getText(x));
+    <h2>Project</h2>
+    <input type="file" id="myFile">
+    <button class="open" id="open" name="open">Save</button>
 
-    console.log(data);
-
-    data.forEach(function (item, index, array) {
-        Projects.insert(item);
-        console.log(Projects)
-    })
-}
-}
-	// Meteor.call('newProject');
-
-</script> -->
-
-	<input type="file" id="myFile">
-
-	<button class="open" id="open" name="open">Try it</button>
-
-  {{#each arrayify allProjects}}
+    <h3>Choose Your Project</h3>
+    {{#each arrayify allProjects}}
 	  	<div>
 	  		<a href="/monitor" class="project" id="{{this.value._id}}" name="project">{{this.value.methodname}}</a>
 		</div>
 	{{/each}}
-
-  <a href="/monitor">Monitoring</a>
 </template>

@@ -15,36 +15,17 @@
 	</div>
 	<div class="center">
 	<h3>Alpha</h3>
-	  	{{#each arrayify alphas}}
-		  	<div class="dropdown">
-		  		<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{this.name}}
-		   		<span class="caret"></span></button>
-		   		<ul class="dropdown-menu">
-		   		{{#each arrayify this.value.states}}
-			      	<li class="states" id="{{this.name}}" name="{{this.name}}"><a href="">{{this.name}}</a></li>
-			      	<input id="alpha{{this.name}}" type="hidden" name="alphas" value="{{this.value.alpha}}">
-			    {{/each}}
-			    </ul>
-			    <br><br>
-		  		<!-- <input class="accordionitem" type="radio" />
-		  		<label class="alphas" id="{{this.name}}">{{this.name}}</label> -->
-		  		 
-		  			<!-- <article class="{{this.name}}">
-		  				<ul>
-			  				{{#each arrayify this.value.states}}
-			  					<li class="states" id="{{this.name}}" name="{{this.name}}">{{this.name}}</li>
-			  					<input id="alpha{{this.name}}" type="hidden" name="alphas" value="{{this.value.alpha}}">
-			  					<ul>
-			  						{{#each arrayify this.value.checklists}}
-			  							<li class="checklists" id="{{this.name}}" name="{{this.name}}" value="{{this.value.name}}">{{this.value.name}}</li>
-			  						{{/each}}
-			  					</ul>
-			  				{{/each}}
-			  			</ul>
-			  		</article> -->
-			</div>
-		{{/each}}
-
+	  			{{#each arrayify alphas}}
+			  	<div class="dropdown">
+				  		<a class="dropbtn" href="">{{this.name}}</a>
+				  		<div class="dropdown-content">
+				   		{{#each arrayify this.value.states}}
+				   			<a class="states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}}</a>
+					      	<input id="alpha{{this.name}}" type="hidden" name="alphas" value="{{this.value.alpha}}">
+					    {{/each}}
+					    </div>
+				</div>
+				{{/each}}
 		<h3>Work Product</h3>
 		{{#each arrayify alphas}}
 			{{#each this.value.workproducts}}
@@ -56,27 +37,13 @@
 		<h3>Activity</h3>
 		{{#each arrayify activities}}
 			<div class="dropdown">
-		  		<button class="btn btn-primary dropdown-toggle activity_spaces" type="button" data-toggle="dropdown" id="{{this.name}}">{{this.name}}
-		   		<span class="caret"></span></button>
-		   		<ul class="dropdown-menu">
+		   		<a class="dropbtn" id="{{this.name}}" href="">{{this.name}}</a>
+		   		<div class="dropdown-content">
 		   		{{#each arrayify this.value.activities}}
-			      	<li class="activities" id="{{this.name}}" name="{{this.name}}"><a href="">{{this.value.name}}</a></li>
+			      	<a class="activities" id="{{this.name}}" name="{{this.name}}" href="">{{this.value.name}}</a>
 			      	<input id="activity_spaces{{this.name}}" type="hidden" name="activity_spaces" value="{{this.value.activity_space}}">
 			    {{/each}}
-			    </ul>
-			    <br><br>
-		  	<!-- <div>
-		  		<input class="accordionitem" type="radio" />
-		  		<label class="activity_spaces" id="{{this.name}}">{{this.name}}</label>
-		  		 
-		  			<article class="{{this.name}}">
-		  				<ul>
-			  				{{#each arrayify this.value.activities}}
-			  					<input id="activity_spaces{{this.name}}" type="hidden" name="activity_spaces" value="{{this.value.activity_space}}">
-			  					<li class="activities" id="{{this.name}}" name="{{this.name}}">{{this.value.name}}</li>
-			  				{{/each}}
-			  			</ul>
-			  		</article> -->
+			    </div>
 			</div>
 		{{/each}}
 	</div>
