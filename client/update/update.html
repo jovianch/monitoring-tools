@@ -20,7 +20,12 @@
 				  		<a class="dropbtn" href="">{{this.name}}</a>
 				  		<div class="dropdown-content">
 				   		{{#each arrayify this.value.states}}
-				   			<a class="states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}}</a>
+				   			{{#if this.value.result}}
+				   				<a class="states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}} v</a>
+				   			{{else}}
+				   				<a class="states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}}</a>
+				   			{{/if}}
+				   			
 					      	<input id="alpha{{this.name}}" type="hidden" name="alphas" value="{{this.value.alpha}}">
 					    {{/each}}
 					    </div>

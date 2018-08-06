@@ -11,6 +11,18 @@ Meteor.subscribe('Projects');
 // 	return projects.alphas;
 // };
 
+Template.update.onCreated(function helloOnCreated() {
+    console.log('start');
+    var id = Session.get('project');
+    var projectAlphas = Projects.findOne({_id:id}).alphas;
+    // for (var projectAlpha in projectAlphas) {
+    //     for (var state in projectAlpha.states) {
+    //         var state = state.name;
+    //         $("." + state).css('color', '00FFFF');
+    //     }
+    // }
+});
+
 Template.update.helpers({
 	alphas : function() {
         var id = Session.get('project');
@@ -55,13 +67,23 @@ Template.update.events({
         var string_alphas = 'alpha' + states;
         var alphas = document.getElementById(string_alphas).value;
         alphas = alphas.replace(/\s/g,'');
-    	var fields = {}
-    	var appendString = "alphas." + alphas + ".states." + states + ".result";
-    	fields[appendString] = "true";
-        var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
-        fields[appendString] = new Date();
-        console.log(fields)
         var id = Session.get('project')
+        var project = Projects.findOne({_id:id});
+        if (project.alphas[alphas].states[states].result) {
+            var fields = {}
+            var appendString = "alphas." + alphas + ".states." + states + ".result";
+            fields[appendString] = false;
+            var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
+            fields[appendString] = new Date();
+            console.log(fields);
+        } else {
+            var fields = {}
+            var appendString = "alphas." + alphas + ".states." + states + ".result";
+            fields[appendString] = true;
+            var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
+            fields[appendString] = new Date();
+            console.log(fields)
+        }
     	Projects.update({_id:id}, {$set : fields});
         // drawAlpha();
         // drawActivity();
@@ -84,7 +106,7 @@ Template.update.events({
             var states = entry.split('::')[1].replace(/ +/g, "");;
             var fields = {}
             var appendString = "alphas." + alphas + ".states." + states + ".result";
-            fields[appendString] = "true";
+            fields[appendString] = true;
             var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
             fields[appendString] = new Date();
             console.log(fields);
@@ -96,7 +118,7 @@ Template.update.events({
         //update activity spaces
         var fields = {}
         var appendString = "activityspaces." + activity + ".result";
-        fields[appendString] = "true";
+        fields[appendString] = true;
         var appendString = "activityspaces." + activity + ".timestamp";
         fields[appendString] = new Date();
         var id = Session.get('project');
@@ -140,7 +162,7 @@ Template.update.events({
             var states = entry.split('::')[1].replace(/ +/g, "");;
             var fields = {}
             var appendString = "alphas." + alphas + ".states." + states + ".result";
-            fields[appendString] = "true";
+            fields[appendString] = true;
             var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
             fields[appendString] = new Date();
             console.log(fields);
@@ -151,7 +173,7 @@ Template.update.events({
         //update activities -> ubah format
         var fields = {}
         var appendString = "activityspaces.CoordinateActivity.activities." + activity + ".result";
-        fields[appendString] = "true";
+        fields[appendString] = true;
         var appendString = "activityspaces.CoordinateActivity.activities." + activity + ".timestamp";
         fields[appendString] = new Date();
         Projects.update({_id:id}, {$set : fields});
