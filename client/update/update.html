@@ -33,8 +33,9 @@
 				{{/each}}
 		<h3>Work Product</h3>
 		{{#each arrayify alphas}}
-			{{#each this.value.workproducts}}
-				<li>{{this.name}}</li>
+			{{#each arrayify this.value.workproducts}}
+				<li class="workproduct" id="{{this.name}}" name="{{this.name}}">{{this.name}}</li>
+				<input id="workproduct{{this.name}}" type="hidden" name="workproduct" value="{{this.value.alpha}}">
 			{{/each}}
 		{{/each}}
 	</div>
@@ -42,10 +43,18 @@
 		<h3>Activity</h3>
 		{{#each arrayify activities}}
 			<div class="dropdown">
-		   		<a class="dropbtn" id="{{this.name}}" href="">{{this.name}}</a>
+				{{#if this.value.result}}
+		   			<a class="dropbtn activity_spaces" id="{{this.name}}" href="">{{this.name}} v</a>
+		   		{{else}}
+		   			<a class="dropbtn activity_spaces" id="{{this.name}}" href="">{{this.name}}</a>
+		   		{{/if}}
 		   		<div class="dropdown-content">
 		   		{{#each arrayify this.value.activities}}
-			      	<a class="activities" id="{{this.name}}" name="{{this.name}}" href="">{{this.value.name}}</a>
+		   			{{#if this.value.result}}
+			      		<a class="activities" id="{{this.name}}" name="{{this.name}}" href="">{{this.value.name}} v</a>
+			      	{{else}}
+			      		<a class="activities" id="{{this.name}}" name="{{this.name}}" href="">{{this.value.name}}</a>
+			      	{{/if}}
 			      	<input id="activity_spaces{{this.name}}" type="hidden" name="activity_spaces" value="{{this.value.activity_space}}">
 			    {{/each}}
 			    </div>

@@ -101,28 +101,67 @@ Template.update.events({
         // var completionCriteria = JSON.parse(completionCriteriaStr);
         console.log(completionCriteria);
         //update alpha completion criteria
-        completionCriteria.forEach(function(entry) {
-            var alphas = entry.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
-            var states = entry.split('::')[1].replace(/ +/g, "");;
-            var fields = {}
-            var appendString = "alphas." + alphas + ".states." + states + ".result";
-            fields[appendString] = true;
-            var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
-            fields[appendString] = new Date();
-            console.log(fields);
-            var id = Session.get('project');
-            Projects.update({_id:id}, {$set : fields});
-            // console.log(streetaddress);
-        });
+        // completionCriteria.forEach(function(entry) {
+        //     var alphas = entry.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
+        //     var states = entry.split('::')[1].replace(/ +/g, "");;
+        //     var fields = {}
+        //     var appendString = "alphas." + alphas + ".states." + states + ".result";
+        //     fields[appendString] = true;
+        //     var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
+        //     fields[appendString] = new Date();
+        //     console.log(fields);
+        //     var id = Session.get('project');
+        //     Projects.update({_id:id}, {$set : fields});
+        //     // console.log(streetaddress);
+        // });
 
         //update activity spaces
-        var fields = {}
-        var appendString = "activityspaces." + activity + ".result";
-        fields[appendString] = true;
-        var appendString = "activityspaces." + activity + ".timestamp";
-        fields[appendString] = new Date();
-        var id = Session.get('project');
-        Projects.update({_id:id}, {$set : fields});
+        var id = Session.get('project')
+        var project = Projects.findOne({_id:id});
+        if (project.activityspaces[activity].result) {
+            completionCriteria.forEach(function(entry) {
+                var alphas = entry.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
+                var states = entry.split('::')[1].replace(/ +/g, "");;
+                var fields = {}
+                var appendString = "alphas." + alphas + ".states." + states + ".result";
+                fields[appendString] = false;
+                var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
+                fields[appendString] = new Date();
+                console.log(fields);
+                var id = Session.get('project');
+                Projects.update({_id:id}, {$set : fields});
+                // console.log(streetaddress);
+            });
+            var fields = {}
+            var appendString = "activityspaces." + activity + ".result";
+            fields[appendString] = false;
+            var appendString = "activityspaces." + activity + ".timestamp";
+            fields[appendString] = new Date();
+            var id = Session.get('project');
+            Projects.update({_id:id}, {$set : fields});
+        } else {
+            completionCriteria.forEach(function(entry) {
+                var alphas = entry.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
+                var states = entry.split('::')[1].replace(/ +/g, "");;
+                var fields = {}
+                var appendString = "alphas." + alphas + ".states." + states + ".result";
+                fields[appendString] = true;
+                var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
+                fields[appendString] = new Date();
+                console.log(fields);
+                var id = Session.get('project');
+                Projects.update({_id:id}, {$set : fields});
+                // console.log(streetaddress);
+            });
+            var fields = {}
+            var appendString = "activityspaces." + activity + ".result";
+            fields[appendString] = true;
+            var appendString = "activityspaces." + activity + ".timestamp";
+            fields[appendString] = new Date();
+            var id = Session.get('project');
+            Projects.update({_id:id}, {$set : fields});  
+        }
+        
 
         // drawAlpha();
         // drawActivity();
@@ -157,26 +196,63 @@ Template.update.events({
         // var completionCriteria = JSON.parse(completionCriteriaStr);
         console.log(completionCriteria);
         //update alpha completion criteria
-        completionCriteria.forEach(function(entry) {
-            var alphas = entry.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
-            var states = entry.split('::')[1].replace(/ +/g, "");;
+        // completionCriteria.forEach(function(entry) {
+        //     var alphas = entry.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
+        //     var states = entry.split('::')[1].replace(/ +/g, "");;
+        //     var fields = {}
+        //     var appendString = "alphas." + alphas + ".states." + states + ".result";
+        //     fields[appendString] = true;
+        //     var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
+        //     fields[appendString] = new Date();
+        //     console.log(fields);
+        //     Projects.update({_id:id}, {$set : fields});
+        //     // console.log(streetaddress);
+        // });
+
+        //update activities -> ubah format
+        var id = Session.get('project')
+        var project = Projects.findOne({_id:id});
+        console.log(project.activityspaces[activity_spaces].activities[activity].result);
+        if (project.activityspaces[activity_spaces].activities[activity].result) {
+            completionCriteria.forEach(function(entry) {
+                var alphas = entry.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
+                var states = entry.split('::')[1].replace(/ +/g, "");;
+                var fields = {}
+                var appendString = "alphas." + alphas + ".states." + states + ".result";
+                fields[appendString] = false;
+                var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
+                fields[appendString] = new Date();
+                console.log(fields);
+                Projects.update({_id:id}, {$set : fields});
+                // console.log(streetaddress);
+            });
             var fields = {}
-            var appendString = "alphas." + alphas + ".states." + states + ".result";
-            fields[appendString] = true;
-            var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
+            var appendString = "activityspaces." + activity_spaces + ".activities." + activity + ".result";
+            fields[appendString] = false;
+            var appendString = "activityspaces." + activity_spaces + ".activities." + activity + ".timestamp";
             fields[appendString] = new Date();
             console.log(fields);
             Projects.update({_id:id}, {$set : fields});
-            // console.log(streetaddress);
-        });
-
-        //update activities -> ubah format
-        var fields = {}
-        var appendString = "activityspaces.CoordinateActivity.activities." + activity + ".result";
-        fields[appendString] = true;
-        var appendString = "activityspaces.CoordinateActivity.activities." + activity + ".timestamp";
-        fields[appendString] = new Date();
-        Projects.update({_id:id}, {$set : fields});
+        } else {
+            completionCriteria.forEach(function(entry) {
+                var alphas = entry.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
+                var states = entry.split('::')[1].replace(/ +/g, "");;
+                var fields = {}
+                var appendString = "alphas." + alphas + ".states." + states + ".result";
+                fields[appendString] = true;
+                var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
+                fields[appendString] = new Date();
+                console.log(fields);
+                Projects.update({_id:id}, {$set : fields});
+                // console.log(streetaddress);
+            });
+            var fields = {}
+            var appendString = "activityspaces." + activity_spaces + ".activities." + activity + ".result";
+            fields[appendString] = true;
+            var appendString = "activityspaces." + activity_spaces + ".activities." + activity + ".timestamp";
+            fields[appendString] = new Date();
+            Projects.update({_id:id}, {$set : fields});
+        }
 
         // drawAlpha();
         // drawActivity();
@@ -225,5 +301,39 @@ Template.update.events({
 
         // var value = project.alphas.({}).states.({}).checklists[checklist];
         // console.log(value);
+    },
+
+    'click .workproduct': function(event) {
+        console.log('Work Product clicked');
+        Session.set('workproduct', event.currentTarget.id);
+        var workproduct = Session.get('workproduct');
+        console.log(workproduct);
+        string_workproduct = 'workproduct' + workproduct;
+        var alpha = document.getElementById(string_workproduct).value;
+        console.log(alpha);
+
+        var id = Session.get('project')
+        var project = Projects.findOne({_id:id});
+
+        var states = project.alphas[alpha].workproducts[workproduct].states;
+        console.log(states);
+        states.forEach(function(entry) {
+                var fields = {}
+                var appendString = "alphas." + alpha + ".states." + entry + ".result";
+                fields[appendString] = true;
+                var appendString = "alphas." + alpha + ".states." + entry + ".timestamp";
+                fields[appendString] = new Date();
+                console.log(fields);
+                Projects.update({_id:id}, {$set : fields});
+                // console.log(streetaddress);
+            });
+        // console.log(activity);
+        // var completionCriteria = activity + ".completioncriteria";
+        // var project = Projects.findOne();
+        // var completionCriteria = project.activityspaces[activity].completioncriteria;
+        // // var completionCriteriaStr = 'project.activityspaces.' + activity + '.completioncriteria';
+        // // console.log(typeof(completionCriteriaStr));
+        // // var completionCriteria = JSON.parse(completionCriteriaStr);
+        // console.log(completionCriteria);
     }
 });

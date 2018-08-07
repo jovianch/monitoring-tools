@@ -519,16 +519,17 @@
         "subalphas": [
           
         ],
-        "workproducts": [
-          {
+        "workproducts": {
+        	"Product Backlog": {
             "name": "Product Backlog",
+            "alpha": "Requirements",
             "subalpha": "",
             "bound": "1",
             "states": [
               "Bounded"
             ]
           }
-        ]
+        }
       },
       "SoftwareSystem": {
         "name": "Software System",
@@ -718,16 +719,17 @@
         "subalphas": [
           
         ],
-        "workproducts": [
-          {
+        "workproducts": {
+          "Increment":{
             "name": "Increment",
+            "alpha": "SoftwareSystem",
             "subalpha": "",
             "bound": "1..*",
             "states": [
               "Architecture Selected"
             ]
           }
-        ]
+        }
       },
       "Work": {
         "name": "Work",
@@ -990,16 +992,17 @@
             ]
           }
         ],
-        "workproducts": [
-          {
+        "workproducts":{ 
+          "Sprint Backlog":{
             "name": "Sprint Backlog",
+            "alpha": "Work",
             "subalpha": "Sprint",
             "bound": "1",
             "states": [
               "Sprint - Started"
             ]
           }
-        ]
+        }
       },
       "Team": {
         "name": "Team",
