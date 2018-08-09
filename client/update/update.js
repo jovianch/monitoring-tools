@@ -277,6 +277,7 @@ Template.update.events({
 
         var arr_checklist = arrayify(checklist);
         // console.log(arr_checklist);
+        tbody.innerHTML = "<h3>Checklists</h3>";
 
         for (var i = 0; i < arr_checklist.length; i++) {
             var tr = "<li>" + arr_checklist[i].name + "</li>";
@@ -317,7 +318,27 @@ Template.update.events({
 
         var states = project.alphas[alpha].workproducts[workproduct].states;
         console.log(states);
-        states.forEach(function(entry) {
+
+        if (project.alphas[alpha].workproducts[workproduct].result) {
+            states.forEach(function(entry) {
+                var fields = {}
+                var appendString = "alphas." + alpha + ".states." + entry + ".result";
+                fields[appendString] = false;
+                var appendString = "alphas." + alpha + ".states." + entry + ".timestamp";
+                fields[appendString] = new Date();
+                console.log(fields);
+                Projects.update({_id:id}, {$set : fields});
+                // console.log(streetaddress);
+            });
+
+            var fields = {}
+            var appendString = "alphas." + alpha + ".workproducts." + workproduct + ".result";
+            fields[appendString] = false;
+            var appendString = "alphas." + alpha + ".workproducts." + workproduct + ".timestamp";
+            fields[appendString] = new Date();
+            Projects.update({_id:id}, {$set : fields});
+        } else {
+            states.forEach(function(entry) {
                 var fields = {}
                 var appendString = "alphas." + alpha + ".states." + entry + ".result";
                 fields[appendString] = true;
@@ -327,6 +348,15 @@ Template.update.events({
                 Projects.update({_id:id}, {$set : fields});
                 // console.log(streetaddress);
             });
+
+            var fields = {}
+            var appendString = "alphas." + alpha + ".workproducts." + workproduct + ".result";
+            fields[appendString] = true;
+            var appendString = "alphas." + alpha + ".workproducts." + workproduct + ".timestamp";
+            fields[appendString] = new Date();
+            Projects.update({_id:id}, {$set : fields});
+        }
+        
         // console.log(activity);
         // var completionCriteria = activity + ".completioncriteria";
         // var project = Projects.findOne();
@@ -335,5 +365,44 @@ Template.update.events({
         // // console.log(typeof(completionCriteriaStr));
         // // var completionCriteria = JSON.parse(completionCriteriaStr);
         // console.log(completionCriteria);
-    }
+    },
+
+    'mouseenter .activities':function(event) {
+        // console.log('mouseenter');
+        document.getElementById("checklist").innerHTML = "";
+
+        Session.set('activity', event.currentTarget.id);
+        var activity = Session.get('activity');
+        console.log(activity);
+        string_activity = 'activity_spaces' + activity;
+        var activity_spaces = document.getElementById(string_activity).value;
+        console.log(activity_spaces);
+        // var activity_spaces = "CoordinateActivity";
+        // console.log(activity_spaces);
+        // var completionCriteria = activity + ".completioncriteria";
+        var id = Session.get('project');
+        var project = Projects.findOne({_id:id});
+        var competencies = project.activityspaces[activity_spaces].activities[activity].competencies;
+        console.log(competencies);
+        // console.log(checklist);
+
+        var tbody = document.getElementById('checklist');
+
+        // var arr_checklist = arrayify(checklist);
+        // console.log(arr_checklist);
+
+        tbody.innerHTML = "<h3>Competencies</h3>";
+
+        for (var i = 0; i < competencies.length; i++) {
+            var tr = "<li>" + competencies[i].name + "</li>";
+
+            console.log(competencies[i]);
+
+            /* We add the table row to the table body */
+            tbody.innerHTML += tr;
+        }
+        // document.getElementById("checklist").innerHTML=
+        // ""
+        // "";
+    },
 });

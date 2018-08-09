@@ -9,7 +9,6 @@
 	<div class="container">
 	<h1>Update Your Project Progress</h1>
 	<div class="left">
-		<h3>Checklists</h3>
 		<div id="checklist">
 		</div>
 	</div>
@@ -34,7 +33,11 @@
 		<h3>Work Product</h3>
 		{{#each arrayify alphas}}
 			{{#each arrayify this.value.workproducts}}
-				<li class="workproduct" id="{{this.name}}" name="{{this.name}}">{{this.name}}</li>
+				{{#if this.value.result}}
+					<a class="workproduct" id="{{this.name}}" name="{{this.name}}">{{this.name}} v</a><br>
+				{{else}}
+					<a class="workproduct" id="{{this.name}}" name="{{this.name}}">{{this.name}}</a><br>
+				{{/if}}
 				<input id="workproduct{{this.name}}" type="hidden" name="workproduct" value="{{this.value.alpha}}">
 			{{/each}}
 		{{/each}}
