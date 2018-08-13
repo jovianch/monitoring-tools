@@ -18,9 +18,9 @@ ecmascript@0.10.0              # Enable ECMAScript2015+ syntax in app code
 shell-server@0.3.1            # Server-side component of the `meteor shell` command
 
 insecure@1.0.7                # Allow all DB writes from clients (for prototyping)
-kadira:flow-router
 kadira:blaze-layout
 session
 rafaelhdr:google-charts
 mizzao:bootboxjs
 http
+iron:router
