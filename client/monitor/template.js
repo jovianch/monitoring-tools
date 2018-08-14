@@ -77,7 +77,7 @@ function drawConcern() {
             }
         });
         
-        var id_customer = 0;
+        var done_customer = 0;
         var latest_customer = 0;
         var flag_customer = false;
         for (var i = 0; i < total_alpha_customer; i++) {
@@ -85,16 +85,12 @@ function drawConcern() {
             for (var j = 0; j < arr_states.length; j++) {
                 if (arr_states[j].value.result) {
                     flag_customer = true;
-                    id_customer = latest_customer + j + 1;
-                }
-
-                if (j == arr_states.length - 1) {
-                    latest_customer = latest_customer + arr_states.length;
+                    done_customer++;
                 }
             }
         }
 
-        var id_solution = 0;
+        var done_solution = 0;
         var latest_solution = 0;
         var flag_solution = false;
         // console.log(alpha_solution);
@@ -103,16 +99,12 @@ function drawConcern() {
             for (var j = 0; j < arr_states.length; j++) {
                 if (arr_states[j].value.result) {
                     flag_solution = true;
-                    id_solution = latest_solution + j + 1;
-                }
-
-                if (j == arr_states.length - 1) {
-                    latest_solution = latest_solution + arr_states.length;
+                    done_solution++;
                 }
             }
         }
 
-        var id_endeavor = 0;
+        var done_endeavor = 0;
         var latest_endeavor = 0;
         var flag_endeavor = false;
         for (var i = 0; i < total_alpha_endeavor; i++) {
@@ -120,20 +112,16 @@ function drawConcern() {
             for (var j = 0; j < arr_states.length; j++) {
                 if (arr_states[j].value.result) {
                     flag_endeavor = true;
-                    id_endeavor = latest_endeavor + j + 1;
-                }
-
-                if (j == arr_states.length - 1) {
-                    latest_endeavor = latest_endeavor + arr_states.length;
+                    done_endeavor++;
                 }
             }
         }
-        console.log(id_endeavor);
+        // console.log(id_endeavor);
 
         var data = [
-        ['Customer', id_customer/total_states_customer],
-        ['Solution', id_solution/total_states_solution],
-        ['Endeavor', id_endeavor/total_states_endeavor]
+        ['Customer', done_customer/total_states_customer],
+        ['Solution', done_solution/total_states_solution],
+        ['Endeavor', done_endeavor/total_states_endeavor]
 
         ];
         chart = {

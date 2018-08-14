@@ -69,22 +69,42 @@ Template.update.events({
         alphas = alphas.replace(/\s/g,'');
         var id = Session.get('project')
         var project = Projects.findOne({_id:id});
-        if (project.alphas[alphas].states[states].result) {
-            var fields = {}
-            var appendString = "alphas." + alphas + ".states." + states + ".result";
-            fields[appendString] = false;
-            var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
-            fields[appendString] = new Date();
-            console.log(fields);
-        } else {
-            var fields = {}
-            var appendString = "alphas." + alphas + ".states." + states + ".result";
-            fields[appendString] = true;
-            var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
-            fields[appendString] = new Date();
-            console.log(fields)
+        var arr_states = arrayify(project.alphas[alphas].states);
+        
+        var idx_states = 0;
+        var i = 0;
+        var is_states = false;
+        // console.log(project.alphas[alphas].states[states].name.replace(/\s/g,''));
+        while (!(is_states)) {
+            if (arr_states[i].name === project.alphas[alphas].states[states].name.replace(/\s/g,'')) {
+                idx_states = i + 1;
+                is_states = true;
+            }
+            i++;
         }
-    	Projects.update({_id:id}, {$set : fields});
+
+        console.log('idx_states : ' + idx_states);
+        if (project.alphas[alphas].states[states].result) {
+            for (var j = arr_states.length; j >= idx_states; j--) {
+                var fields = {}
+                var appendString = "alphas." + alphas + ".states." + arr_states[j-1].name + ".result";
+                fields[appendString] = false;
+                var appendString = "alphas." + alphas + ".states." + arr_states[j-1].name + ".timestamp";
+                fields[appendString] = new Date();
+                console.log(fields)
+                Projects.update({_id:id}, {$set : fields});
+            }
+        } else {
+            for (var j = 0; j < idx_states; j++) {
+                var fields = {}
+                var appendString = "alphas." + alphas + ".states." + arr_states[j].name + ".result";
+                fields[appendString] = true;
+                var appendString = "alphas." + alphas + ".states." + arr_states[j].name + ".timestamp";
+                fields[appendString] = new Date();
+                console.log(fields);
+                Projects.update({_id:id}, {$set : fields});
+            }
+        }
         // drawAlpha();
         // drawActivity();
     },
@@ -282,7 +302,7 @@ Template.update.events({
         for (var i = 0; i < arr_checklist.length; i++) {
             var tr = "<li>" + arr_checklist[i].name + "</li>";
 
-            console.log(arr_checklist[i]);
+            // console.log(arr_checklist[i]);
 
             /* We add the table row to the table body */
             tbody.innerHTML += tr;
