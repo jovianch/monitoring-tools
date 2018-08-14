@@ -1,0 +1,73 @@
+<template name="method">
+    <script>
+        function showOpenModal() {
+            bootbox.dialog({
+                title: "Open a Method",
+                onEscape: true,
+                message: $(".openfile").html(),
+                buttons: [
+                {
+                    label: "OK",
+                    className: "btn btn-primary pull-left",
+                    callback: function() {
+                        var files = $('input#selectFiles.form-control-file', '.bootbox').get(0).files;
+                        if (files.length <= 0) {
+                            alert("Open File Error!");
+                        }
+                        var fr = new FileReader();
+                        var result;
+                        fr.onload = function(e) {
+                            dataText = e.target.result;
+                            dataText = dataText.replace(/\\n/g, "\\n"); 
+                            dataText = dataText.replace(/\\'/g, "\\'");
+                            dataText = dataText.replace(/\\"/g, '\\"');
+                            dataText = dataText.replace(/\\&/g, "\\&");
+                            dataText = dataText.replace(/\\r/g, "\\r");
+                            dataText = dataText.replace(/\\t/g, "\\t");
+                            dataText = dataText.replace(/\\b/g, "\\b");
+                            dataText = dataText.replace(/\\f/g, "\\f");
+                            result = JSON.parse(dataText);
+                            console.log(result);
+                            if(result.length != 1){
+                                alert("File Corrupted!");
+                            }
+                            else{
+                                result.forEach(function (item, index, array) {
+                                    Projects.insert(item);
+                                })
+                            }
+                        }
+                        fr.readAsText(files.item(0));
+                    }
+                },
+                {
+                    label: "Cancel",
+                    className: "btn btn-default pull-left",
+                    callback: function() {
+                        
+                    }
+                }
+                ]
+            });
+        }
+    </script>
+    <h1>CASE Tool for Monitoring with Essence</h1>
+
+    <h2>Method</h2>
+    <a href="/method" class="clickable" onclick="showOpenModal()">Open File</a>
+
+    <div class="openfile" style="display:none;">
+        <input type="file" class="form-control-file" id="selectFiles" align="center" style="width:100%; background-color: #ccffff;">
+    </div>
+
+    <h2>Project</h2>
+    <input type="file" id="myFile">
+    <button class="open" id="open" name="open">Save</button>
+
+    <h3>Choose Your Project</h3>
+    {{#each arrayify allProjects}}
+	  	<div>
+	  		<a href="/monitor" class="project" id="{{this.value._id}}" name="project">{{this.value.methodname}}</a>
+		</div>
+	{{/each}}
+</template>

@@ -1,15 +1,4 @@
 Meteor.subscribe('Projects');
-// Meteor.subscribe('Alphas');
-
-// Template.monitor.projects = function() {
-// 	return Projects.find();
-// };
-
-// Template.monitor.alphas = function() {
-// 	// console.log(Projects.findOne({_id:"CyctMixX7iiThhNvW"}));
-// 	var projects = Projects.find({_id:"CyctMixX7iiThhNvW"});
-// 	return projects.alphas;
-// };
 
 Template.monitor.helpers({
 	alphas : function() {
@@ -44,7 +33,6 @@ function drawConcern() {
         var id = Session.get('project');
         var alphas = Projects.findOne({_id:id}).alphas;
         var arr_alphas = arrayify(alphas);
-        // console.log(arr_alphas)
         var total_alpha_customer = 0;
         var total_alpha_solution = 0;
         var total_alpha_endeavor = 0;
@@ -60,7 +48,6 @@ function drawConcern() {
                 var total_states = alpha_states.length;
                 total_states_customer = total_states_customer + total_states;
                 total_alpha_customer = total_alpha_customer + 1;
-                // console.log(total_customer);
                 alpha_customer.push(alpha);
             } else if (alpha.value.concern == "Solution") {
                 var alpha_states = arrayify(alpha.value.states)
@@ -93,7 +80,6 @@ function drawConcern() {
         var done_solution = 0;
         var latest_solution = 0;
         var flag_solution = false;
-        // console.log(alpha_solution);
         for (var i = 0; i < total_alpha_solution; i++) {
             var arr_states = arrayify(alpha_solution[i].value.states);
             for (var j = 0; j < arr_states.length; j++) {
@@ -116,7 +102,6 @@ function drawConcern() {
                 }
             }
         }
-        // console.log(id_endeavor);
 
         var data = [
         ['Customer', done_customer/total_states_customer],
@@ -125,15 +110,15 @@ function drawConcern() {
 
         ];
         chart = {
-      target: 'chart1',
-      type: 'BarChart',
-      columns: columns,
-      rows: data,
-      options: {
-        'title':'Progress per Alpha',
-        'width':400,
-        'height':300
-      }
+        target: 'chart1',
+        type: 'BarChart',
+        columns: columns,
+        rows: data,
+        options: {
+            'title':'Progress per Alpha',
+            'width':400,
+            'height':300
+        }
     };
 
     drawChart(chart);
@@ -149,7 +134,6 @@ function drawAlpha() {
         var id = Session.get('project');
         var alphas = Projects.findOne({_id:id}).alphas;
         var arr_alphas = arrayify(alphas);
-        // console.log(arr_alphas)
         var count_state = [];
         var count_state_done = [];
 
@@ -165,20 +149,18 @@ function drawAlpha() {
             count_state.push([alpha.name, done_states/total_states]);
         });
 
-        console.log(count_state);
-
         var data = count_state;
 
         chart = {
-      target: 'alpha',
-      type: 'BarChart',
-      columns: columns,
-      rows: data,
-      options: {
-        'title':'Progress per Alpha',
-        'width':400,
-        'height':300
-      }
+        target: 'alpha',
+        type: 'BarChart',
+        columns: columns,
+        rows: data,
+        options: {
+            'title':'Progress per Alpha',
+            'width':400,
+            'height':300
+    }
     };
 
     drawChart(chart);
@@ -194,7 +176,6 @@ function drawActivity() {
         var id = Session.get('project');
         var alphas = Projects.findOne({_id:id}).alphas;
         var arr_alphas = arrayify(alphas);
-        // console.log(arr_alphas)
         var total_alpha_customer = 0;
         var total_alpha_solution = 0;
         var total_alpha_endeavor = 0;
@@ -210,7 +191,6 @@ function drawActivity() {
                 var total_states = alpha_states.length;
                 total_states_customer = total_states_customer + total_states;
                 total_alpha_customer = total_alpha_customer + 1;
-                // console.log(total_customer);
                 alpha_customer.push(alpha);
             } else if (alpha.value.concern == "Solution") {
                 var alpha_states = arrayify(alpha.value.states)
@@ -247,7 +227,6 @@ function drawActivity() {
         var id_solution = 0;
         var latest_solution = 0;
         var flag_solution = false;
-        // console.log(alpha_solution);
         for (var i = 0; i < total_alpha_solution; i++) {
             var arr_states = arrayify(alpha_solution[i].value.states);
             for (var j = 0; j < arr_states.length; j++) {
@@ -287,15 +266,15 @@ function drawActivity() {
 
         ];
         chart = {
-      target: 'chart2',
-      type: 'PieChart',
-      columns: columns,
-      rows: data,
-      options: {
-        'title':'Progress per Alpha',
-        'width':400,
-        'height':300
-      }
+        target: 'chart2',
+        type: 'PieChart',
+        columns: columns,
+        rows: data,
+        options: {
+            'title':'Progress per Alpha',
+            'width':400,
+            'height':300
+        }
     };
 
     drawChart(chart);
@@ -419,131 +398,5 @@ Template.monitor.events({
     },
     'click .spider_chart': function(event) {
        drawSpider();
-    },
-    'click .alphas': function(event) {
-    	Session.set('states', event.currentTarget.id);
-    	var states = Session.get('states');
-        $("." + states).css('visibility', 'hidden');
-    },
-    'click .states': function(event) {
-    	Session.set('states', event.currentTarget.id);
-    	var states = Session.get('states');
-        var string_alphas = 'alpha' + states;
-        var alphas = document.getElementById(string_alphas).value;
-        alphas = alphas.replace(/\s/g,'');
-    	var fields = {}
-    	var appendString = "alphas." + alphas + ".states." + states + ".result";
-    	fields[appendString] = "true";
-        var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
-        fields[appendString] = new Date();
-        console.log(fields)
-        var id = Session.get('project')
-    	Projects.update({_id:id}, {$set : fields});
-        drawAlpha();
-        drawActivity();
-    },
-    'click .activity_spaces': function(event) {
-        Session.set('activity', event.currentTarget.id);
-        var activity = Session.get('activity');
-        console.log(activity);
-        // console.log(activity);
-        // var completionCriteria = activity + ".completioncriteria";
-        var project = Projects.findOne();
-        var completionCriteria = project.activityspaces[activity].completioncriteria;
-        // var completionCriteriaStr = 'project.activityspaces.' + activity + '.completioncriteria';
-        // console.log(typeof(completionCriteriaStr));
-        // var completionCriteria = JSON.parse(completionCriteriaStr);
-        console.log(completionCriteria);
-        //update alpha completion criteria
-        completionCriteria.forEach(function(entry) {
-            var alphas = entry.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
-            var states = entry.split('::')[1].replace(/ +/g, "");;
-            var fields = {}
-            var appendString = "alphas." + alphas + ".states." + states + ".result";
-            fields[appendString] = "true";
-            var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
-            fields[appendString] = new Date();
-            console.log(fields);
-            var id = Session.get('project');
-            Projects.update({_id:id}, {$set : fields});
-            // console.log(streetaddress);
-        });
-
-        //update activity spaces
-        var fields = {}
-        var appendString = "activityspaces." + activity + ".result";
-        fields[appendString] = "true";
-        var appendString = "activityspaces." + activity + ".timestamp";
-        fields[appendString] = new Date();
-        var id = Session.get('project');
-        Projects.update({_id:id}, {$set : fields});
-
-        drawAlpha();
-        drawActivity();
-    },
-
-    //if click activities
-    'click .activities': function(event) {
-        Session.set('activity', event.currentTarget.id);
-        var activity = Session.get('activity');
-        console.log(activity);
-        string_activity = 'activity_spaces' + activity;
-        var activity_spaces = document.getElementById(string_activity).value;
-        console.log(activity_spaces);
-        // var activity_spaces = "CoordinateActivity";
-        // console.log(activity_spaces);
-        // var completionCriteria = activity + ".completioncriteria";
-        var id = Session.get('project');
-        var project = Projects.findOne({_id:id});
-        var activities = project.activityspaces[activity_spaces].activities;
-        console.log(activities);
-        // console.log(activities.length);
-        // var idx;
-        // for (var i = 0; i < activities.length; i++) {
-        //     if (activities[i].name = "Daily Scrum") {
-        //         idx = i;
-        //     }
-        // }
-        // console.log(idx);
-        var completionCriteria = activities[activity].completioncriteria;
-        // var completionCriteriaStr = 'project.activityspaces.' + activity + '.completioncriteria';
-        // console.log(typeof(completionCriteriaStr));
-        // var completionCriteria = JSON.parse(completionCriteriaStr);
-        console.log(completionCriteria);
-        //update alpha completion criteria
-        completionCriteria.forEach(function(entry) {
-            var alphas = entry.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
-            var states = entry.split('::')[1].replace(/ +/g, "");;
-            var fields = {}
-            var appendString = "alphas." + alphas + ".states." + states + ".result";
-            fields[appendString] = "true";
-            var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
-            fields[appendString] = new Date();
-            console.log(fields);
-            Projects.update({_id:id}, {$set : fields});
-            // console.log(streetaddress);
-        });
-
-        //update activities -> ubah format
-        var fields = {}
-        var appendString = "activityspaces.CoordinateActivity.activities." + activity + ".result";
-        fields[appendString] = "true";
-        var appendString = "activityspaces.CoordinateActivity.activities." + activity + ".timestamp";
-        fields[appendString] = new Date();
-        Projects.update({_id:id}, {$set : fields});
-
-        drawAlpha();
-        drawActivity();
-    },
-
-    // if click checklist
-    'click .checklists': function(event) {
-        Session.set('checklist', event.currentTarget.id);
-        var checklist = Session.get('checklist');
-        var id = Session.get('project');
-        var project = Projects.findOne({_id:id});
-
-        // var value = project.alphas.({}).states.({}).checklists[checklist];
-        // console.log(value);
     }
 });
