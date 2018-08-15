@@ -1,4 +1,5 @@
 Meteor.subscribe('Projects');
+Meteor.subscribe('Methods');
 Meteor.subscribe('AllProject');
 
 Template.method.helpers({

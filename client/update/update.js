@@ -99,18 +99,34 @@ Template.update.events({
         //update activity spaces
         var id = Session.get('project')
         var project = Projects.findOne({_id:id});
+
         if (project.activityspaces[activity].result) {
             completionCriteria.forEach(function(entry) {
                 var alphas = entry.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
                 var states = entry.split('::')[1].replace(/ +/g, "");;
-                var fields = {}
-                var appendString = "alphas." + alphas + ".states." + states + ".result";
-                fields[appendString] = false;
-                var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
-                fields[appendString] = new Date();
-                console.log(fields);
-                var id = Session.get('project');
-                Projects.update({_id:id}, {$set : fields});
+
+                var arr_states = arrayify(project.alphas[alphas].states);
+                var idx_states = 0;
+                var i = 0;
+                var is_states = false;
+                while (!(is_states)) {
+                    if (arr_states[i].name === project.alphas[alphas].states[states].name.replace(/\s/g,'')) {
+                        idx_states = i + 1;
+                        is_states = true;
+                    }
+                    i++;
+                }
+
+                for (var j = arr_states.length; j >= idx_states; j--) {   
+                    var fields = {}
+                    var appendString = "alphas." + alphas + ".states." + arr_states[j-1].name + ".result";
+                    fields[appendString] = false;
+                    var appendString = "alphas." + alphas + ".states." + arr_states[j-1].name + ".timestamp";
+                    fields[appendString] = new Date();
+                    console.log(fields);
+                    var id = Session.get('project');
+                    Projects.update({_id:id}, {$set : fields});
+                }
             });
             var fields = {}
             var appendString = "activityspaces." + activity + ".result";
@@ -123,15 +139,31 @@ Template.update.events({
             completionCriteria.forEach(function(entry) {
                 var alphas = entry.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
                 var states = entry.split('::')[1].replace(/ +/g, "");;
-                var fields = {}
-                var appendString = "alphas." + alphas + ".states." + states + ".result";
-                fields[appendString] = true;
-                var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
-                fields[appendString] = new Date();
-                console.log(fields);
-                var id = Session.get('project');
-                Projects.update({_id:id}, {$set : fields});
-                // console.log(streetaddress);
+
+                var arr_states = arrayify(project.alphas[alphas].states);
+                // console.log(arr_states);
+                var idx_states = 0;
+                var i = 0;
+                var is_states = false;
+                while (!(is_states)) {
+                    if (arr_states[i].name === project.alphas[alphas].states[states].name.replace(/\s/g,'')) {
+                        idx_states = i + 1;
+                        is_states = true;
+                    }
+                    i++;
+                }
+
+                for (var j = 0; j < idx_states; j++) {
+                    var fields = {}
+                    var appendString = "alphas." + alphas + ".states." + arr_states[j].name + ".result";
+                    fields[appendString] = true;
+                    var appendString = "alphas." + alphas + ".states." + arr_states[j].name + ".timestamp";
+                    fields[appendString] = new Date();
+                    console.log(fields);
+                    var id = Session.get('project');
+                    Projects.update({_id:id}, {$set : fields});
+                    // console.log(streetaddress);
+                }
             });
             var fields = {}
             var appendString = "activityspaces." + activity + ".result";

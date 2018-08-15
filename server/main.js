@@ -111,6 +111,10 @@ Meteor.publish('Projects', function () {
 	// return Projects.find({_id:"bNkP9pQLQTvocamnS"});
 });
 
+Meteor.publish('Methods', function () {
+    // return Projects.find({_id:"bNkP9pQLQTvocamnS"});
+});
+
 Meteor.publish('AllProject', function () {
     return Projects.find({});
 });
