@@ -1591,7 +1591,7 @@
         ],
         "completioncriteria": [
           "Team::Seeded",
-          "Way-of-Working::Foundation Established",
+          "WayofWorking::Foundation Established",
           "Work::Prepared"
         ],
         "activities": 
@@ -1676,11 +1676,11 @@
         ],
         "entrycriteria": [
           "Team::Formed",
-          "Way-of-Working::Foundation Established"
+          "WayofWorking::Foundation Established"
         ],
         "completioncriteria": [
           "Team::Collaborating",
-          "Way-of-Working::In Place"
+          "WayofWorking::In Place"
         ],
         "activities": 
           {
@@ -1719,12 +1719,12 @@
         ],
         "entrycriteria": [
           "Team::Collaborating",
-          "Way-of-Working::In Place",
+          "WayofWorking::In Place",
           "Work::Started"
         ],
         "completioncriteria": [
           "Team::Performing",
-          "Way-of-Working::Working Well",
+          "WayofWorking::Working Well",
           "Work::Concluded"
         ],
         "activities": 
@@ -1764,12 +1764,12 @@
         ],
         "entrycriteria": [
           "Team::Performing",
-          "Way-of-Working::Working Well",
+          "WayofWorking::Working Well",
           "Work::Concluded"
         ],
         "completioncriteria": [
           "Team::Adjourned",
-          "Way-of-Working::Retired",
+          "WayofWorking::Retired",
           "Work::Closed"
         ],
         "activities": {}

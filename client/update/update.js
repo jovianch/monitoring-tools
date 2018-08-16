@@ -65,6 +65,8 @@ Template.update.events({
             i++;
         }
 
+        var arr_activity_spaces = arrayify(project.activityspaces);
+
         console.log('idx_states : ' + idx_states);
         if (project.alphas[alphas].states[states].result) {
             for (var j = arr_states.length; j >= idx_states; j--) {
@@ -85,8 +87,86 @@ Template.update.events({
                 fields[appendString] = new Date();
                 console.log(fields);
                 Projects.update({_id:id}, {$set : fields});
+                // console.log(project)
             }
         }
+
+        arr_activity_spaces.forEach(function(activity_space) {
+            var completion_criterias = activity_space.value.completioncriteria;
+            var is_complete = true;
+            var id = Session.get('project');
+            var project = Projects.findOne({_id:id});
+            // console.log("activity_space : " + activity_space.name);
+            completion_criterias.forEach(function(completion_criteria) {
+                var alphas = completion_criteria.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
+                var states = completion_criteria.split('::')[1].replace(/ +/g, "");;
+                // console.log("alphas : " + alphas);
+                // console.log("states : " + states);
+                // console.log(project.alphas[alphas].states[states].result);
+                if (project.alphas[alphas].states[states].result) {
+                    is_complete = is_complete && true;
+                } else {
+                    is_complete = is_complete && false;
+                }
+            });
+            // console.log(is_complete);
+            if (is_complete) {
+                var fields = {}
+                var appendString = "activityspaces." + activity_space.name + ".result";
+                fields[appendString] = true;
+                var appendString = "activityspaces." + activity_space.name + ".timestamp";
+                fields[appendString] = new Date();
+                var id = Session.get('project');
+                Projects.update({_id:id}, {$set : fields});
+            } else {
+                var fields = {}
+                var appendString = "activityspaces." + activity_space.name + ".result";
+                fields[appendString] = false;
+                var appendString = "activityspaces." + activity_space.name + ".timestamp";
+                fields[appendString] = new Date();
+                var id = Session.get('project');
+                Projects.update({_id:id}, {$set : fields});
+            }
+
+            var arr_activities = arrayify(activity_space.value.activities);
+            arr_activities.forEach(function(activity) {
+                var completion_criterias = activity.value.completioncriteria;
+                var is_complete = true;
+                var id = Session.get('project');
+                var project = Projects.findOne({_id:id});
+                // console.log("activity_space : " + activity_space.name);
+                completion_criterias.forEach(function(completion_criteria) {
+                    var alphas = completion_criteria.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
+                    var states = completion_criteria.split('::')[1].replace(/ +/g, "");;
+                    // console.log("alphas : " + alphas);
+                    // console.log("states : " + states);
+                    // console.log(project.alphas[alphas].states[states].result);
+                    if (project.alphas[alphas].states[states].result) {
+                        is_complete = is_complete && true;
+                    } else {
+                        is_complete = is_complete && false;
+                    }
+                });
+                // console.log(is_complete);
+                if (is_complete) {
+                    var fields = {}
+                    var appendString = "activityspaces." + activity_space.name + ".activities." + activity.name + ".result";
+                    fields[appendString] = true;
+                    var appendString = "activityspaces." + activity_space.name + ".activities." + activity.name + ".timestamp";
+                    fields[appendString] = new Date();
+                    var id = Session.get('project');
+                    Projects.update({_id:id}, {$set : fields});
+                } else {
+                    var fields = {}
+                    var appendString = "activityspaces." + activity_space.name + ".activities." + activity.name + ".result";
+                    fields[appendString] = false;
+                    var appendString = "activityspaces." + activity_space.name + ".activities." + activity.name + ".timestamp";
+                    fields[appendString] = new Date();
+                    var id = Session.get('project');
+                    Projects.update({_id:id}, {$set : fields});
+                }
+            });
+        })
     },
     'click .activity_spaces': function(event) {
         Session.set('activity', event.currentTarget.id);
@@ -94,6 +174,7 @@ Template.update.events({
         console.log(activity);
         var project = Projects.findOne();
         var completionCriteria = project.activityspaces[activity].completioncriteria;
+        var entryCriteria = project.activityspaces[activity].entrycriteria;
         console.log(completionCriteria);
 
         //update activity spaces
@@ -136,42 +217,60 @@ Template.update.events({
             var id = Session.get('project');
             Projects.update({_id:id}, {$set : fields});
         } else {
-            completionCriteria.forEach(function(entry) {
+            var is_complete = true;
+            entryCriteria.forEach(function(entry) {
                 var alphas = entry.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
                 var states = entry.split('::')[1].replace(/ +/g, "");;
 
                 var arr_states = arrayify(project.alphas[alphas].states);
-                // console.log(arr_states);
-                var idx_states = 0;
-                var i = 0;
-                var is_states = false;
-                while (!(is_states)) {
-                    if (arr_states[i].name === project.alphas[alphas].states[states].name.replace(/\s/g,'')) {
-                        idx_states = i + 1;
-                        is_states = true;
-                    }
-                    i++;
-                }
-
-                for (var j = 0; j < idx_states; j++) {
-                    var fields = {}
-                    var appendString = "alphas." + alphas + ".states." + arr_states[j].name + ".result";
-                    fields[appendString] = true;
-                    var appendString = "alphas." + alphas + ".states." + arr_states[j].name + ".timestamp";
-                    fields[appendString] = new Date();
-                    console.log(fields);
-                    var id = Session.get('project');
-                    Projects.update({_id:id}, {$set : fields});
-                    // console.log(streetaddress);
+                
+                if (project.alphas[alphas].states[states].result) {
+                    is_complete = is_complete && true;
+                } else {
+                    is_complete = is_complete && false;
                 }
             });
-            var fields = {}
-            var appendString = "activityspaces." + activity + ".result";
-            fields[appendString] = true;
-            var appendString = "activityspaces." + activity + ".timestamp";
-            fields[appendString] = new Date();
-            var id = Session.get('project');
-            Projects.update({_id:id}, {$set : fields});  
+
+            if (is_complete) {
+                completionCriteria.forEach(function(entry) {
+                    var alphas = entry.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
+                    var states = entry.split('::')[1].replace(/ +/g, "");;
+
+                    var arr_states = arrayify(project.alphas[alphas].states);
+                    // console.log(arr_states);
+                    var idx_states = 0;
+                    var i = 0;
+                    var is_states = false;
+                    while (!(is_states)) {
+                        if (arr_states[i].name === project.alphas[alphas].states[states].name.replace(/\s/g,'')) {
+                            idx_states = i + 1;
+                            is_states = true;
+                        }
+                        i++;
+                    }
+
+                    for (var j = 0; j < idx_states; j++) {
+                        var fields = {}
+                        var appendString = "alphas." + alphas + ".states." + arr_states[j].name + ".result";
+                        fields[appendString] = true;
+                        var appendString = "alphas." + alphas + ".states." + arr_states[j].name + ".timestamp";
+                        fields[appendString] = new Date();
+                        console.log(fields);
+                        var id = Session.get('project');
+                        Projects.update({_id:id}, {$set : fields});
+                        // console.log(streetaddress);
+                    }
+                });
+                var fields = {}
+                var appendString = "activityspaces." + activity + ".result";
+                fields[appendString] = true;
+                var appendString = "activityspaces." + activity + ".timestamp";
+                fields[appendString] = new Date();
+                var id = Session.get('project');
+                Projects.update({_id:id}, {$set : fields}); 
+            } else {
+                alert("Cannot do this Activity!");
+            }
         }
     },
 
@@ -188,6 +287,8 @@ Template.update.events({
         var activities = project.activityspaces[activity_spaces].activities;
         console.log(activities);
         var completionCriteria = activities[activity].completioncriteria;
+        var entryCriteria = activities[activity].entrycriteria;
+
         console.log(completionCriteria);
 
         //update activities -> ubah format
@@ -198,13 +299,29 @@ Template.update.events({
             completionCriteria.forEach(function(entry) {
                 var alphas = entry.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
                 var states = entry.split('::')[1].replace(/ +/g, "");;
-                var fields = {}
-                var appendString = "alphas." + alphas + ".states." + states + ".result";
-                fields[appendString] = false;
-                var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
-                fields[appendString] = new Date();
-                console.log(fields);
-                Projects.update({_id:id}, {$set : fields});
+
+                var arr_states = arrayify(project.alphas[alphas].states);
+                var idx_states = 0;
+                var i = 0;
+                var is_states = false;
+                while (!(is_states)) {
+                    if (arr_states[i].name === project.alphas[alphas].states[states].name.replace(/\s/g,'')) {
+                        idx_states = i + 1;
+                        is_states = true;
+                    }
+                    i++;
+                }
+
+                for (var j = arr_states.length; j >= idx_states; j--) {   
+                    var fields = {}
+                    var appendString = "alphas." + alphas + ".states." + arr_states[j-1].name + ".result";
+                    fields[appendString] = false;
+                    var appendString = "alphas." + alphas + ".states." + arr_states[j-1].name + ".timestamp";
+                    fields[appendString] = new Date();
+                    console.log(fields);
+                    var id = Session.get('project');
+                    Projects.update({_id:id}, {$set : fields});
+                }
             });
             var fields = {}
             var appendString = "activityspaces." + activity_spaces + ".activities." + activity + ".result";
@@ -214,23 +331,60 @@ Template.update.events({
             console.log(fields);
             Projects.update({_id:id}, {$set : fields});
         } else {
-            completionCriteria.forEach(function(entry) {
+            var is_complete = true;
+            entryCriteria.forEach(function(entry) {
                 var alphas = entry.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
                 var states = entry.split('::')[1].replace(/ +/g, "");;
-                var fields = {}
-                var appendString = "alphas." + alphas + ".states." + states + ".result";
-                fields[appendString] = true;
-                var appendString = "alphas." + alphas + ".states." + states + ".timestamp";
-                fields[appendString] = new Date();
-                console.log(fields);
-                Projects.update({_id:id}, {$set : fields});
+
+                var arr_states = arrayify(project.alphas[alphas].states);
+                
+                if (project.alphas[alphas].states[states].result) {
+                    is_complete = is_complete && true;
+                } else {
+                    is_complete = is_complete && false;
+                }
             });
-            var fields = {}
-            var appendString = "activityspaces." + activity_spaces + ".activities." + activity + ".result";
-            fields[appendString] = true;
-            var appendString = "activityspaces." + activity_spaces + ".activities." + activity + ".timestamp";
-            fields[appendString] = new Date();
-            Projects.update({_id:id}, {$set : fields});
+
+            if (is_complete) {
+                completionCriteria.forEach(function(entry) {
+                    var alphas = entry.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
+                    var states = entry.split('::')[1].replace(/ +/g, "");;
+
+                    var arr_states = arrayify(project.alphas[alphas].states);
+                    // console.log(arr_states);
+                    var idx_states = 0;
+                    var i = 0;
+                    var is_states = false;
+                    while (!(is_states)) {
+                        if (arr_states[i].name === project.alphas[alphas].states[states].name.replace(/\s/g,'')) {
+                            idx_states = i + 1;
+                            is_states = true;
+                        }
+                        i++;
+                    }
+
+                    for (var j = 0; j < idx_states; j++) {
+                        var fields = {}
+                        var appendString = "alphas." + alphas + ".states." + arr_states[j].name + ".result";
+                        fields[appendString] = true;
+                        var appendString = "alphas." + alphas + ".states." + arr_states[j].name + ".timestamp";
+                        fields[appendString] = new Date();
+                        console.log(fields);
+                        var id = Session.get('project');
+                        Projects.update({_id:id}, {$set : fields});
+                        // console.log(streetaddress);
+                    }
+                });
+                var fields = {}
+                var appendString = "activityspaces." + activity_spaces + ".activities." + activity + ".result";
+                fields[appendString] = true;
+                var appendString = "activityspaces." + activity_spaces + ".activities." + activity + ".timestamp";
+                fields[appendString] = new Date();
+                var id = Session.get('project');
+                Projects.update({_id:id}, {$set : fields}); 
+            } else {
+                alert("Cannot do this Activity!");
+            }
         }
     },
 
