@@ -167,117 +167,42 @@ function drawAlpha() {
 }
 
 function drawActivity() {
-     var columns = [
-        ['string', 'Alphas'],
-        ['number', 'Progress'],
-        ];
+    document.getElementById("table_activity").innerHTML = "";
 
-        //get data from database for every alphas
-        var id = Session.get('project');
-        var alphas = Projects.findOne({_id:id}).alphas;
-        var arr_alphas = arrayify(alphas);
-        var total_alpha_customer = 0;
-        var total_alpha_solution = 0;
-        var total_alpha_endeavor = 0;
-        var total_states_customer = 0;
-        var total_states_solution = 0;
-        var total_states_endeavor = 0;
-        var alpha_customer = [];
-        var alpha_solution = [];
-        var alpha_endeavor = [];
-        arr_alphas.forEach(function(alpha) {
-            if (alpha.value.concern == "Customer") {
-                var alpha_states = arrayify(alpha.value.states)
-                var total_states = alpha_states.length;
-                total_states_customer = total_states_customer + total_states;
-                total_alpha_customer = total_alpha_customer + 1;
-                alpha_customer.push(alpha);
-            } else if (alpha.value.concern == "Solution") {
-                var alpha_states = arrayify(alpha.value.states)
-                var total_states = alpha_states.length;
-                total_states_solution = total_states_solution + total_states;
-                total_alpha_solution = total_alpha_solution+ 1;
-                alpha_solution.push(alpha);
-            } else if (alpha.value.concern == "Endeavor") {
-                var alpha_states = arrayify(alpha.value.states)
-                var total_states = alpha_states.length;
-                total_states_endeavor = total_states_endeavor + total_states;
-                total_alpha_endeavor = total_alpha_endeavor + 1;
-                alpha_endeavor.push(alpha);
-            }
-        });
-        
-        var id_customer = 0;
-        var latest_customer = 0;
-        var flag_customer = false;
-        for (var i = 0; i < total_alpha_customer; i++) {
-            var arr_states = arrayify(alpha_customer[i].value.states);
-            for (var j = 0; j < arr_states.length; j++) {
-                if (arr_states[j].value.result == "true") {
-                    flag_customer = true;
-                    id_customer = latest_customer + j + 1;
-                }
+    var tbody = document.getElementById('table_activity');
 
-                if (j == arr_states.length - 1) {
-                    latest_customer = latest_customer + arr_states.length;
-                }
-            }
+    var html = "<h3>Progress Activity</h3><table><tr><th>Number</th><th>Activity</th><th>Status</th></tr>";
+    
+    var id = Session.get('project');
+    var arr_activityspaces = arrayify(Projects.findOne({_id:id}).activityspaces);
+
+    var idx = 1;
+
+    arr_activityspaces.forEach(function(activityspace) {
+        var data = "<tr><td>" + idx + "</td>" + "<td>" + activityspace.name + "</td>";
+
+        console.log("End Date : " + idx + " : " + activityspace.value.end_date);
+        console.log("End Date : " + idx + " : " + activityspace.value.timestamp);
+        if (activityspace.value.end_date < activityspace.value.timestamp) {
+            data += "<td>Done</td></tr>";
+        } else {
+            data += "<td>Not Done</td></tr>";
         }
 
-        var id_solution = 0;
-        var latest_solution = 0;
-        var flag_solution = false;
-        for (var i = 0; i < total_alpha_solution; i++) {
-            var arr_states = arrayify(alpha_solution[i].value.states);
-            for (var j = 0; j < arr_states.length; j++) {
-                if (arr_states[j].value.result == "true") {
-                    flag_solution = true;
-                    id_solution = latest_solution + j + 1;
-                }
+        html += data;
+        // console.log(tbody.innerHTML);
+        idx++;
+    });
+    html += "</table>";
+    tbody.innerHTML = html;
+        // for (var i = 0; i < competencies.length; i++) {
+        //     var tr = "<li>" + competencies[i].name + "</li>";
 
-                if (j == arr_states.length - 1) {
-                    latest_solution = latest_solution + arr_states.length;
-                }
-            }
-        }
+        //     console.log(competencies[i]);
 
-        var id_endeavor = 0;
-        var latest_endeavor = 0;
-        var flag_endeavor = false;
-        for (var i = 0; i < total_alpha_endeavor; i++) {
-            var arr_states = arrayify(alpha_endeavor[i].value.states);
-            for (var j = 0; j < arr_states.length; j++) {
-                if (arr_states[j].value.result == "true") {
-                    flag_endeavor = true;
-                    id_endeavor = latest_endeavor + j + 1;
-                }
-
-                if (j == arr_states.length - 1) {
-                    latest_endeavor = latest_endeavor + arr_states.length;
-                }
-            }
-        }
-        console.log(id_endeavor);
-
-        var data = [
-        ['Customer', id_customer/total_states_customer],
-        ['Solution', id_solution/total_states_solution],
-        ['Endeavor', id_endeavor/total_states_endeavor]
-
-        ];
-        chart = {
-        target: 'chart2',
-        type: 'PieChart',
-        columns: columns,
-        rows: data,
-        options: {
-            'title':'Progress per Alpha',
-            'width':400,
-            'height':300
-        }
-    };
-
-    drawChart(chart);
+        //     /* We add the table row to the table body */
+        //     tbody.innerHTML += tr;
+        // }
 }
 
 function drawSpider() {
