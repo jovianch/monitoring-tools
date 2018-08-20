@@ -9,3 +9,7 @@ Router.route('/method', function () {
 Router.route('/update', function () {
   this.render('update');
 });
+
+Router.route('/project', function () {
+  this.render('project');
+});

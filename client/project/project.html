@@ -1,0 +1,11 @@
+<template name="project">
+  	<h2>Your Project</h2>
+
+    <h3>Update Your Activity</h3>
+    {{#each arrayify Activities}}
+      <label>{{this.name}}</label>
+      <input id="activity{{this.name}}" type="date" name="end_date">
+      <br>
+    {{/each}}
+    <button class="submit" id="submit">Submit</button>
+</template>

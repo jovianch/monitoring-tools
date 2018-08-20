@@ -181,8 +181,10 @@ function drawActivity() {
     arr_activityspaces.forEach(function(activityspace) {
         var data = "<tr><td>" + idx + "</td>" + "<td>" + activityspace.name + "</td>";
 
-        console.log("End Date : " + idx + " : " + activityspace.value.end_date);
-        console.log("End Date : " + idx + " : " + activityspace.value.timestamp);
+        // console.log("End Date : " + idx + " : " + activityspace.value.end_date.getTime());
+        // console.log("End Date : " + idx + " : " + activityspace.value.timestamp.getTime());
+        // var selisih = activityspace.value.end_date.getTime() - activityspace.value.timestamp.getTime();
+        // console.log(selisih);
         if (activityspace.value.end_date < activityspace.value.timestamp) {
             data += "<td>Done</td></tr>";
         } else {

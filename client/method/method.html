@@ -87,7 +87,7 @@
           Last name:<br>
           <input type="text" name="lastname" value="Mouse">
           <br><br> -->
-          <input type="submit" value="Submit" onclick="submit()">
+          <a href="/project"><input type="submit" value="Submit" onclick="submit()"></a>
       </div>
 
     </div>
@@ -150,6 +150,8 @@
             // console.log(name);
             // Projects.remove({});
             Projects.insert({"name" : projectname, "description" : description, "start_date" : startdate, "end_date" : enddate, "method" : method});
+            console.log(Projects.findOne({"name" : projectname})._id);
+            Session.set('project', Projects.findOne({"name" : projectname})._id);
         }
     </script>
 </template>
