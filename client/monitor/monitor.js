@@ -3,11 +3,11 @@ Meteor.subscribe('Projects');
 Template.monitor.helpers({
 	alphas : function() {
         var id = Session.get('project');
-		return Projects.findOne({_id:id}).alphas
+		return Projects.findOne({_id:id}).method.alphas
 	},
     activities : function() {
         var id = Session.get('project');
-        return Projects.findOne({_id:id}).activityspaces
+        return Projects.findOne({_id:id}).method.activityspaces
     }
 });
 
@@ -31,7 +31,7 @@ function drawConcern() {
 
         //get data from database for every alphas
         var id = Session.get('project');
-        var alphas = Projects.findOne({_id:id}).alphas;
+        var alphas = Projects.findOne({_id:id}).method.alphas;
         var arr_alphas = arrayify(alphas);
         var total_alpha_customer = 0;
         var total_alpha_solution = 0;
@@ -132,7 +132,7 @@ function drawAlpha() {
 
         //get data from database for every alphas
         var id = Session.get('project');
-        var alphas = Projects.findOne({_id:id}).alphas;
+        var alphas = Projects.findOne({_id:id}).method.alphas;
         var arr_alphas = arrayify(alphas);
         var count_state = [];
         var count_state_done = [];
@@ -174,7 +174,7 @@ function drawActivity() {
     var html = "<h3>Progress Activity</h3><table><tr><th>Number</th><th>Activity</th><th>Status</th></tr>";
     
     var id = Session.get('project');
-    var arr_activityspaces = arrayify(Projects.findOne({_id:id}).activityspaces);
+    var arr_activityspaces = arrayify(Projects.findOne({_id:id}).method.activityspaces);
 
     var idx = 1;
 
@@ -267,7 +267,7 @@ function drawSpider() {
     }
 
     var id = Session.get('project');
-    var alphas = Projects.findOne({_id:id}).alphas;
+    var alphas = Projects.findOne({_id:id}).method.alphas;
     var arr_alphas = arrayify(alphas);
     // console.log(arr_alphas)
     var name_state = [];

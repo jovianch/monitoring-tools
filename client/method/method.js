@@ -5,6 +5,10 @@ Meteor.subscribe('AllProject');
 Template.method.helpers({
   allProjects : function() {
     return Projects.find().fetch()
+  },
+  allMethods : function() {
+    console.log(Methods.find().fetch());
+    return Methods.find().fetch()
   }
 });
 

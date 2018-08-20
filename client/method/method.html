@@ -77,14 +77,17 @@
           <input id="start_date" type="text" name="start_date">
           <p>End Date:</p>
           <input id="end_date" type="text" name="end_date">
-          <p>Your Method:</p>
+          <p>List Method:</p>
+          {{#each arrayify allMethods}}
+            <li>{{this.value.methodname}}</li>
+          {{/each}}
+          <p>Input Your Method Name:</p>
           <input id="method" type="text" name="method">
           <!-- <br>
           Last name:<br>
           <input type="text" name="lastname" value="Mouse">
           <br><br> -->
           <input type="submit" value="Submit" onclick="submit()">
-        <a onclick="submit()">lala</a>
       </div>
 
     </div>
@@ -104,7 +107,7 @@
     <h3>Choose Your Project</h3>
     {{#each arrayify allProjects}}
 	  	<div>
-	  		<a href="/monitor" class="project" id="{{this.value._id}}" name="project">{{this.value.methodname}}</a>
+	  		<a href="/monitor" class="project" id="{{this.value._id}}" name="project">{{this.value.name}}</a>
 		</div>
 	{{/each}}
 
@@ -136,9 +139,17 @@
         }
 
         function submit() {
-            var name = document.getElementById('firstname').value;
-            console.log(name);
-            Methods.insert({ name : "aaa", description : "bbbb"});
+            var methodname = document.getElementById('method').value;
+            var method = Methods.findOne({"methodname":methodname});
+            var projectname = document.getElementById('project_name').value;
+            var description = document.getElementById('description').value;
+            var startdate = document.getElementById('start_date').value;
+            var enddate = document.getElementById('end_date').value;
+            // console.log(method);
+            // var name = document.getElementById('firstname').value;
+            // console.log(name);
+            // Projects.remove({});
+            Projects.insert({"name" : projectname, "description" : description, "start_date" : startdate, "end_date" : enddate, "method" : method});
         }
     </script>
 </template>

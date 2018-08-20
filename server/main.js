@@ -10,7 +10,7 @@ function escapeSpecialChars(jsonString) {
 }
 
 Meteor.startup(() => {
-    // Meteor.call('removeAllProject');
+    // Meteor.call('removeAllMethod');
 
     // // var data = JSON.parse(Assets.getText("SCRUM.json"));
 
@@ -102,7 +102,7 @@ Meteor.startup(() => {
     // // data = data.replace(/\f/g, "\\f");
 
     // data.forEach(function (item, index, array) {
-    //     Projects.insert(item);
+    //     Methods.insert(item);
     // })
 	// Meteor.call('newProject');
 });
@@ -112,7 +112,7 @@ Meteor.publish('Projects', function () {
 });
 
 Meteor.publish('Methods', function () {
-    // return Projects.find({_id:"bNkP9pQLQTvocamnS"});
+    return Methods.find({});
 });
 
 Meteor.publish('AllProject', function () {
@@ -232,15 +232,15 @@ newProject = function() {
     return projectId;
 };
 
-removeAllProject = function() {
-    return Projects.remove({});
+removeAllMethod = function() {
+    return Methods.remove({});
 };
 
 Meteor.methods({
     newProject: function() {
         return newProject();
     },
-    removeAllProject: function() {
-        return removeAllProject();
+    removeAllMethod: function() {
+        return removeAllMethod();
     }
 });
