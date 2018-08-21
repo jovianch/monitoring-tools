@@ -7,6 +7,10 @@ Template.project.helpers({
     var project = Session.get('project');
     console.log(project);
     return Projects.findOne({_id:project}).method.activityspaces;
+  },
+  allMethods : function() {
+    console.log(Methods.find().fetch());
+    return Methods.find().fetch()
   }
 });
 

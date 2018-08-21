@@ -1,11 +1,122 @@
 <template name="project">
+  <script>
+        function showOpenModal() {
+            bootbox.dialog({
+                title: "Open a Method",
+                onEscape: true,
+                message: $(".openfile").html(),
+                buttons: [
+                {
+                    label: "OK",
+                    className: "btn btn-primary pull-left",
+                    callback: function() {
+                        var files = $('input#selectFiles.form-control-file', '.bootbox').get(0).files;
+                        if (files.length <= 0) {
+                            alert("Open File Error!");
+                        }
+                        var fr = new FileReader();
+                        var result;
+                        fr.onload = function(e) {
+                            dataText = e.target.result;
+                            dataText = dataText.replace(/\\n/g, "\\n"); 
+                            dataText = dataText.replace(/\\'/g, "\\'");
+                            dataText = dataText.replace(/\\"/g, '\\"');
+                            dataText = dataText.replace(/\\&/g, "\\&");
+                            dataText = dataText.replace(/\\r/g, "\\r");
+                            dataText = dataText.replace(/\\t/g, "\\t");
+                            dataText = dataText.replace(/\\b/g, "\\b");
+                            dataText = dataText.replace(/\\f/g, "\\f");
+                            result = JSON.parse(dataText);
+                            console.log(result);
+                            if(result.length != 1){
+                                alert("File Corrupted!");
+                            }
+                            else{
+                                result.forEach(function (item, index, array) {
+                                    Projects.insert(item);
+                                })
+                            }
+                        }
+                        fr.readAsText(files.item(0));
+                    }
+                },
+                {
+                    label: "Cancel",
+                    className: "btn btn-default pull-left",
+                    callback: function() {
+                        
+                    }
+                }
+                ]
+            });
+        }
+    </script>
   	<h2>Your Project</h2>
 
+    <p>Project Name:</p>
+    <input id="project_name" type="text" name="project_name">
+    <p>Description:</p>
+    <input id="description" type="text" name="description">
+    <p>Start Date:</p>
+    <input id="start_date" type="text" name="start_date">
+    <p>End Date:</p>
+    <input id="end_date" type="text" name="end_date">
+    <p>List Method:</p>
+    {{#each arrayify allMethods}}
+      <li>{{this.value.methodname}}</li>
+    {{/each}}
+     <a href="/project" class="clickable" onclick="showOpenModal()">Open File</a>
+
+      <div class="openfile" style="display:none;">
+          <input type="file" class="form-control-file" id="selectFiles" align="center" style="width:100%; background-color: #ccffff;">
+      </div>
+    <p>Input Your Method Name:</p>
+    <input id="method" type="text" name="method">
+    <!-- <br>
+    Last name:<br>
+    <input type="text" name="lastname" value="Mouse">
+    <br><br> -->
+    <a href="/project"><input type="submit" value="Submit" onclick="submit()"></a>
+
     <h3>Update Your Activity</h3>
+    <div class="activity">
     {{#each arrayify Activities}}
       <label>{{this.name}}</label>
       <input id="activity{{this.name}}" type="date" name="end_date">
       <br>
     {{/each}}
-    <button class="submit" id="submit">Submit</button>
+    </div>
+    <a href="/method"><button class="submit" id="submit">Submit</button></a>
+
+    <script>
+    function submit() {
+            var methodname = document.getElementById('method').value;
+            var method = Methods.findOne({"methodname":methodname});
+            var projectname = document.getElementById('project_name').value;
+            var description = document.getElementById('description').value;
+            var startdate = document.getElementById('start_date').value;
+            var enddate = document.getElementById('end_date').value;
+            // console.log(method);
+            // var name = document.getElementById('firstname').value;
+            // console.log(name);
+            // Projects.remove({});
+            Projects.insert({"name" : projectname, "description" : description, "start_date" : startdate, "end_date" : enddate, "method" : method});
+            console.log(Projects.findOne({"name" : projectname})._id);
+            Session.set('project', Projects.findOne({"name" : projectname})._id);
+
+            var tbody = document.getElementById('activity');
+
+            var project = Session.get('project');
+            var arr_activity = arrayify(Projects.findOne({_id:project}).method.activityspaces);
+            tbody.innerHTML = "<h3>Your Activity</h3>";
+
+            for (var i = 0; i < arr_activity.length; i++) {
+                var tr = "<label>" + arr_activity[i].name + "</label>";
+                tr += "<input id='activity" + arr_activity[i].name +"' type='date' name='end_date";
+
+                /* We add the table row to the table body */
+                tbody.innerHTML += tr;
+            }
+        }
+    </script>
 </template>
