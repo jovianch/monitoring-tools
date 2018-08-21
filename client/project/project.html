@@ -58,9 +58,9 @@
     <p>Description:</p>
     <input id="description" type="text" name="description">
     <p>Start Date:</p>
-    <input id="start_date" type="text" name="start_date">
+    <input id="start_date" type="date" name="start_date">
     <p>End Date:</p>
-    <input id="end_date" type="text" name="end_date">
+    <input id="end_date" type="date" name="end_date">
     <p>List Method:</p>
     {{#each arrayify allMethods}}
       <li>{{this.value.methodname}}</li>
@@ -76,8 +76,10 @@
     Last name:<br>
     <input type="text" name="lastname" value="Mouse">
     <br><br> -->
-    <a href="/project"><input type="submit" value="Submit" onclick="submit()"></a>
+    <a href="/project"><input type="submit" value="Choose" onclick="submit()"></a>
+    <br>
 
+    <a href="/method">Back to Home</a>
     <h3>Update Your Activity</h3>
     <div class="activity">
     {{#each arrayify Activities}}
