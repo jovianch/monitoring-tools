@@ -526,12 +526,13 @@ Template.update.events({
 
     'mouseenter .states':function(event) {
         document.getElementById("checklist").innerHTML = "";
-        Session.set('checklist', event.currentTarget.id);
-        var states = Session.get('checklist');
+        Session.set('state', event.currentTarget.id);
+        var states = Session.get('state');
         var id = Session.get('project');
         var project = Projects.findOne({_id:id});
         var string_alphas = 'alpha' + states;
         var alphas = document.getElementById(string_alphas).value;
+        Session.set('alpha', alphas);
         alphas = alphas.replace(/\s/g,'');
 
         // var arr_subalpha = arrayify(project.method.alphas[alphas].subalphas);
@@ -550,7 +551,11 @@ Template.update.events({
         tbody.innerHTML = "<h3>Checklists</h3>";
 
         for (var i = 0; i < arr_checklist.length; i++) {
-            var tr = "<li>" + arr_checklist[i].name + "</li>";
+            if (arr_checklist[i].value.result) {
+                var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'><li>" + arr_checklist[i].name + "v</li></a>";
+            } else {
+                var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'><li>" + arr_checklist[i].name + "</li></a>";
+            }
 
             /* We add the table row to the table body */
             tbody.innerHTML += tr;
@@ -558,12 +563,66 @@ Template.update.events({
     },
 
     // if click checklist
-    'click .checklists': function(event) {
-        Session.set('checklist', event.currentTarget.id);
-        var checklist = Session.get('checklist');
+    'click .checklist': function(event) {
         var id = Session.get('project');
+        var state = Session.get('state');
+        var alpha = Session.get('alpha');
+        var checklist = event.currentTarget.id;
 
         var project = Projects.findOne({_id:id});
+
+        if (project.method.alphas[alpha].states[state].checklists[checklist].result) {
+            var fields = {}
+            var appendString = "method.alphas." + alpha + ".states." + state + ".checklists." + checklist + ".result";
+            fields[appendString] = false;
+            var appendString = "method.alphas." + alpha + ".states." + state + ".checklists." + checklist + ".timestamp";
+            fields[appendString] = new Date();
+            var id = Session.get('project');
+            Projects.update({_id:id}, {$set : fields});
+        } else {
+            var fields = {}
+            var appendString = "method.alphas." + alpha + ".states." + state + ".checklists." + checklist + ".result";
+            fields[appendString] = true;
+            var appendString = "method.alphas." + alpha + ".states." + state + ".checklists." + checklist + ".timestamp";
+            fields[appendString] = new Date();
+            var id = Session.get('project');
+            Projects.update({_id:id}, {$set : fields});
+        }
+
+        document.getElementById("checklist").innerHTML = "";
+        var states = Session.get('state');
+        var id = Session.get('project');
+        var project = Projects.findOne({_id:id});
+        var string_alphas = 'alpha' + states;
+        var alphas = document.getElementById(string_alphas).value;
+        Session.set('alpha', alphas);
+        alphas = alphas.replace(/\s/g,'');
+
+        // var arr_subalpha = arrayify(project.method.alphas[alphas].subalphas);
+        // if (arr_subalpha.length > 0) {
+        //     var string_subalpha = 'subalpha' + states;
+        //     var subalpha = document.getElementById(string_subalpha).value;
+        //     subalpha = subalpha.replace(/\s/g,'');
+        //     var checklist = project.method.alphas[alphas].subalphas[subalpha].states[states].checklists;
+        // } else {
+            var checklist = project.method.alphas[alphas].states[states].checklists;
+        // }
+
+        var tbody = document.getElementById('checklist');
+
+        var arr_checklist = arrayify(checklist);
+        tbody.innerHTML = "<h3>Checklists</h3>";
+
+        for (var i = 0; i < arr_checklist.length; i++) {
+            if (arr_checklist[i].value.result) {
+                var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'><li>" + arr_checklist[i].name + "v</li></a>";
+            } else {
+                var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'><li>" + arr_checklist[i].name + "</li></a>";
+            }
+
+            /* We add the table row to the table body */
+            tbody.innerHTML += tr;
+        }
     },
 
     'click .workproduct': function(event) {
