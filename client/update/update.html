@@ -16,7 +16,7 @@
 	<h3>Alpha</h3>
 	  			{{#each arrayify alphas}}
 			  	<div class="dropdown">
-			  		{{#if is_subalpha this.value}}
+			  		<!-- {{#if is_subalpha this.value}}
 			  			{{#each arrayify this.value.subalphas}}
 			  				<a class="dropbtn" href="">{{this.name}}</a>
 			  				<div class="dropdown-content">
@@ -31,7 +31,7 @@
 						    {{/each}}
 						    </div>
 			  			{{/each}}
-			  		{{else}}
+			  		{{else}} -->
 				  		<a class="dropbtn" href="">{{this.name}}</a>
 				  		<div class="dropdown-content">
 				   		{{#each arrayify this.value.states}}
@@ -44,7 +44,7 @@
 					      	<input id="alpha{{this.name}}" type="hidden" name="alphas" value="{{this.value.alpha}}">
 					    {{/each}}
 					    </div>
-					{{/if}}
+					<!-- {{/if}} -->
 				</div>
 				{{/each}}
 		<h3>Work Product</h3>
