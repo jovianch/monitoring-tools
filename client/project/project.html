@@ -88,6 +88,16 @@
       <br>
     {{/each}}
     </div>
+
+    <div class="subalpha">
+      <h3>Update Your Subalpha</h3>
+      {{#each arrayify alphas}}
+        {{#each arrayify this.value.subalphas}}
+          <label>{{this.name}}</label>
+          <input id="subalpha{{this.name}}" type="number">
+        {{/each}}
+      {{/each}}
+    </div>
     <a href="/method"><button class="submit" id="submit">Submit</button></a>
 
     <script>
@@ -106,19 +116,19 @@
             console.log(Projects.findOne({"name" : projectname})._id);
             Session.set('project', Projects.findOne({"name" : projectname})._id);
 
-            var tbody = document.getElementById('activity');
+            // var tbody = document.getElementById('activity');
 
-            var project = Session.get('project');
-            var arr_activity = arrayify(Projects.findOne({_id:project}).method.activityspaces);
-            tbody.innerHTML = "<h3>Your Activity</h3>";
+            // var project = Session.get('project');
+            // var arr_activity = arrayify(Projects.findOne({_id:project}).method.activityspaces);
+            // tbody.innerHTML = "<h3>Your Activity</h3>";
 
-            for (var i = 0; i < arr_activity.length; i++) {
-                var tr = "<label>" + arr_activity[i].name + "</label>";
-                tr += "<input id='activity" + arr_activity[i].name +"' type='date' name='end_date";
+            // for (var i = 0; i < arr_activity.length; i++) {
+            //     var tr = "<label>" + arr_activity[i].name + "</label>";
+            //     tr += "<input id='activity" + arr_activity[i].name +"' type='date' name='end_date";
 
-                /* We add the table row to the table body */
-                tbody.innerHTML += tr;
-            }
+            //     /* We add the table row to the table body */
+            //     tbody.innerHTML += tr;
+            // }
         }
     </script>
 </template>

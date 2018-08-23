@@ -47,6 +47,40 @@
 					<!-- {{/if}} -->
 				</div>
 				{{/each}}
+		<h3>SubAlpha</h3>
+		{{#each arrayify subalphas}}
+			<div class="dropdown">
+			  		<!-- {{#if is_subalpha this.value}}
+			  			{{#each arrayify this.value.subalphas}}
+			  				<a class="dropbtn" href="">{{this.name}}</a>
+			  				<div class="dropdown-content">
+					   		{{#each arrayify this.value.states}}
+					   			{{#if this.value.result}}
+					   				<a class="states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}} v</a>
+					   			{{else}}
+					   				<a class="states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}}</a>
+					   			{{/if}}
+						      	<input id="alpha{{this.name}}" type="hidden" name="alphas" value="{{this.value.alpha}}">
+						      	<input id="subalpha{{this.name}}" type="hidden" name="alphas" value="{{this.value.subalpha}}">
+						    {{/each}}
+						    </div>
+			  			{{/each}}
+			  		{{else}} -->
+				  		<a class="dropbtn" href="">{{this.name}}</a>
+				  		<div class="dropdown-content">
+				   		{{#each arrayify this.value.states}}
+				   			{{#if this.value.result}}
+				   				<a class="states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}} v</a>
+				   			{{else}}
+				   				<a class="states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}}</a>
+				   			{{/if}}
+				   			
+					      	<input id="alpha{{this.name}}" type="hidden" name="alphas" value="{{this.value.alpha}}">
+					    {{/each}}
+					    </div>
+					<!-- {{/if}} -->
+				</div>
+		{{/each}}
 		<h3>Work Product</h3>
 		{{#each arrayify alphas}}
 			{{#each arrayify this.value.workproducts}}

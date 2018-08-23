@@ -15,6 +15,11 @@ Template.update.helpers({
         var id = Session.get('project');
         return Projects.findOne({_id:id}).method.activityspaces
     },
+    subalphas : function() {
+        var id = Session.get('project');
+        console.log(Projects.findOne({_id:id}));
+        return Projects.findOne({_id:id}).subalpha
+    }
     // is_subalpha : function(alpha) {
     //     var arr_subalpha = arrayify(alpha.subalphas);
     //     if (arr_subalpha.length > 0) {
