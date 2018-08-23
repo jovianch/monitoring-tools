@@ -67,6 +67,18 @@ Template.project.events({
             console.log(fields);
             var id = Session.get('project');
             Projects.update({_id:id}, {$set : fields});
+
+            var str_name = subalpha.name + (i + 1);
+            var arr_states = arrayify(Projects.findOne({_id:project}).subalpha[str_name].states);
+
+            arr_states.forEach(function(state) {
+              var fields = {};
+              var appendString = "subalpha." + subalpha.name + (i + 1) + ".states." + state.name + ".subalpha";
+              fields[appendString] = subalpha.name + (i + 1);
+              console.log(fields);
+              var id = Session.get('project');
+              Projects.update({_id:id}, {$set : fields});
+            });
           }
         });
       }

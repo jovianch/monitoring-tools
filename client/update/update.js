@@ -706,4 +706,187 @@ Template.update.events({
             tbody.innerHTML += tr;
         }
     },
+
+    'click .subalpha_states': function(event) {
+        Session.set('subalpha_states', event.currentTarget.id);
+        var states = Session.get('subalpha_states');
+
+        var id = Session.get('project')
+        var project = Projects.findOne({_id:id});
+
+        var name = Session.get('subalpha_dropdown');
+        console.log('name : ' + name);
+        name = name.replace(/\s/g,'');
+
+        var string_subalpha = 'subalpha' + name + states;
+        var subalpha = document.getElementById(string_subalpha).value;
+        subalpha = subalpha.replace(/\s/g,'');
+        // console.log('alphas : ' + alphas);
+
+       
+        var arr_states = arrayify(project.subalpha[subalpha].states);
+        
+        var idx_states = 0;
+        var i = 0;
+        var is_states = false;
+        while (!(is_states)) {
+            if (arr_states[i].name.replace(/\s/g,'') === project.subalpha[subalpha].states[states].name.replace(/\s/g,'')) {
+                idx_states = i + 1;
+                is_states = true;
+            }
+            i++;
+        }
+
+        // var arr_activity_spaces = arrayify(project.method.activityspaces);
+
+        console.log('idx_states : ' + idx_states);
+        if (project.subalpha[subalpha].states[states].result) {
+            for (var j = arr_states.length; j >= idx_states; j--) {
+                var fields = {}
+                var appendString = "subalpha." + subalpha + ".states." + arr_states[j-1].name + ".result";
+                fields[appendString] = false;
+                var appendString = "subalpha." + subalpha + ".states." + arr_states[j-1].name + ".timestamp";
+                fields[appendString] = new Date();
+                console.log(fields)
+                Projects.update({_id:id}, {$set : fields});
+            }
+        } else {
+            for (var j = 0; j < idx_states; j++) {
+                var fields = {}
+                var appendString = "subalpha." + subalpha + ".states." + arr_states[j].name + ".result";
+                fields[appendString] = true;
+                var appendString = "subalpha." + subalpha + ".states." + arr_states[j].name + ".timestamp";
+                fields[appendString] = new Date();
+                console.log(fields);
+                Projects.update({_id:id}, {$set : fields});
+                // console.log(project)
+            }
+        }
+
+        // arr_activity_spaces.forEach(function(activity_space) {
+        //     var completion_criterias = activity_space.value.completioncriteria;
+        //     var is_complete = true;
+        //     var id = Session.get('project');
+        //     var project = Projects.findOne({_id:id});
+        //     // console.log("activity_space : " + activity_space.name);
+        //     completion_criterias.forEach(function(completion_criteria) {
+        //         var alphas = completion_criteria.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
+        //         var states = completion_criteria.split('::')[1].replace(/ +/g, "");;
+        //         // console.log("alphas : " + alphas);
+        //         // console.log("states : " + states);
+        //         // console.log(project.alphas[alphas].states[states].result);
+        //         if (project.method.alphas[alphas].states[states].result) {
+        //             is_complete = is_complete && true;
+        //         } else {
+        //             is_complete = is_complete && false;
+        //         }
+        //     });
+        //     // console.log(is_complete);
+        //     if (is_complete) {
+        //         var fields = {}
+        //         var appendString = "method.activityspaces." + activity_space.name + ".result";
+        //         fields[appendString] = true;
+        //         var appendString = "method.activityspaces." + activity_space.name + ".timestamp";
+        //         fields[appendString] = new Date();
+        //         var id = Session.get('project');
+        //         Projects.update({_id:id}, {$set : fields});
+        //     } else {
+        //         var fields = {}
+        //         var appendString = "method.activityspaces." + activity_space.name + ".result";
+        //         fields[appendString] = false;
+        //         var appendString = "method.activityspaces." + activity_space.name + ".timestamp";
+        //         fields[appendString] = new Date();
+        //         var id = Session.get('project');
+        //         Projects.update({_id:id}, {$set : fields});
+        //     }
+
+        //     var arr_activities = arrayify(activity_space.value.activities);
+        //     arr_activities.forEach(function(activity) {
+        //         var completion_criterias = activity.value.completioncriteria;
+        //         var is_complete = true;
+        //         var id = Session.get('project');
+        //         var project = Projects.findOne({_id:id});
+        //         // console.log("activity_space : " + activity_space.name);
+        //         completion_criterias.forEach(function(completion_criteria) {
+        //             var alphas = completion_criteria.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
+        //             var states = completion_criteria.split('::')[1].replace(/ +/g, "");;
+        //             // console.log("alphas : " + alphas);
+        //             // console.log("states : " + states);
+        //             // console.log(project.alphas[alphas].states[states].result);
+        //             if (project.method.alphas[alphas].states[states].result) {
+        //                 is_complete = is_complete && true;
+        //             } else {
+        //                 is_complete = is_complete && false;
+        //             }
+        //         });
+        //         // console.log(is_complete);
+        //         if (is_complete) {
+        //             var fields = {}
+        //             var appendString = "method.activityspaces." + activity_space.name + ".activities." + activity.name + ".result";
+        //             fields[appendString] = true;
+        //             var appendString = "method.activityspaces." + activity_space.name + ".activities." + activity.name + ".timestamp";
+        //             fields[appendString] = new Date();
+        //             var id = Session.get('project');
+        //             Projects.update({_id:id}, {$set : fields});
+        //         } else {
+        //             var fields = {}
+        //             var appendString = "method.activityspaces." + activity_space.name + ".activities." + activity.name + ".result";
+        //             fields[appendString] = false;
+        //             var appendString = "method.activityspaces." + activity_space.name + ".activities." + activity.name + ".timestamp";
+        //             fields[appendString] = new Date();
+        //             var id = Session.get('project');
+        //             Projects.update({_id:id}, {$set : fields});
+        //         }
+        //     });
+        // });
+        // }
+        
+    },
+
+    'mouseenter .subalpha_dropdown':function(event) {
+        Session.set('subalpha_dropdown', event.currentTarget.id);
+    },
+
+    'mouseenter .subalpha_states':function(event) {
+        document.getElementById("checklist").innerHTML = "";
+        Session.set('subalpha_state', event.currentTarget.id);
+        var subalpha_state = Session.get('subalpha_state');
+
+        var name = Session.get('subalpha_dropdown');
+        console.log('name : ' + name);
+        name = name.replace(/\s/g,'');
+
+        var id = Session.get('project');
+        var project = Projects.findOne({_id:id});
+        var string_subalpha = 'subalpha' + name + subalpha_state;
+        var subalpha = document.getElementById(string_subalpha).value;
+        Session.set('subalpha', subalpha);
+        subalpha = subalpha.replace(/\s/g,'');
+
+        // var arr_subalpha = arrayify(project.method.alphas[alphas].subalphas);
+        // if (arr_subalpha.length > 0) {
+        //     var string_subalpha = 'subalpha' + states;
+        //     var subalpha = document.getElementById(string_subalpha).value;
+        //     subalpha = subalpha.replace(/\s/g,'');
+        //     var checklist = project.method.alphas[alphas].subalphas[subalpha].states[states].checklists;
+        // } else {
+            var checklist = project.subalpha[subalpha].states[subalpha_state].checklists;
+        // }
+
+        var tbody = document.getElementById('checklist');
+
+        var arr_checklist = arrayify(checklist);
+        tbody.innerHTML = "<h3>Checklists</h3>";
+
+        for (var i = 0; i < arr_checklist.length; i++) {
+            if (arr_checklist[i].value.result) {
+                var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'><li>" + arr_checklist[i].name + "v</li></a>";
+            } else {
+                var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'><li>" + arr_checklist[i].name + "</li></a>";
+            }
+
+            /* We add the table row to the table body */
+            tbody.innerHTML += tr;
+        }
+    },
 });

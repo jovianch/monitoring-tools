@@ -66,16 +66,17 @@
 						    </div>
 			  			{{/each}}
 			  		{{else}} -->
-				  		<a class="dropbtn" href="">{{this.name}}</a>
+				  		<a class="dropbtn subalpha_dropdown" id="{{this.name}}" href="">{{this.name}}</a>
+				  		<input id="name{{this.name}}" type="hidden" name="name_subalpha" value="{{this.name}}">
 				  		<div class="dropdown-content">
 				   		{{#each arrayify this.value.states}}
 				   			{{#if this.value.result}}
-				   				<a class="states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}} v</a>
+				   				<a class="subalpha_states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}} v</a>
 				   			{{else}}
-				   				<a class="states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}}</a>
+				   				<a class="subalpha_states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}}</a>
 				   			{{/if}}
-				   			
-					      	<input id="alpha{{this.name}}" type="hidden" name="alphas" value="{{this.value.alpha}}">
+
+					      	<input id="subalpha{{this.value.subalpha}}{{this.name}}" type="hidden" name="subalphas" value="{{this.value.subalpha}}">
 					    {{/each}}
 					    </div>
 					<!-- {{/if}} -->
