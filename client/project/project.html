@@ -33,7 +33,7 @@
                             }
                             else{
                                 result.forEach(function (item, index, array) {
-                                    Projects.insert(item);
+                                    Methods.insert(item);
                                 })
                             }
                         }
@@ -96,6 +96,27 @@
           <label>{{this.name}}</label>
           <input id="subalpha{{this.name}}" type="number">
         {{/each}}
+      {{/each}}
+    </div>
+    <div class="workproduct">
+        <h3>Update Your Work Product</h3>
+        {{#each arrayify alphas}}
+          {{#each arrayify this.value.workproducts}}
+            <label>{{this.name}}</label>
+            <input id="workproduct{{this.name}}" type="number">
+          {{/each}}
+        {{/each}}
+    </div>
+    <button class="submit_workproduct">Submit Workproduct</button>
+    <div class="state_workproduct">
+      <h3>Choose Your State</h3>
+      {{#each workproduct in workproducts}}
+        <label>{{workproduct.name}}</label>
+        <select id="{{workproduct.name}}">
+        {{#each states_workproduct workproduct.name}}
+          <option value="{{this.name}}">{{this.name}}</option>
+        {{/each}}
+        </select>
       {{/each}}
     </div>
     <a href="/method"><button class="submit" id="submit">Submit</button></a>

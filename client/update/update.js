@@ -225,6 +225,18 @@ Template.update.events({
                     fields[appendString] = new Date();
                     console.log(fields);
                     Projects.update({_id:id}, {$set : fields});
+
+
+                    var arr_checklists = arrayify(project.method.alphas[alphas].states[arr_states[j].name].checklists);
+                    arr_checklists.forEach(function(checklist) {
+                        var fields = {}
+                        var appendString = "method.alphas." + alphas + ".states." + arr_states[j].name + ".checklists." + checklist.name + ".result";
+                        fields[appendString] = true;
+                        var appendString = "method.alphas." + alphas + ".states." + arr_states[j].name + ".checklists." + checklist.name + ".timestamp";
+                        fields[appendString] = new Date();
+                        var id = Session.get('project');
+                        Projects.update({_id:id}, {$set : fields});
+                    })
                     // console.log(project)
                 }
             }
@@ -305,6 +317,7 @@ Template.update.events({
                     }
                 });
             });
+
         // }
         
     },
@@ -573,61 +586,197 @@ Template.update.events({
         var state = Session.get('state');
         var alpha = Session.get('alpha');
         var checklist = event.currentTarget.id;
+        var subalpha_state = Session.get('subalpha_state');
+        var subalpha = Session.get('subalpha');
+             
 
         var project = Projects.findOne({_id:id});
 
-        if (project.method.alphas[alpha].states[state].checklists[checklist].result) {
-            var fields = {}
-            var appendString = "method.alphas." + alpha + ".states." + state + ".checklists." + checklist + ".result";
-            fields[appendString] = false;
-            var appendString = "method.alphas." + alpha + ".states." + state + ".checklists." + checklist + ".timestamp";
-            fields[appendString] = new Date();
-            var id = Session.get('project');
-            Projects.update({_id:id}, {$set : fields});
-        } else {
-            var fields = {}
-            var appendString = "method.alphas." + alpha + ".states." + state + ".checklists." + checklist + ".result";
-            fields[appendString] = true;
-            var appendString = "method.alphas." + alpha + ".states." + state + ".checklists." + checklist + ".timestamp";
-            fields[appendString] = new Date();
-            var id = Session.get('project');
-            Projects.update({_id:id}, {$set : fields});
-        }
-
-        document.getElementById("checklist").innerHTML = "";
-        var states = Session.get('state');
-        var id = Session.get('project');
-        var project = Projects.findOne({_id:id});
-        var string_alphas = 'alpha' + states;
-        var alphas = document.getElementById(string_alphas).value;
-        Session.set('alpha', alphas);
-        alphas = alphas.replace(/\s/g,'');
-
-        // var arr_subalpha = arrayify(project.method.alphas[alphas].subalphas);
-        // if (arr_subalpha.length > 0) {
-        //     var string_subalpha = 'subalpha' + states;
-        //     var subalpha = document.getElementById(string_subalpha).value;
-        //     subalpha = subalpha.replace(/\s/g,'');
-        //     var checklist = project.method.alphas[alphas].subalphas[subalpha].states[states].checklists;
-        // } else {
-            var checklist = project.method.alphas[alphas].states[states].checklists;
-        // }
-
-        var tbody = document.getElementById('checklist');
-
-        var arr_checklist = arrayify(checklist);
-        tbody.innerHTML = "<h3>Checklists</h3>";
-
-        for (var i = 0; i < arr_checklist.length; i++) {
-            if (arr_checklist[i].value.result) {
-                var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'><li>" + arr_checklist[i].name + "v</li></a>";
-            } else {
-                var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'><li>" + arr_checklist[i].name + "</li></a>";
+        if (alpha === '') {
+            subalpha = subalpha.replace(/\s/g,''); 
+            var arr_checklists = arrayify(project.subalpha[subalpha].states[subalpha_state].checklists);
+            
+            var idx_checklists = 0;
+            var i = 0;
+            var is_checklists = false;
+            while (!(is_checklists)) {
+                console.log('array : ' + arr_checklists[i].name.replace(/\s/g,''));
+                console.log('db : ' + project.subalpha[subalpha].states[subalpha_state].checklists[checklist].name.replace(/\s/g,''));
+                if (arr_checklists[i].name.replace(/\s/g,'') === project.subalpha[subalpha].states[subalpha_state].checklists[checklist].name.replace(/\s/g,'')) {
+                    idx_checklists = i + 1;
+                    is_checklists = true;
+                }
+                i++;
             }
+
+            if (project.subalpha[subalpha].states[subalpha_state].checklists[checklist].result) {
+                for (var j = arr_checklists.length; j >= idx_checklists; j--) {
+                    var fields = {}
+                    var appendString = "subalpha." + subalpha + ".states." + subalpha_state + ".checklists." + arr_checklists[j-1].name + ".result";
+                    fields[appendString] = false;
+                    var appendString = "subalpha." + subalpha + ".states." + subalpha_state + ".checklists." + arr_checklists[j-1].name + ".timestamp";
+                    fields[appendString] = new Date();
+                    var id = Session.get('project');
+                    Projects.update({_id:id}, {$set : fields});
+                }
+            } else {
+                for (var j = 0; j < idx_checklists; j++) {
+                    var fields = {}
+                    var appendString = "subalpha." + subalpha + ".states." + subalpha_state + ".checklists." + arr_checklists[j].name + ".result";
+                    fields[appendString] = true;
+                    var appendString = "subalpha." + subalpha + ".states." + subalpha_state + ".checklists." + arr_checklists[j].name + ".timestamp";
+                    fields[appendString] = new Date();
+                    var id = Session.get('project');
+                    Projects.update({_id:id}, {$set : fields});
+                }
+            }
+
+            document.getElementById("checklist").innerHTML = "";
+            var states = Session.get('state');
+            var id = Session.get('project');
+            var project = Projects.findOne({_id:id});
+            var string_subalpha = 'subalpha' + name + subalpha_state;
+            var subalpha = Session.get('subalpha');
+            
+            subalpha = subalpha.replace(/\s/g,'');
+
+            // var arr_subalpha = arrayify(project.method.alphas[alphas].subalphas);
+            // if (arr_subalpha.length > 0) {
+            //     var string_subalpha = 'subalpha' + states;
+            //     var subalpha = document.getElementById(string_subalpha).value;
+            //     subalpha = subalpha.replace(/\s/g,'');
+            //     var checklist = project.method.alphas[alphas].subalphas[subalpha].states[states].checklists;
+            // } else {
+                var checklist = project.subalpha[subalpha].states[subalpha_state].checklists;
+            // }
+
+            var tbody = document.getElementById('checklist');
+
+            var arr_checklist = arrayify(checklist);
+            tbody.innerHTML = "<h3>Checklists</h3>";
+
+            for (var i = 0; i < arr_checklist.length; i++) {
+                if (arr_checklist[i].value.result) {
+                    var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'><li>" + arr_checklist[i].name + "v</li></a>";
+                } else {
+                    var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'><li>" + arr_checklist[i].name + "</li></a>";
+                }
 
             /* We add the table row to the table body */
             tbody.innerHTML += tr;
+            }
+
+            if (idx_checklists == arr_checklists.length) {
+                var fields = {}
+                var appendString = "subalpha." + subalpha + ".states." + subalpha_state + ".result";
+                fields[appendString] = true;
+                var appendString = "subalpha." + subalpha + ".states." + subalpha_state + ".timestamp";
+                fields[appendString] = new Date();
+                console.log(fields);
+                Projects.update({_id:id}, {$set : fields});
+            } else {
+                var fields = {}
+                var appendString = "subalpha." + subalpha + ".states." + subalpha_state + ".result";
+                fields[appendString] = false;
+                var appendString = "subalpha." + subalpha + ".states." + subalpha_state + ".timestamp";
+                fields[appendString] = new Date();
+                console.log(fields);
+                Projects.update({_id:id}, {$set : fields});
+            }
+
+        } else {
+            var arr_checklists = arrayify(project.method.alphas[alpha].states[state].checklists);
+            console.log(arr_checklists);
+            
+            var idx_checklists = 0;
+            var i = 0;
+            var is_checklists = false;
+            while (!(is_checklists)) {
+                console.log(i);
+                if (arr_checklists[i].name.replace(/\s/g,'') === project.method.alphas[alpha].states[state].checklists[checklist].name.replace(/\s/g,'')) {
+                    idx_checklists = i + 1;
+                    is_checklists = true;
+                }
+                i++;
+            }
+
+            if (project.method.alphas[alpha].states[state].checklists[checklist].result) {
+                for (var j = arr_checklists.length; j >= idx_checklists; j--) {
+                    var fields = {}
+                    var appendString = "method.alphas." + alpha + ".states." + state + ".checklists." + arr_checklists[j-1].name + ".result";
+                    fields[appendString] = false;
+                    var appendString = "method.alphas." + alpha + ".states." + state + ".checklists." + arr_checklists[j-1].name + ".timestamp";
+                    fields[appendString] = new Date();
+                    var id = Session.get('project');
+                    Projects.update({_id:id}, {$set : fields});
+                }
+            } else {
+                for (var j = 0; j < idx_checklists; j++) {
+                    var fields = {}
+                    var appendString = "method.alphas." + alpha + ".states." + state + ".checklists." + arr_checklists[j].name + ".result";
+                    fields[appendString] = true;
+                    var appendString = "method.alphas." + alpha + ".states." + state + ".checklists." + arr_checklists[j].name + ".timestamp";
+                    fields[appendString] = new Date();
+                    var id = Session.get('project');
+                    Projects.update({_id:id}, {$set : fields});
+                }
+            }
+
+            document.getElementById("checklist").innerHTML = "";
+            var states = Session.get('state');
+            var id = Session.get('project');
+            var project = Projects.findOne({_id:id});
+            var string_alphas = 'alpha' + states;
+            var alphas = document.getElementById(string_alphas).value;
+            Session.set('alpha', alphas);
+            alphas = alphas.replace(/\s/g,'');
+
+            // var arr_subalpha = arrayify(project.method.alphas[alphas].subalphas);
+            // if (arr_subalpha.length > 0) {
+            //     var string_subalpha = 'subalpha' + states;
+            //     var subalpha = document.getElementById(string_subalpha).value;
+            //     subalpha = subalpha.replace(/\s/g,'');
+            //     var checklist = project.method.alphas[alphas].subalphas[subalpha].states[states].checklists;
+            // } else {
+                var checklist = project.method.alphas[alphas].states[states].checklists;
+            // }
+
+            var tbody = document.getElementById('checklist');
+
+            var arr_checklist = arrayify(checklist);
+            tbody.innerHTML = "<h3>Checklists</h3>";
+
+            for (var i = 0; i < arr_checklist.length; i++) {
+                if (arr_checklist[i].value.result) {
+                    var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'><li>" + arr_checklist[i].name + "v</li></a>";
+                } else {
+                    var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'><li>" + arr_checklist[i].name + "</li></a>";
+                }
+
+                /* We add the table row to the table body */
+                tbody.innerHTML += tr;
+            } 
+
+            if (idx_checklists == arr_checklists.length) {
+                var fields = {}
+                var appendString = "method.alphas." + alphas + ".states." + states + ".result";
+                fields[appendString] = true;
+                var appendString = "method.alphas." + alphas + ".states." + states + ".timestamp";
+                fields[appendString] = new Date();
+                console.log(fields);
+                Projects.update({_id:id}, {$set : fields});
+            } else {
+                var fields = {}
+                var appendString = "method.alphas." + alphas + ".states." + states + ".result";
+                fields[appendString] = false;
+                var appendString = "method.alphas." + alphas + ".states." + states + ".timestamp";
+                fields[appendString] = new Date();
+                console.log(fields);
+                Projects.update({_id:id}, {$set : fields});
+            }
         }
+
+        
     },
 
     'click .workproduct': function(event) {
@@ -850,6 +999,7 @@ Template.update.events({
     'mouseenter .subalpha_states':function(event) {
         document.getElementById("checklist").innerHTML = "";
         Session.set('subalpha_state', event.currentTarget.id);
+        Session.set('alpha', '');
         var subalpha_state = Session.get('subalpha_state');
 
         var name = Session.get('subalpha_dropdown');

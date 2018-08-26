@@ -24,15 +24,15 @@
 						{
 							"An idea for a way of improving current ways of working, increasing market share, or applying a new or innovative software system has been identified" :
 							{
-								"name":"An idea for a way of improving current ways of working, increasing market share, or applying a new or innovative software system has been identified."
+								"name":"An idea for a way of improving current ways of working, increasing market share, or applying a new or innovative software system has been identified"
 							},
 							"At least one of the stakeholders wishes to make an investment in better understanding the opportunity and the value associated with addressing it" :
 							{
-								"name":"At least one of the stakeholders wishes to make an investment in better understanding the opportunity and the value associated with addressing it."
+								"name":"At least one of the stakeholders wishes to make an investment in better understanding the opportunity and the value associated with addressing it"
 							},
 							"The other stakeholders who share the opportunity have been identified" :
 							{
-								"name":"The other stakeholders who share the opportunity have been identified."
+								"name":"The other stakeholders who share the opportunity have been identified"
 							}
 						}
 					},
@@ -46,23 +46,23 @@
 			            {
 			              	"The stakeholders in the opportunity and the proposed solution have been identified":
 			              	{
-			              		"name":"The stakeholders in the opportunity and the proposed solution have been identified."
+			              		"name":"The stakeholders in the opportunity and the proposed solution have been identified"
 			              	},
 			              	"The stakeholders' needs that generate the opportunity have been established":
 			              	{
-			              		"name":"The stakeholders' needs that generate the opportunity have been established."
+			              		"name":"The stakeholders' needs that generate the opportunity have been established"
 			              	},
 			              	"Any underlying problems and their root causes have been identified":
 			              	{
-			              		"name":"Any underlying problems and their root causes have been identified."
+			              		"name":"Any underlying problems and their root causes have been identified"
 			              	},
 			              	"It has been confirmed that a software-based solution is needed":
 			              	{
-			              		"name":"It has been confirmed that a software-based solution is needed."
+			              		"name":"It has been confirmed that a software-based solution is needed"
 			              	},
 			              	"At least one software-based solution has been proposed":
 			              	{
-			              		"name":"At least one software-based solution has been proposed."
+			              		"name":"At least one software-based solution has been proposed"
 			              	}
 			            }
           			},
@@ -964,7 +964,7 @@
                 	{
                   		"name":"Choose the members of the team"
                   	},
-                  	"Choose a Scrum Master":
+                  	"Choose a Scrum master":
                   	{
                   		"name":"Choose a Scrum master"
                   	}

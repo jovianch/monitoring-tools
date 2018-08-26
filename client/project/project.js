@@ -15,7 +15,26 @@ Template.project.helpers({
   alphas : function() {
     var project = Session.get('project');
     return Projects.findOne({_id:project}).method.alphas;
-  }
+  },
+  workproducts : function() {
+    var is_workproducts = Session.get('is_workproducts');
+    if (is_workproducts) {
+      var project = Session.get('project');
+      return arrayify(Projects.findOne({_id:project}).workproducts);
+    }
+  },
+  states_workproduct : function(workproduct) {
+      var project = Session.get('project');
+      console.log(workproduct);
+      var alpha = Projects.findOne({_id:project}).workproducts[workproduct].alpha;
+      var subalpha = Projects.findOne({_id:project}).workproducts[workproduct].subalpha;
+
+      if (subalpha == '') {
+        return arrayify(Projects.findOne({_id:project}).method.alphas[alpha].states);
+      } else {
+        return arrayify(Projects.findOne({_id:project}).method.alphas[alpha].subalphas[subalpha].states);
+      }
+    }
 });
 
 Template.registerHelper('arrayify',function(obj){
@@ -83,5 +102,44 @@ Template.project.events({
         });
       }
     });
+
+    var workproducts = arrayify(Projects.findOne({_id:project}).workproducts);
+    workproducts.forEach(function(workproduct) {
+      var fields = {};
+      var appendString = "workproducts." + workproduct.name + ".states";
+      var e = document.getElementById(workproduct.name);
+      var arr_states = [];
+      arr_states.push(e.options[e.selectedIndex].value);
+      console.log(arr_states);
+      fields[appendString] = arr_states;
+      console.log(fields);
+      var id = Session.get('project');
+      Projects.update({_id:id}, {$set : fields});
+    });
+  },
+
+  'click .submit_workproduct' : function(event) {
+    var project = Session.get('project');
+
+    var alphas = arrayify(Projects.findOne({_id:project}).method.alphas);
+    alphas.forEach(function(alpha) {
+      var workproducts = arrayify(Projects.findOne({_id:project}).method.alphas[alpha.name].workproducts);
+      if(workproducts.length > 0) {
+        workproducts.forEach(function(workproduct) {
+          var str_workproduct = "workproduct" + workproduct.name;
+          var count_workproduct = document.getElementById(str_workproduct).value;
+
+          for (var i = 0; i < count_workproduct; i++) {
+            var fields = {};
+            var appendString = "workproducts." + workproduct.name + (i + 1);
+            fields[appendString] = Projects.findOne({_id:project}).method.alphas[alpha.name].workproducts[workproduct.name];
+            console.log(fields);
+            var id = Session.get('project');
+            Projects.update({_id:id}, {$set : fields});
+          }
+        });
+      }
+    });
+    Session.set('is_workproducts', true);
   }
 });

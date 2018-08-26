@@ -310,6 +310,48 @@ function drawSpider() {
     var myRadarChart = new Chart(ctx2).Radar(data2, options2);
 }
 
+function drawSubalpha() {
+     var columns = [
+        ['string', 'Subalpha'],
+        ['number', 'Progress'],
+        ];
+
+        //get data from database for every alphas
+        var id = Session.get('project');
+        var subalphas = Projects.findOne({_id:id}).subalpha;
+        var arr_subalphas = arrayify(subalphas);
+        var count_state = [];
+        var count_state_done = [];
+
+        arr_subalphas.forEach(function(subalpha) {
+            var subalpha_states = arrayify(subalpha.value.states);
+            var total_states = subalpha_states.length;
+            var done_states = 0;
+            subalpha_states.forEach(function(subalpha) {
+                if (subalpha.value.result) {
+                    done_states += 1;
+                }
+            });
+            count_state.push([subalpha.name, done_states/total_states]);
+        });
+
+        var data = count_state;
+
+        chart = {
+        target: 'subalpha',
+        type: 'BarChart',
+        columns: columns,
+        rows: data,
+        options: {
+            'title':'Progress per Alpha',
+            'width':400,
+            'height':300
+    }
+    };
+
+    drawChart(chart);
+}
+
 Template.monitor.events({
 	'click': function(){
         console.log("You clicked something");
@@ -325,5 +367,8 @@ Template.monitor.events({
     },
     'click .spider_chart': function(event) {
        drawSpider();
+    },
+    'click .subalpha': function(event) {
+        drawSubalpha();
     }
 });
