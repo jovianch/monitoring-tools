@@ -55,115 +55,117 @@
     <div class="jumbotron text-center">
         <h1>CASE Tool for Monitoring with Essence</h1>
         <h3>Jovian Christianto - 13514101</h3>
+        <a href="/method"><button class="btn-default">Back to Home</button></a>
     </div>
 
-  	<h2>Create New Project</h2>
+    <div class="container">
+        <div class="left-half text-center">
+        	<h2>Create New Project</h2>
 
-    <p>Project Name:</p>
-    <input id="project_name" type="text" name="project_name">
-    <p>Description:</p>
-    <input id="description" type="text" name="description">
-    <p>Start Date:</p>
-    <input id="start_date" type="date" name="start_date">
-    <p>End Date:</p>
-    <input id="end_date" type="date" name="end_date">
-    <p>List Method:</p>
-    {{#each arrayify allMethods}}
-      <li>{{this.value.methodname}}</li>
-    {{/each}}
-     <a href="/project" class="clickable" onclick="showOpenModal()">Open File</a>
+            <label>Project Name</label>
+            <input id="project_name" type="text" name="project_name">
+            <br>
+            <label>Description</label>
+            <input id="description" type="text" name="description">
+            <br>
+            <label>Start Date</label>
+            <input id="start_date" type="date" name="start_date">
+            <br>
+            <label>End Date</label>
+            <input id="end_date" type="date" name="end_date">
+            <br>
 
-      <div class="openfile" style="display:none;">
-          <input type="file" class="form-control-file" id="selectFiles" align="center" style="width:100%; background-color: #ccffff;">
-      </div>
-    <p>Input Your Method Name:</p>
-    <input id="method" type="text" name="method">
-    <!-- <br>
-    Last name:<br>
-    <input type="text" name="lastname" value="Mouse">
-    <br><br> -->
-    <a href="/project"><input type="submit" value="Choose" onclick="submit()"></a>
-    <br>
+            <label>Choose Your Method</label>
+            <a href="/project" class="clickable" onclick="showOpenModal()"><button class="btn">Add New Method</button></a>
+            {{#each arrayify allMethods}}
+                <a href="" id="{{this.value.methodname}}" name="method" value="{{this.value.methodname}}" onclick="submit()"><li>{{this.value.methodname}}</li></a>
+            {{/each}}
 
-    <a href="/method">Back to Home</a>
-    <h3>Update Your Activity</h3>
-    <div class="activity">
-    {{#each arrayify Activities}}
-      <label>{{this.name}}</label>
-      <input id="activity{{this.name}}" type="date" name="end_date">
-      <br>
-    {{/each}}
-    </div>
+            <div class="openfile" style="display:none;">
+                <input type="file" class="form-control-file" id="selectFiles" align="center" style="width:100%; background-color: #ccffff;">
+            </div>
+            <br>
 
-    <div class="subalpha">
-      <h3>Update Your Subalpha</h3>
-      {{#each arrayify alphas}}
-        {{#each arrayify this.value.subalphas}}
-          <label>{{this.name}}</label>
-          {{#if is_bounded this.value.bound}}
-            <input id="subalpha{{this.name}}" type="number">
-          {{else}}
-            <input id="subalpha{{this.name}}" type="number" value="1">
-          {{/if}}
-        {{/each}}
-      {{/each}}
+            <div id="after-method" class="after-method">
+                <h3>Your Activity</h3>
+                <p>Set your activity end date</p>
+                <div class="activity">
+                {{#each arrayify Activities}}
+                    <label>{{this.name}}</label>
+                    <input id="activity{{this.name}}" type="date" name="end_date">
+                    <br>
+                {{/each}}
+                </div>
+                <button class="btn after_activity">Next</button>
+            </div>
+        </div>
+
+        <div class="right-half text-center">
+            <div id="after-activity" class="after-activity">
+                <div class="subalpha">
+                    <h3>Your Subalpha</h3>
+                    <p>Set how many subalpha needed</p>
+                    {{#each arrayify alphas}}
+                        {{#each arrayify this.value.subalphas}}
+                            <label>{{this.name}}</label>
+                            {{#if is_bounded this.value.bound}}
+                                <input id="subalpha{{this.name}}" type="number">
+                            {{else}}
+                                <input id="subalpha{{this.name}}" type="number" value="1">
+                            {{/if}}
+                            <br>
+                        {{/each}}
+                    {{/each}}
+                </div>
+                <div class="workproduct">
+                    <h3>Your Work Product</h3>
+                    <p>Set how many work product needed</p>
+                    {{#each arrayify alphas}}
+                        {{#each arrayify this.value.workproducts}}
+                            <label>{{this.name}}</label>
+                            {{#if is_bounded this.value.bound}}
+                                <input id="workproduct{{this.name}}" type="number">
+                            {{else}}
+                                <input id="workproduct{{this.name}}" type="number" value="1">
+                            {{/if}}
+                            <br>
+                        {{/each}}
+                    {{/each}}
+                </div>
+                <button class="btn-primary submit_workproduct">Next</button>
+            </div>
+            <div id="after-next" class="after-next">
+                <div class="state_workproduct">
+                    <h3>Choose Your State</h3>
+                    {{#each workproduct in workproducts}}
+                        <label>{{workproduct.name}}</label>
+                        <select id="{{workproduct.name}}">
+                            {{#each states_workproduct workproduct.name}}
+                                <option value="{{this.name}}">{{this.name}}</option>
+                            {{/each}}
+                        </select>
+                        <br>
+                    {{/each}}
+                </div>
+                <a href="/method"><button class="btn submit" id="submit">Submit</button></a>
+            </div>
+        </div>
     </div>
-    <div class="workproduct">
-        <h3>Update Your Work Product</h3>
-        {{#each arrayify alphas}}
-          {{#each arrayify this.value.workproducts}}
-            <label>{{this.name}}</label>
-            {{#if is_bounded this.value.bound}}
-              <input id="workproduct{{this.name}}" type="number">
-            {{else}}
-              <input id="workproduct{{this.name}}" type="number" value="1">
-            {{/if}}
-          {{/each}}
-        {{/each}}
-    </div>
-    <button class="submit_workproduct">Submit Workproduct</button>
-    <div class="state_workproduct">
-      <h3>Choose Your State</h3>
-      {{#each workproduct in workproducts}}
-        <label>{{workproduct.name}}</label>
-        <select id="{{workproduct.name}}">
-        {{#each states_workproduct workproduct.name}}
-          <option value="{{this.name}}">{{this.name}}</option>
-        {{/each}}
-        </select>
-      {{/each}}
-    </div>
-    <a href="/method"><button class="submit" id="submit">Submit</button></a>
 
     <script>
-    function submit() {
-            var methodname = document.getElementById('method').value;
+        function submit() {
+            var methodname = event.currentTarget.id;
             var method = Methods.findOne({"methodname":methodname});
             var projectname = document.getElementById('project_name').value;
             var description = document.getElementById('description').value;
             var startdate = document.getElementById('start_date').value;
             var enddate = document.getElementById('end_date').value;
-            // console.log(method);
-            // var name = document.getElementById('firstname').value;
-            // console.log(name);
-            // Projects.remove({});
             Projects.insert({"name" : projectname, "description" : description, "start_date" : startdate, "end_date" : enddate, "method" : method});
             console.log(Projects.findOne({"name" : projectname})._id);
             Session.set('project', Projects.findOne({"name" : projectname})._id);
 
-            // var tbody = document.getElementById('activity');
-
-            // var project = Session.get('project');
-            // var arr_activity = arrayify(Projects.findOne({_id:project}).method.activityspaces);
-            // tbody.innerHTML = "<h3>Your Activity</h3>";
-
-            // for (var i = 0; i < arr_activity.length; i++) {
-            //     var tr = "<label>" + arr_activity[i].name + "</label>";
-            //     tr += "<input id='activity" + arr_activity[i].name +"' type='date' name='end_date";
-
-            //     /* We add the table row to the table body */
-            //     tbody.innerHTML += tr;
-            // }
+            var element = document.getElementById('after-method');
+            element.style.visibility = "visible";
         }
     </script>
 </template>

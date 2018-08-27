@@ -172,5 +172,13 @@ Template.project.events({
       }
     });
     Session.set('is_workproducts', true);
+
+    var element = document.getElementById('after-next');
+    element.style.visibility = "visible";
+  },
+
+  'click .after_activity' : function(event) {
+    var element = document.getElementById('after-activity');
+    element.style.visibility = "visible";
   }
 });

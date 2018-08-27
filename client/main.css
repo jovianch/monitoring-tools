@@ -57,6 +57,18 @@
     display: block;
 }
 
+.after-method {
+    visibility: hidden;
+}
+
+.after-next {
+    visibility: hidden;
+}
+
+.after-activity {
+    visibility: hidden;
+}
+
 .dropdown-content a:hover {background-color: #ddd;}
 
 .dropdown:hover .dropdown-content {display: block;}
