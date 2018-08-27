@@ -159,7 +159,14 @@ function drawAlpha() {
         options: {
             'title':'Progress per Alpha',
             'width':400,
-            'height':300
+            'height':300,
+            'hAxis': {
+    'viewWindow' : {
+        min: 0,
+        max: 100
+    },
+    'ticks': [0, 25, 50, 75, 100] // display labels every 25
+}
     }
     };
 

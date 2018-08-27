@@ -51,30 +51,23 @@
             });
         }
     </script>
-    <h1>CASE Tool for Monitoring with Essence</h1>
+    <div class="jumbotron text-center">
+        <h1>CASE Tool for Monitoring with Essence</h1>
+        <h3>Jovian Christianto - 13514101</h3>
+    </div>
 
-    <h2>Project</h2>
-    <a href="/project"><button id="myBtn">Add New Project</button></a>
+    <div class="left-half text-center">
+        <h3>Choose Project to Monitor</h3>
+        {{#each arrayify allProjects}}
+    	  	<div>
+    	  		<a href="/update" class="project" id="{{this.value._id}}" name="project">{{this.value.name}}</a>
+    		</div>
+    	{{/each}}
+    </div>
 
-    <!-- <a onclick="submit()">lala</a>
-    <form>
-      First name:<br>
-      <input type="text" name="firstname" value="Mickey">
-      <br>
-      Last name:<br>
-      <input type="text" name="lastname" value="Mouse">
-      <br><br>
-      <input type="submit" value="Submit" onclick="submit()">
-    </form>  -->
-    <!-- <input type="file" id="myFile">
-    <button class="open" id="open" name="open">Save</button> -->
-
-    <h3>Choose Your Project</h3>
-    {{#each arrayify allProjects}}
-	  	<div>
-	  		<a href="/update" class="project" id="{{this.value._id}}" name="project">{{this.value.name}}</a>
-		</div>
-	{{/each}}
+    <div class="right-half text-center">
+        <a href="/project"><button id="myBtn" class="btn">Add New Project</button></a>
+    </div>
 
     <!-- <script>
         // Get the modal
