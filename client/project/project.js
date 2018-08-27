@@ -32,7 +32,28 @@ Template.project.helpers({
       if (subalpha == '') {
         return arrayify(Projects.findOne({_id:project}).method.alphas[alpha].states);
       } else {
-        return arrayify(Projects.findOne({_id:project}).method.alphas[alpha].subalphas[subalpha].states);
+        return arrayify(Projects.findOne({_id:project}).subalpha[subalpha].states);
+      }
+    },
+    subalpha_bounded : function(alpha) {
+      var project = Session.get('project');
+      var subalphas = arrayify(Projects.findOne({_id:project}).method.alphas[alpha].subalphas);
+      var arr_subalpha = []
+      subalphas.forEach(function(subalpha) {
+        console.log(subalpha);
+        if (subalpha.value.bound == "1..*") {
+          console.log('masuk');
+          arr_subalpha.push(subalpha);
+        }
+      });
+      return arr_subalpha;
+    },
+    is_bounded : function(bound) {
+      var project = Session.get('project');
+      if (bound == "1..*") {
+        return true;
+      } else {
+        return false;
       }
     }
 });
@@ -69,6 +90,24 @@ Template.project.events({
       }
     });
 
+    var workproducts = arrayify(Projects.findOne({_id:project}).workproducts);
+    workproducts.forEach(function(workproduct) {
+      var fields = {};
+      var appendString = "workproducts." + workproduct.name + ".states";
+      var e = document.getElementById(workproduct.name);
+      var arr_states = [];
+      arr_states.push(e.options[e.selectedIndex].value);
+      console.log(arr_states);
+      fields[appendString] = arr_states;
+      console.log(fields);
+      var id = Session.get('project');
+      Projects.update({_id:id}, {$set : fields});
+    });
+  },
+
+  'click .submit_workproduct' : function(event) {
+    var project = Session.get('project');
+
     var alphas = arrayify(Projects.findOne({_id:project}).method.alphas);
     alphas.forEach(function(alpha) {
       // if(isset(Projects.))
@@ -103,24 +142,6 @@ Template.project.events({
       }
     });
 
-    var workproducts = arrayify(Projects.findOne({_id:project}).workproducts);
-    workproducts.forEach(function(workproduct) {
-      var fields = {};
-      var appendString = "workproducts." + workproduct.name + ".states";
-      var e = document.getElementById(workproduct.name);
-      var arr_states = [];
-      arr_states.push(e.options[e.selectedIndex].value);
-      console.log(arr_states);
-      fields[appendString] = arr_states;
-      console.log(fields);
-      var id = Session.get('project');
-      Projects.update({_id:id}, {$set : fields});
-    });
-  },
-
-  'click .submit_workproduct' : function(event) {
-    var project = Session.get('project');
-
     var alphas = arrayify(Projects.findOne({_id:project}).method.alphas);
     alphas.forEach(function(alpha) {
       var workproducts = arrayify(Projects.findOne({_id:project}).method.alphas[alpha.name].workproducts);
@@ -136,6 +157,16 @@ Template.project.events({
             console.log(fields);
             var id = Session.get('project');
             Projects.update({_id:id}, {$set : fields});
+
+            if (workproduct.value.subalpha == '') {
+
+            } else {
+              var fields = {};
+              var appendString = "workproducts." + workproduct.name + (i + 1) + ".subalpha";
+              fields[appendString] = workproduct.value.subalpha + (i + 1); 
+              var id = Session.get('project');
+              Projects.update({_id:id}, {$set : fields});
+            }
           }
         });
       }

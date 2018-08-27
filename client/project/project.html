@@ -94,7 +94,11 @@
       {{#each arrayify alphas}}
         {{#each arrayify this.value.subalphas}}
           <label>{{this.name}}</label>
-          <input id="subalpha{{this.name}}" type="number">
+          {{#if is_bounded this.value.bound}}
+            <input id="subalpha{{this.name}}" type="number">
+          {{else}}
+            <input id="subalpha{{this.name}}" type="number" value="1">
+          {{/if}}
         {{/each}}
       {{/each}}
     </div>
@@ -103,7 +107,11 @@
         {{#each arrayify alphas}}
           {{#each arrayify this.value.workproducts}}
             <label>{{this.name}}</label>
-            <input id="workproduct{{this.name}}" type="number">
+            {{#if is_bounded this.value.bound}}
+              <input id="workproduct{{this.name}}" type="number">
+            {{else}}
+              <input id="workproduct{{this.name}}" type="number" value="1">
+            {{/if}}
           {{/each}}
         {{/each}}
     </div>

@@ -83,15 +83,14 @@
 				</div>
 		{{/each}}
 		<h3>Work Product</h3>
-		{{#each arrayify alphas}}
-			{{#each arrayify this.value.workproducts}}
-				{{#if this.value.result}}
-					<a class="workproduct" id="{{this.name}}" name="{{this.name}}">{{this.name}} v</a><br>
-				{{else}}
-					<a class="workproduct" id="{{this.name}}" name="{{this.name}}">{{this.name}}</a><br>
-				{{/if}}
-				<input id="workproduct{{this.name}}" type="hidden" name="workproduct" value="{{this.value.alpha}}">
-			{{/each}}
+		{{#each arrayify workproducts}}
+			{{#if this.value.result}}
+				<a class="workproduct" id="{{this.name}}" name="{{this.name}}">{{this.name}} v</a><br>
+			{{else}}
+				<a class="workproduct" id="{{this.name}}" name="{{this.name}}">{{this.name}}</a><br>
+			{{/if}}
+			<input id="alpha{{this.name}}" type="hidden" name="workproduct" value="{{this.value.alpha}}">
+			<input id="subalpha{{this.name}}" type="hidden" name="workproduct" value="{{this.value.subalpha}}">
 		{{/each}}
 	</div>
 	<div class="right">

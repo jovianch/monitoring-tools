@@ -19,6 +19,11 @@ Template.update.helpers({
         var id = Session.get('project');
         console.log(Projects.findOne({_id:id}));
         return Projects.findOne({_id:id}).subalpha
+    },
+    workproducts : function() {
+        var id = Session.get('project');
+        // console.log(Projects.findOne({_id:id}));
+        return Projects.findOne({_id:id}).workproducts
     }
     // is_subalpha : function(alpha) {
     //     var arr_subalpha = arrayify(alpha.subalphas);
@@ -780,52 +785,78 @@ Template.update.events({
     },
 
     'click .workproduct': function(event) {
-        console.log('Work Product clicked');
+        // console.log('Work Product clicked');
         Session.set('workproduct', event.currentTarget.id);
+        var id = Session.get('project')
+        var project = Projects.findOne({_id:id});
         var workproduct = Session.get('workproduct');
         console.log(workproduct);
         string_workproduct = 'workproduct' + workproduct;
-        var alpha = document.getElementById(string_workproduct).value;
+        var alpha = project.workproducts[workproduct].alpha;
         console.log(alpha);
+        var subalpha = project.workproducts[workproduct].subalpha;
 
-        var id = Session.get('project')
-        var project = Projects.findOne({_id:id});
+        
 
-        var states = project.method.alphas[alpha].workproducts[workproduct].states;
+        var states = project.workproducts[workproduct].states;
         console.log(states);
 
-        if (project.alphas[alpha].workproducts[workproduct].result) {
-            states.forEach(function(entry) {
-                var fields = {}
-                var appendString = "method.alphas." + alpha + ".states." + entry + ".result";
-                fields[appendString] = false;
-                var appendString = "method.alphas." + alpha + ".states." + entry + ".timestamp";
-                fields[appendString] = new Date();
-                console.log(fields);
-                Projects.update({_id:id}, {$set : fields});
-            });
+        if (project.workproducts[workproduct].result) {
+            if (project.workproducts[workproduct].subalpha == '') {
+                states.forEach(function(entry) {
+                    var fields = {}
+                    var appendString = "method.alphas." + alpha + ".states." + entry + ".result";
+                    fields[appendString] = false;
+                    var appendString = "method.alphas." + alpha + ".states." + entry + ".timestamp";
+                    fields[appendString] = new Date();
+                    console.log(fields);
+                    Projects.update({_id:id}, {$set : fields});
+                });
+            } else {
+                 states.forEach(function(entry) {
+                    var fields = {}
+                    var appendString = "subalpha." + subalpha + ".states." + entry + ".result";
+                    fields[appendString] = false;
+                    var appendString = "subalpha." + subalpha + ".states." + entry + ".timestamp";
+                    fields[appendString] = new Date();
+                    console.log(fields);
+                    Projects.update({_id:id}, {$set : fields});
+                });
+            }
 
             var fields = {}
-            var appendString = "method.alphas." + alpha + ".workproducts." + workproduct + ".result";
+            var appendString = "workproducts." + workproduct + ".result";
             fields[appendString] = false;
-            var appendString = "method.alphas." + alpha + ".workproducts." + workproduct + ".timestamp";
+            var appendString = "workproducts." + workproduct + ".timestamp";
             fields[appendString] = new Date();
             Projects.update({_id:id}, {$set : fields});
         } else {
-            states.forEach(function(entry) {
-                var fields = {}
-                var appendString = "method.alphas." + alpha + ".states." + entry + ".result";
-                fields[appendString] = true;
-                var appendString = "method.alphas." + alpha + ".states." + entry + ".timestamp";
-                fields[appendString] = new Date();
-                console.log(fields);
-                Projects.update({_id:id}, {$set : fields});
-            });
+             if (project.workproducts[workproduct].subalpha == '') {
+                states.forEach(function(entry) {
+                    var fields = {}
+                    var appendString = "method.alphas." + alpha + ".states." + entry + ".result";
+                    fields[appendString] = true;
+                    var appendString = "method.alphas." + alpha + ".states." + entry + ".timestamp";
+                    fields[appendString] = new Date();
+                    console.log(fields);
+                    Projects.update({_id:id}, {$set : fields});
+                });
+            } else {
+                 states.forEach(function(entry) {
+                    var fields = {}
+                    var appendString = "subalpha." + subalpha + ".states." + entry + ".result";
+                    fields[appendString] = true;
+                    var appendString = "subalpha." + subalpha + ".states." + entry + ".timestamp";
+                    fields[appendString] = new Date();
+                    console.log(fields);
+                    Projects.update({_id:id}, {$set : fields});
+                });
+            }
 
             var fields = {}
-            var appendString = "method.alphas." + alpha + ".workproducts." + workproduct + ".result";
+            var appendString = "workproducts." + workproduct + ".result";
             fields[appendString] = true;
-            var appendString = "method.alphas." + alpha + ".workproducts." + workproduct + ".timestamp";
+            var appendString = "workproducts." + workproduct + ".timestamp";
             fields[appendString] = new Date();
             Projects.update({_id:id}, {$set : fields});
         }
