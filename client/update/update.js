@@ -24,6 +24,10 @@ Template.update.helpers({
         var id = Session.get('project');
         // console.log(Projects.findOne({_id:id}));
         return Projects.findOne({_id:id}).workproducts
+    },
+    project : function() {
+        var id = Session.get('project');
+        return Projects.findOne({_id:id})
     }
     // is_subalpha : function(alpha) {
     //     var arr_subalpha = arrayify(alpha.subalphas);

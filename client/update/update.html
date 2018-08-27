@@ -6,116 +6,98 @@
 	  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	</head>
 
-	<div class="container">
-	<h1>Update Your Project Progress</h1>
-	<div class="center">
-		<div id="checklist">
-		</div>
-	</div>
-	<div class="left">
-	<h3>Alpha</h3>
-	  			{{#each arrayify alphas}}
-			  	<div class="dropdown">
-			  		<!-- {{#if is_subalpha this.value}}
-			  			{{#each arrayify this.value.subalphas}}
-			  				<a class="dropbtn" href="">{{this.name}}</a>
-			  				<div class="dropdown-content">
-					   		{{#each arrayify this.value.states}}
-					   			{{#if this.value.result}}
-					   				<a class="states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}} v</a>
-					   			{{else}}
-					   				<a class="states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}}</a>
-					   			{{/if}}
-						      	<input id="alpha{{this.name}}" type="hidden" name="alphas" value="{{this.value.alpha}}">
-						      	<input id="subalpha{{this.name}}" type="hidden" name="alphas" value="{{this.value.subalpha}}">
-						    {{/each}}
-						    </div>
-			  			{{/each}}
-			  		{{else}} -->
-				  		<a class="dropbtn" href="">{{this.name}}</a>
-				  		<div class="dropdown-content">
-				   		{{#each arrayify this.value.states}}
-				   			{{#if this.value.result}}
-				   				<a class="states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}} v</a>
-				   			{{else}}
-				   				<a class="states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}}</a>
-				   			{{/if}}
-				   			
-					      	<input id="alpha{{this.name}}" type="hidden" name="alphas" value="{{this.value.alpha}}">
-					    {{/each}}
-					    </div>
-					<!-- {{/if}} -->
-				</div>
-				{{/each}}
-		<h3>SubAlpha</h3>
-		{{#each arrayify subalphas}}
-			<div class="dropdown">
-			  		<!-- {{#if is_subalpha this.value}}
-			  			{{#each arrayify this.value.subalphas}}
-			  				<a class="dropbtn" href="">{{this.name}}</a>
-			  				<div class="dropdown-content">
-					   		{{#each arrayify this.value.states}}
-					   			{{#if this.value.result}}
-					   				<a class="states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}} v</a>
-					   			{{else}}
-					   				<a class="states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}}</a>
-					   			{{/if}}
-						      	<input id="alpha{{this.name}}" type="hidden" name="alphas" value="{{this.value.alpha}}">
-						      	<input id="subalpha{{this.name}}" type="hidden" name="alphas" value="{{this.value.subalpha}}">
-						    {{/each}}
-						    </div>
-			  			{{/each}}
-			  		{{else}} -->
-				  		<a class="dropbtn subalpha_dropdown" id="{{this.name}}" href="">{{this.name}}</a>
-				  		<input id="name{{this.name}}" type="hidden" name="name_subalpha" value="{{this.name}}">
-				  		<div class="dropdown-content">
-				   		{{#each arrayify this.value.states}}
-				   			{{#if this.value.result}}
-				   				<a class="subalpha_states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}} v</a>
-				   			{{else}}
-				   				<a class="subalpha_states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}}</a>
-				   			{{/if}}
+	<div class="jumbotron text-center">
+        <h1>CASE Tool for Monitoring with Essence</h1>
+        <h3>Jovian Christianto - 13514101</h3>
+    </div>
 
-					      	<input id="subalpha{{this.value.subalpha}}{{this.name}}" type="hidden" name="subalphas" value="{{this.value.subalpha}}">
-					    {{/each}}
-					    </div>
-					<!-- {{/if}} -->
-				</div>
-		{{/each}}
-		<h3>Work Product</h3>
-		{{#each arrayify workproducts}}
-			{{#if this.value.result}}
-				<a class="workproduct" id="{{this.name}}" name="{{this.name}}">{{this.name}} v</a><br>
-			{{else}}
-				<a class="workproduct" id="{{this.name}}" name="{{this.name}}">{{this.name}}</a><br>
-			{{/if}}
-			<input id="alpha{{this.name}}" type="hidden" name="workproduct" value="{{this.value.alpha}}">
-			<input id="subalpha{{this.name}}" type="hidden" name="workproduct" value="{{this.value.subalpha}}">
-		{{/each}}
-	</div>
-	<div class="right">
-		<h3>Activity</h3>
-		{{#each arrayify activities}}
-			<div class="dropdown">
-				{{#if this.value.result}}
-		   			<a class="dropbtn activity_spaces" id="{{this.name}}" href="">{{this.name}} v</a>
-		   		{{else}}
-		   			<a class="dropbtn activity_spaces" id="{{this.name}}" href="">{{this.name}}</a>
-		   		{{/if}}
-		   		<div class="dropdown-content">
-		   		{{#each arrayify this.value.activities}}
-		   			{{#if this.value.result}}
-			      		<a class="activities" id="{{this.name}}" name="{{this.name}}" href="">{{this.value.name}} v</a>
-			      	{{else}}
-			      		<a class="activities" id="{{this.name}}" name="{{this.name}}" href="">{{this.value.name}}</a>
-			      	{{/if}}
-			      	<input id="activity_spaces{{this.name}}" type="hidden" name="activity_spaces" value="{{this.value.activity_space}}">
-			    {{/each}}
+	<div class="container">
+		<div class="text-center">
+			<h2>{{project.name}}</h2>
+			<h4>{{project.description}}</h4>
+			<h5>{{project.start_date}} - {{project.end_date}}</h5>
+		</div>
+
+		<br>
+		<h2>Update Your Project</h2>
+
+		<div class="column">
+			<div id="checklist">
+			</div>
+		</div>
+
+		<div class="column">
+			<h3>Alpha</h3>
+  			{{#each arrayify alphas}}
+		  	<div class="dropdown">
+			  	<a class="dropbtn" href="">{{this.name}}</a>
+		  		<div class="dropdown-content">
+			   		{{#each arrayify this.value.states}}
+			   			{{#if this.value.result}}
+			   				<a class="states states-done" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}} v</a>
+			   			{{else}}
+			   				<a class="states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}}</a>
+			   			{{/if}}
+				      	<input id="alpha{{this.name}}" type="hidden" name="alphas" value="{{this.value.alpha}}">
+				    {{/each}}
 			    </div>
 			</div>
-		{{/each}}
-	</div>
-	<a href="/method">Back</a>
-	<a href="/monitor">Monitor</a>
+			{{/each}}
+
+			<h3>SubAlpha</h3>
+			{{#each arrayify subalphas}}
+				<div class="dropdown">
+					<a class="dropbtn subalpha_dropdown" id="{{this.name}}" href="">{{this.name}}</a>
+					<input id="name{{this.name}}" type="hidden" name="name_subalpha" value="{{this.name}}">
+					<div class="dropdown-content">
+						{{#each arrayify this.value.states}}
+					   		{{#if this.value.result}}
+					   			<a class="subalpha_states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}} v</a>
+					   		{{else}}
+					   			<a class="subalpha_states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}}</a>
+					   		{{/if}}
+						      	<input id="subalpha{{this.value.subalpha}}{{this.name}}" type="hidden" name="subalphas" value="{{this.value.subalpha}}">
+						{{/each}}
+					</div>
+				</div>
+			{{/each}}
+
+			<h3>Work Product</h3>
+			{{#each arrayify workproducts}}
+				{{#if this.value.result}}
+					<a class="workproduct" id="{{this.name}}" name="{{this.name}}">{{this.name}} v</a><br>
+				{{else}}
+					<a class="workproduct" id="{{this.name}}" name="{{this.name}}">{{this.name}}</a><br>
+				{{/if}}
+				<input id="alpha{{this.name}}" type="hidden" name="workproduct" value="{{this.value.alpha}}">
+				<input id="subalpha{{this.name}}" type="hidden" name="workproduct" value="{{this.value.subalpha}}">
+			{{/each}}
+		</div>
+
+		<div class="column">
+		<h3>Activity</h3>
+			{{#each arrayify activities}}
+				<div class="dropdown">
+					{{#if this.value.result}}
+			   			<a class="dropbtn activity_spaces" id="{{this.name}}" href="">{{this.name}} v</a>
+			   		{{else}}
+			   			<a class="dropbtn activity_spaces" id="{{this.name}}" href="">{{this.name}}</a>
+			   		{{/if}}
+			   		<div class="dropdown-content">
+			   			{{#each arrayify this.value.activities}}
+			   				{{#if this.value.result}}
+				      			<a class="activities" id="{{this.name}}" name="{{this.name}}" href="">{{this.value.name}} v</a>
+				      		{{else}}
+				      			<a class="activities" id="{{this.name}}" name="{{this.name}}" href="">{{this.value.name}}</a>
+				      		{{/if}}
+				      		<input id="activity_spaces{{this.name}}" type="hidden" name="activity_spaces" value="{{this.value.activity_space}}">
+				    	{{/each}}
+				    </div>
+				</div>
+			{{/each}}
+		</div>
+
+		<a href="/method">Back</a>
+		<a href="/monitor">Monitor</a>
 	</div>
 </template>

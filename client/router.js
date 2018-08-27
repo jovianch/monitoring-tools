@@ -1,15 +1,15 @@
 Router.route('/monitor', function () {
-  this.render('monitor');
+	this.render('monitor');
 });
 
 Router.route('/method', function () {
-  this.render('method');
+	this.render('method');
 });
 
 Router.route('/update', function () {
-  this.render('update');
+	this.render('update');
 });
 
 Router.route('/project', function () {
-  this.render('project');
+	this.render('project');
 });

@@ -3,18 +3,14 @@ Meteor.subscribe('Methods');
 Meteor.subscribe('AllProject');
 
 Template.method.helpers({
-  allProjects : function() {
-    return Projects.find().fetch()
-  },
-  allMethods : function() {
-    console.log(Methods.find().fetch());
-    return Methods.find().fetch()
-  }
+    allProjects : function() {
+        return Projects.find().fetch()
+    }
 });
 
 Template.method.events({
-    'click .project' : function(event){
-      Session.set('project', event.currentTarget.id);
+    'click .project' : function(event) {
+        Session.set('project', event.currentTarget.id);
     }
   });
 
