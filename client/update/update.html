@@ -34,7 +34,7 @@
 		  		<div class="dropdown-content">
 			   		{{#each arrayify this.value.states}}
 			   			{{#if this.value.result}}
-			   				<a class="states states-done" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}} v</a>
+			   				<a class="states states-done" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}}</a>
 			   			{{else}}
 			   				<a class="states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}}</a>
 			   			{{/if}}
@@ -52,7 +52,7 @@
 					<div class="dropdown-content">
 						{{#each arrayify this.value.states}}
 					   		{{#if this.value.result}}
-					   			<a class="subalpha_states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}} v</a>
+					   			<a class="subalpha_states states-done" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}}</a>
 					   		{{else}}
 					   			<a class="subalpha_states" id="{{this.name}}" name="{{this.name}}" href="">{{this.name}}</a>
 					   		{{/if}}
@@ -63,15 +63,17 @@
 			{{/each}}
 
 			<h3>Work Product</h3>
-			{{#each arrayify workproducts}}
-				{{#if this.value.result}}
-					<a class="workproduct" id="{{this.name}}" name="{{this.name}}">{{this.name}} v</a><br>
-				{{else}}
-					<a class="workproduct" id="{{this.name}}" name="{{this.name}}">{{this.name}}</a><br>
-				{{/if}}
-				<input id="alpha{{this.name}}" type="hidden" name="workproduct" value="{{this.value.alpha}}">
-				<input id="subalpha{{this.name}}" type="hidden" name="workproduct" value="{{this.value.subalpha}}">
-			{{/each}}
+			<div class="workproduct-content">
+				{{#each arrayify workproducts}}
+					{{#if this.value.result}}
+						<a class="workproduct" id="{{this.name}}" name="{{this.name}}">{{this.name}} v</a>
+					{{else}}
+						<a class="workproduct" id="{{this.name}}" name="{{this.name}}">{{this.name}}</a>
+					{{/if}}
+					<input id="alpha{{this.name}}" type="hidden" name="workproduct" value="{{this.value.alpha}}">
+					<input id="subalpha{{this.name}}" type="hidden" name="workproduct" value="{{this.value.subalpha}}">
+				{{/each}}
+			</div>
 		</div>
 
 		<div class="column">

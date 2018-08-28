@@ -146,7 +146,7 @@ function drawAlpha() {
                     done_states += 1;
                 }
             });
-            count_state.push([alpha.name, done_states/total_states]);
+            count_state.push([alpha.name, (done_states/total_states) * 100]);
         });
 
         var data = count_state;
@@ -165,7 +165,6 @@ function drawAlpha() {
         min: 0,
         max: 100
     },
-    'ticks': [0, 25, 50, 75, 100] // display labels every 25
 }
     }
     };

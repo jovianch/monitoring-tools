@@ -576,17 +576,32 @@ Template.update.events({
 
         var arr_checklist = arrayify(checklist);
         tbody.innerHTML = "<h3>Checklists</h3>";
+        var total = "";
 
         for (var i = 0; i < arr_checklist.length; i++) {
-            if (arr_checklist[i].value.result) {
-                var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'><li>" + arr_checklist[i].name + "v</li></a>";
+            if (i == 0) {
+                if (arr_checklist[i].value.result) {
+                    var tr = "<div class='workproduct-content'><a class='states-done checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'>" + arr_checklist[i].name + "</a>";
+                } else {
+                    var tr = "<div class='workproduct-content'><a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'>" + arr_checklist[i].name + "</a>";
+                }
             } else {
-                var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'><li>" + arr_checklist[i].name + "</li></a>";
+                if (arr_checklist[i].value.result) {
+                    var tr = "<a class='checklist states-done' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'>" + arr_checklist[i].name + "</a>";
+                } else {
+                    var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'>" + arr_checklist[i].name + "</a>";
+                }
+            }
+
+            if (i == arr_checklist.length - 1) {
+                tr += "</div>";
+                console.log(tr);
             }
 
             /* We add the table row to the table body */
-            tbody.innerHTML += tr;
+            total += tr;
         }
+        tbody.innerHTML += total;
     },
 
     // if click checklist
@@ -663,17 +678,32 @@ Template.update.events({
 
             var arr_checklist = arrayify(checklist);
             tbody.innerHTML = "<h3>Checklists</h3>";
+            var total = "";
 
             for (var i = 0; i < arr_checklist.length; i++) {
-                if (arr_checklist[i].value.result) {
-                    var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'><li>" + arr_checklist[i].name + "v</li></a>";
+                if (i == 0) {
+                    if (arr_checklist[i].value.result) {
+                        var tr = "<div class='workproduct-content'><a class='checklist states-done' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'>" + arr_checklist[i].name + "</a>";
+                    } else {
+                        var tr = "<div class='workproduct-content'><a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'>" + arr_checklist[i].name + "</a>";
+                    }
                 } else {
-                    var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'><li>" + arr_checklist[i].name + "</li></a>";
+                    if (arr_checklist[i].value.result) {
+                        var tr = "<a class='checklist states-done' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'>" + arr_checklist[i].name + "</a>";
+                    } else {
+                        var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'>" + arr_checklist[i].name + "</a>";
+                    }
                 }
 
-            /* We add the table row to the table body */
-            tbody.innerHTML += tr;
+                if (i == arr_checklist.length - 1) {
+                    tr += "</div>";
+                    console.log(tr);
+                }
+
+                /* We add the table row to the table body */
+                total += tr;
             }
+            tbody.innerHTML += total;
 
             if (idx_checklists == arr_checklists.length) {
                 var fields = {}
@@ -694,6 +724,7 @@ Template.update.events({
             }
 
         } else {
+            console.log(alpha + state);
             var arr_checklists = arrayify(project.method.alphas[alpha].states[state].checklists);
             console.log(arr_checklists);
             
@@ -754,17 +785,32 @@ Template.update.events({
 
             var arr_checklist = arrayify(checklist);
             tbody.innerHTML = "<h3>Checklists</h3>";
+            var total = "";
 
             for (var i = 0; i < arr_checklist.length; i++) {
-                if (arr_checklist[i].value.result) {
-                    var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'><li>" + arr_checklist[i].name + "v</li></a>";
+                if (i == 0) {
+                    if (arr_checklist[i].value.result) {
+                        var tr = "<div class='workproduct-content'><a class='checklist states-done' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'>" + arr_checklist[i].name + "</a>";
+                    } else {
+                        var tr = "<div class='workproduct-content'><a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'>" + arr_checklist[i].name + "</a>";
+                    }
                 } else {
-                    var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'><li>" + arr_checklist[i].name + "</li></a>";
+                    if (arr_checklist[i].value.result) {
+                        var tr = "<a class='checklist states-done' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'>" + arr_checklist[i].name + "</a>";
+                    } else {
+                        var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'>" + arr_checklist[i].name + "</a>";
+                    }
+                }
+
+                if (i == arr_checklist.length - 1) {
+                    tr += "</div>";
+                    console.log(tr);
                 }
 
                 /* We add the table row to the table body */
-                tbody.innerHTML += tr;
-            } 
+                total += tr;
+            }
+            tbody.innerHTML += total;
 
             if (idx_checklists == arr_checklists.length) {
                 var fields = {}
@@ -1062,16 +1108,31 @@ Template.update.events({
 
         var arr_checklist = arrayify(checklist);
         tbody.innerHTML = "<h3>Checklists</h3>";
+        var total = "";
 
         for (var i = 0; i < arr_checklist.length; i++) {
-            if (arr_checklist[i].value.result) {
-                var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'><li>" + arr_checklist[i].name + "v</li></a>";
+            if (i == 0) {
+                if (arr_checklist[i].value.result) {
+                    var tr = "<div class='workproduct-content'><a class='checklist states-done' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'>" + arr_checklist[i].name + "</a>";
+                } else {
+                    var tr = "<div class='workproduct-content'><a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'>" + arr_checklist[i].name + "</a>";
+                }
             } else {
-                var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'><li>" + arr_checklist[i].name + "</li></a>";
+                if (arr_checklist[i].value.result) {
+                    var tr = "<a class='checklist states-done' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'>" + arr_checklist[i].name + "v</a>";
+                } else {
+                    var tr = "<a class='checklist' id='" + arr_checklist[i].name + "' name='" + arr_checklist[i].name + "'>" + arr_checklist[i].name + "</a>";
+                }
+            }
+
+            if (i == arr_checklist.length - 1) {
+                tr += "</div>";
+                console.log(tr);
             }
 
             /* We add the table row to the table body */
-            tbody.innerHTML += tr;
+            total += tr;
         }
+        tbody.innerHTML += total;
     },
 });
