@@ -1721,7 +1721,7 @@
               
             ],
             "completioncriteria": [
-              
+             	"Team::Formed"
             ],
             "competencies": [
               

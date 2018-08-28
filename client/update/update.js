@@ -1,7 +1,6 @@
 Meteor.subscribe('Projects');
 
 Template.update.onCreated(function helloOnCreated() {
-    console.log('start');
     var id = Session.get('project');
     var projectAlphas = Projects.findOne({_id:id}).method.alphas;
 });
@@ -17,26 +16,16 @@ Template.update.helpers({
     },
     subalphas : function() {
         var id = Session.get('project');
-        console.log(Projects.findOne({_id:id}));
         return Projects.findOne({_id:id}).subalpha
     },
     workproducts : function() {
         var id = Session.get('project');
-        // console.log(Projects.findOne({_id:id}));
         return Projects.findOne({_id:id}).workproducts
     },
     project : function() {
         var id = Session.get('project');
         return Projects.findOne({_id:id})
     }
-    // is_subalpha : function(alpha) {
-    //     var arr_subalpha = arrayify(alpha.subalphas);
-    //     if (arr_subalpha.length > 0) {
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
 });
 
 Template.registerHelper('arrayify',function(obj){
@@ -51,284 +40,389 @@ function arrayify(obj) {
     return result;
 }
 
+function updateState(alpha, state) {
+    Session.set('states', event.currentTarget.id);
+    var states = state;
+    var alphas = alpha;
+    var id = Session.get('project')
+    var project = Projects.findOne({_id:id});
+
+    var arr_states = arrayify(project.method.alphas[alphas].states);
+    
+    // UPDATE STATE
+    var idx_states = 0;
+    var i = 0;
+    var is_states = false;
+    while (!(is_states)) {
+        if (arr_states[i].name === project.method.alphas[alphas].states[states].name.replace(/\s/g,'')) {
+            idx_states = i + 1;
+            is_states = true;
+        }
+        i++;
+    }
+
+    var arr_activity_spaces = arrayify(project.method.activityspaces);
+
+    if (project.method.alphas[alphas].states[states].result) {
+        for (var j = arr_states.length; j >= idx_states; j--) {
+            var fields = {}
+            var appendString = "method.alphas." + alphas + ".states." + arr_states[j-1].name + ".result";
+            fields[appendString] = false;
+            var appendString = "method.alphas." + alphas + ".states." + arr_states[j-1].name + ".timestamp";
+            fields[appendString] = '';
+            Projects.update({_id:id}, {$set : fields});
+
+            // UPDATE CHECKLISTS
+            var arr_checklists = arrayify(project.method.alphas[alphas].states[arr_states[j-1].name].checklists);
+            var fields = {}
+            var appendString = "method.alphas." + alphas + ".states." + arr_states[j-1].name + ".checklists." + arr_checklists[arr_checklists.length - 1].name + ".result";
+            fields[appendString] = false;
+            var appendString = "method.alphas." + alphas + ".states." + arr_states[j-1].name + ".checklists." + arr_checklists[arr_checklists.length - 1].name + ".timestamp";
+            fields[appendString] = '';
+            console.log(fields);
+            var id = Session.get('project');
+            Projects.update({_id:id}, {$set : fields});
+        }
+    } else {
+        for (var j = 0; j < idx_states; j++) {
+            var fields = {}
+            var appendString = "method.alphas." + alphas + ".states." + arr_states[j].name + ".result";
+            fields[appendString] = true;
+            var appendString = "method.alphas." + alphas + ".states." + arr_states[j].name + ".timestamp";
+            fields[appendString] = new Date();
+            Projects.update({_id:id}, {$set : fields});
+
+            // UPDATE CHECKLISTS
+            var arr_checklists = arrayify(project.method.alphas[alphas].states[arr_states[j].name].checklists);
+            arr_checklists.forEach(function(checklist) {
+                var fields = {}
+                var appendString = "method.alphas." + alphas + ".states." + arr_states[j].name + ".checklists." + checklist.name + ".result";
+                fields[appendString] = true;
+                var appendString = "method.alphas." + alphas + ".states." + arr_states[j].name + ".checklists." + checklist.name + ".timestamp";
+                fields[appendString] = new Date();
+                var id = Session.get('project');
+                Projects.update({_id:id}, {$set : fields});
+            })
+        }
+    }
+
+    // UPDATE ACTIVITY SPACES
+    arr_activity_spaces.forEach(function(activity_space) {
+        var completion_criterias = activity_space.value.completioncriteria;
+        var is_complete = true;
+        var id = Session.get('project');
+        var project = Projects.findOne({_id:id});
+        completion_criterias.forEach(function(completion_criteria) {
+            var alphas = completion_criteria.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
+            var states = completion_criteria.split('::')[1].replace(/ +/g, "");;
+            if (project.method.alphas[alphas].states[states].result) {
+                is_complete = is_complete && true;
+            } else {
+                is_complete = is_complete && false;
+            }
+        });
+
+        if (is_complete) {
+            var fields = {}
+            var appendString = "method.activityspaces." + activity_space.name + ".result";
+            fields[appendString] = true;
+            var appendString = "method.activityspaces." + activity_space.name + ".timestamp";
+            fields[appendString] = new Date();
+            var id = Session.get('project');
+            Projects.update({_id:id}, {$set : fields});
+        } else {
+            var fields = {}
+            var appendString = "method.activityspaces." + activity_space.name + ".result";
+            fields[appendString] = false;
+            var appendString = "method.activityspaces." + activity_space.name + ".timestamp";
+            fields[appendString] = '';
+            var id = Session.get('project');
+            Projects.update({_id:id}, {$set : fields});
+        }
+
+        // UPDATE ACTIVITY
+        var arr_activities = arrayify(activity_space.value.activities);
+        arr_activities.forEach(function(activity) {
+            var completion_criterias = activity.value.completioncriteria;
+            var is_complete = true;
+            var id = Session.get('project');
+            var project = Projects.findOne({_id:id});
+            completion_criterias.forEach(function(completion_criteria) {
+                var alphas = completion_criteria.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
+                var states = completion_criteria.split('::')[1].replace(/ +/g, "");;
+                if (project.method.alphas[alphas].states[states].result) {
+                    is_complete = is_complete && true;
+                } else {
+                    is_complete = is_complete && false;
+                }
+            });
+
+            if (is_complete) {
+                var fields = {}
+                var appendString = "method.activityspaces." + activity_space.name + ".activities." + activity.name + ".result";
+                fields[appendString] = true;
+                var appendString = "method.activityspaces." + activity_space.name + ".activities." + activity.name + ".timestamp";
+                fields[appendString] = new Date();
+                var id = Session.get('project');
+                Projects.update({_id:id}, {$set : fields});
+            } else {
+                var fields = {}
+                var appendString = "method.activityspaces." + activity_space.name + ".activities." + activity.name + ".result";
+                fields[appendString] = false;
+                var appendString = "method.activityspaces." + activity_space.name + ".activities." + activity.name + ".timestamp";
+                fields[appendString] = '';
+                var id = Session.get('project');
+                Projects.update({_id:id}, {$set : fields});
+            }
+        });
+    });
+
+    //UPDATE WORK PRODUCT
+    var id = Session.get('project');
+    var workproducts = arrayify(Projects.findOne({_id:id}).workproducts);
+
+    workproducts.forEach(function(workproduct) {
+        var alpha = workproduct.value.alpha;
+        var subalpha = workproduct.value.subalpha;
+
+        if (subalpha === "") {
+            var states = arrayify(Projects.findOne({_id:id}).method.alphas[alpha].states);
+            states.forEach(function(state) {
+                if (state.value.name.replace(/\s/g,'') == (workproduct.value.states)[0].replace(/\s/g,'')) {
+                    if (state.value.result) {
+                        var fields = {}
+                        var appendString = "workproducts." + workproduct.name + ".result";
+                        fields[appendString] = true;
+                        var appendString = "workproducts." + workproduct.name + ".timestamp";
+                        fields[appendString] = new Date();
+                        Projects.update({_id:id}, {$set : fields});
+                    } else {
+                        var fields = {}
+                        var appendString = "workproducts." + workproduct.name + ".result";
+                        fields[appendString] = false;
+                        var appendString = "workproducts." + workproduct.name + ".timestamp";
+                        fields[appendString] = '';
+                        Projects.update({_id:id}, {$set : fields});
+                    }
+                }
+            });
+        } else {
+            var states = arrayify(Projects.findOne({_id:id}).subalpha[subalpha].states);
+            states.forEach(function(state) {
+                if (state.value.name.replace(/\s/g,'') == (workproduct.value.states)[0].replace(/\s/g,'')) {
+                    if (state.value.result) {
+                        var fields = {}
+                        var appendString = "workproducts." + workproduct.name + ".result";
+                        fields[appendString] = true;
+                        var appendString = "workproducts." + workproduct.name + ".timestamp";
+                        fields[appendString] = new Date();
+                        Projects.update({_id:id}, {$set : fields});
+                    } else {
+                        var fields = {}
+                        var appendString = "workproducts." + workproduct.name + ".result";
+                        fields[appendString] = false;
+                        var appendString = "workproducts." + workproduct.name + ".timestamp";
+                        fields[appendString] = '';
+                        Projects.update({_id:id}, {$set : fields});
+                    }
+                }
+            });
+        }
+    })
+}
+
 Template.update.events({
-	'click': function(){
-        console.log("You clicked something");
-    },
-    'click .bar': function(event) {
-       drawAlpha();
-    },
-    'click .activity_bar': function(event) {
-       drawActivity();
-    },
-    'click .alphas': function(event) {
-    	Session.set('states', event.currentTarget.id);
-    	var states = Session.get('states');
-        $("." + states).css('visibility', 'hidden');
-    },
     'click .states': function(event) {
     	Session.set('states', event.currentTarget.id);
     	var states = Session.get('states');
         var string_alphas = 'alpha' + states;
-        console.log(string_alphas);
         var alphas = document.getElementById(string_alphas).value;
         alphas = alphas.replace(/\s/g,'');
-        console.log('alphas : ' + alphas);
         var id = Session.get('project')
         var project = Projects.findOne({_id:id});
 
-        // var arr_subalpha = arrayify(project.method.alphas[alphas].subalphas);
-        // if (arr_subalpha.length > 0) {
-        //     var string_subalpha = 'subalpha' + states;
-        //     var subalpha = document.getElementById(string_subalpha).value;
-        //     subalpha = subalpha.replace(/\s/g,'');
-        //     var arr_states = arrayify(project.alphas[alphas].subalphas[subalpha].states);
+        var arr_states = arrayify(project.method.alphas[alphas].states);
         
-        //     var idx_states = 0;
-        //     var i = 0;
-        //     var is_states = false;
-        //     while (!(is_states)) {
-        //         if (arr_states[i].name.replace(/\s/g,'') === project.alphas[alphas].subalphas[subalpha].states[states].name.replace(/\s/g,'')) {
-        //             idx_states = i + 1;
-        //             is_states = true;
-        //         }
-        //         i++;
-        //     }
-
-        //     var arr_activity_spaces = arrayify(project.activityspaces);
-
-        //     console.log('idx_states : ' + idx_states);
-        //     if (project.alphas[alphas].subalphas[subalpha].states[states].result) {
-        //         for (var j = arr_states.length; j >= idx_states; j--) {
-        //             var fields = {}
-        //             var appendString = "method.alphas." + alphas + ".subalphas." + subalpha + ".states." + arr_states[j-1].name + ".result";
-        //             fields[appendString] = false;
-        //             var appendString = "method.alphas." + alphas + ".subalphas." + subalpha + ".states." + arr_states[j-1].name + ".timestamp";
-        //             fields[appendString] = new Date();
-        //             console.log(fields)
-        //             Projects.update({_id:id}, {$set : fields});
-        //         }
-        //     } else {
-        //         for (var j = 0; j < idx_states; j++) {
-        //             var fields = {}
-        //             var appendString = "method.alphas." + alphas + ".subalphas." + subalpha + ".states." + arr_states[j].name + ".result";
-        //             fields[appendString] = true;
-        //             var appendString = "method.alphas." + alphas + ".subalphas." + subalpha + ".states." + arr_states[j].name + ".timestamp";
-        //             fields[appendString] = new Date();
-        //             console.log(fields);
-        //             Projects.update({_id:id}, {$set : fields});
-        //             // console.log(project)
-        //         }
-        //     }
-
-        //     //INI BELUM
-        //     arr_activity_spaces.forEach(function(activity_space) {
-        //         var completion_criterias = activity_space.value.completioncriteria;
-        //         var is_complete = true;
-        //         var id = Session.get('project');
-        //         var project = Projects.findOne({_id:id});
-        //         // console.log("activity_space : " + activity_space.name);
-        //         completion_criterias.forEach(function(completion_criteria) {
-        //             var alphas = completion_criteria.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
-        //             var states = completion_criteria.split('::')[1].replace(/ +/g, "");;
-        //             // console.log("alphas : " + alphas);
-        //             // console.log("states : " + states);
-        //             // console.log(project.alphas[alphas].states[states].result);
-        //             if (project.method.alphas[alphas].states[states].result) {
-        //                 is_complete = is_complete && true;
-        //             } else {
-        //                 is_complete = is_complete && false;
-        //             }
-        //         });
-        //         // console.log(is_complete);
-        //         if (is_complete) {
-        //             var fields = {}
-        //             var appendString = "method.activityspaces." + activity_space.name + ".result";
-        //             fields[appendString] = true;
-        //             var appendString = "method.activityspaces." + activity_space.name + ".timestamp";
-        //             fields[appendString] = new Date();
-        //             var id = Session.get('project');
-        //             Projects.update({_id:id}, {$set : fields});
-        //         } else {
-        //             var fields = {}
-        //             var appendString = "method.activityspaces." + activity_space.name + ".result";
-        //             fields[appendString] = false;
-        //             var appendString = "method.activityspaces." + activity_space.name + ".timestamp";
-        //             fields[appendString] = new Date();
-        //             var id = Session.get('project');
-        //             Projects.update({_id:id}, {$set : fields});
-        //         }
-
-        //         var arr_activities = arrayify(activity_space.value.activities);
-        //         arr_activities.forEach(function(activity) {
-        //             var completion_criterias = activity.value.completioncriteria;
-        //             var is_complete = true;
-        //             var id = Session.get('project');
-        //             var project = Projects.findOne({_id:id});
-        //             // console.log("activity_space : " + activity_space.name);
-        //             completion_criterias.forEach(function(completion_criteria) {
-        //                 var alphas = completion_criteria.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
-        //                 var states = completion_criteria.split('::')[1].replace(/ +/g, "");;
-        //                 // console.log("alphas : " + alphas);
-        //                 // console.log("states : " + states);
-        //                 // console.log(project.alphas[alphas].states[states].result);
-        //                 if (project.method.alphas[alphas].states[states].result) {
-        //                     is_complete = is_complete && true;
-        //                 } else {
-        //                     is_complete = is_complete && false;
-        //                 }
-        //             });
-        //             // console.log(is_complete);
-        //             if (is_complete) {
-        //                 var fields = {}
-        //                 var appendString = "method.activityspaces." + activity_space.name + ".activities." + activity.name + ".result";
-        //                 fields[appendString] = true;
-        //                 var appendString = "method.activityspaces." + activity_space.name + ".activities." + activity.name + ".timestamp";
-        //                 fields[appendString] = new Date();
-        //                 var id = Session.get('project');
-        //                 Projects.update({_id:id}, {$set : fields});
-        //             } else {
-        //                 var fields = {}
-        //                 var appendString = "method.activityspaces." + activity_space.name + ".activities." + activity.name + ".result";
-        //                 fields[appendString] = false;
-        //                 var appendString = "method.activityspaces." + activity_space.name + ".activities." + activity.name + ".timestamp";
-        //                 fields[appendString] = new Date();
-        //                 var id = Session.get('project');
-        //                 Projects.update({_id:id}, {$set : fields});
-        //             }
-        //         });
-        //     });
-        // } else {
-            var arr_states = arrayify(project.method.alphas[alphas].states);
-        
-            var idx_states = 0;
-            var i = 0;
-            var is_states = false;
-            while (!(is_states)) {
-                if (arr_states[i].name === project.method.alphas[alphas].states[states].name.replace(/\s/g,'')) {
-                    idx_states = i + 1;
-                    is_states = true;
-                }
-                i++;
+        // UPDATE STATE
+        var idx_states = 0;
+        var i = 0;
+        var is_states = false;
+        while (!(is_states)) {
+            if (arr_states[i].name === project.method.alphas[alphas].states[states].name.replace(/\s/g,'')) {
+                idx_states = i + 1;
+                is_states = true;
             }
+            i++;
+        }
 
-            var arr_activity_spaces = arrayify(project.method.activityspaces);
+        var arr_activity_spaces = arrayify(project.method.activityspaces);
 
-            console.log('idx_states : ' + idx_states);
-            if (project.method.alphas[alphas].states[states].result) {
-                for (var j = arr_states.length; j >= idx_states; j--) {
+        if (project.method.alphas[alphas].states[states].result) {
+            for (var j = arr_states.length; j >= idx_states; j--) {
+                var fields = {}
+                var appendString = "method.alphas." + alphas + ".states." + arr_states[j-1].name + ".result";
+                fields[appendString] = false;
+                var appendString = "method.alphas." + alphas + ".states." + arr_states[j-1].name + ".timestamp";
+                fields[appendString] = '';
+                Projects.update({_id:id}, {$set : fields});
+
+                 // UPDATE CHECKLISTS
+                var arr_checklists = arrayify(project.method.alphas[alphas].states[arr_states[j-1].name].checklists);
+                var fields = {}
+                var appendString = "method.alphas." + alphas + ".states." + arr_states[j-1].name + ".checklists." + arr_checklists[arr_checklists.length - 1].name + ".result";
+                fields[appendString] = false;
+                var appendString = "method.alphas." + alphas + ".states." + arr_states[j-1].name + ".checklists." + arr_checklists[arr_checklists.length - 1].name + ".timestamp";
+                fields[appendString] = '';
+                console.log(fields);
+                var id = Session.get('project');
+                Projects.update({_id:id}, {$set : fields});
+            }
+        } else {
+            for (var j = 0; j < idx_states; j++) {
+                var fields = {}
+                var appendString = "method.alphas." + alphas + ".states." + arr_states[j].name + ".result";
+                fields[appendString] = true;
+                var appendString = "method.alphas." + alphas + ".states." + arr_states[j].name + ".timestamp";
+                fields[appendString] = new Date();
+                Projects.update({_id:id}, {$set : fields});
+
+                // UPDATE CHECKLISTS
+                var arr_checklists = arrayify(project.method.alphas[alphas].states[arr_states[j].name].checklists);
+                arr_checklists.forEach(function(checklist) {
                     var fields = {}
-                    var appendString = "method.alphas." + alphas + ".states." + arr_states[j-1].name + ".result";
-                    fields[appendString] = false;
-                    var appendString = "method.alphas." + alphas + ".states." + arr_states[j-1].name + ".timestamp";
-                    fields[appendString] = new Date();
-                    console.log(fields)
-                    Projects.update({_id:id}, {$set : fields});
-                }
-            } else {
-                for (var j = 0; j < idx_states; j++) {
-                    var fields = {}
-                    var appendString = "method.alphas." + alphas + ".states." + arr_states[j].name + ".result";
+                    var appendString = "method.alphas." + alphas + ".states." + arr_states[j].name + ".checklists." + checklist.name + ".result";
                     fields[appendString] = true;
-                    var appendString = "method.alphas." + alphas + ".states." + arr_states[j].name + ".timestamp";
+                    var appendString = "method.alphas." + alphas + ".states." + arr_states[j].name + ".checklists." + checklist.name + ".timestamp";
                     fields[appendString] = new Date();
-                    console.log(fields);
+                    var id = Session.get('project');
                     Projects.update({_id:id}, {$set : fields});
+                })
+            }
+        }
 
-
-                    var arr_checklists = arrayify(project.method.alphas[alphas].states[arr_states[j].name].checklists);
-                    arr_checklists.forEach(function(checklist) {
-                        var fields = {}
-                        var appendString = "method.alphas." + alphas + ".states." + arr_states[j].name + ".checklists." + checklist.name + ".result";
-                        fields[appendString] = true;
-                        var appendString = "method.alphas." + alphas + ".states." + arr_states[j].name + ".checklists." + checklist.name + ".timestamp";
-                        fields[appendString] = new Date();
-                        var id = Session.get('project');
-                        Projects.update({_id:id}, {$set : fields});
-                    })
-                    // console.log(project)
+        // UPDATE ACTIVITY SPACES
+        arr_activity_spaces.forEach(function(activity_space) {
+            var completion_criterias = activity_space.value.completioncriteria;
+            var is_complete = true;
+            var id = Session.get('project');
+            var project = Projects.findOne({_id:id});
+            completion_criterias.forEach(function(completion_criteria) {
+                var alphas = completion_criteria.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
+                var states = completion_criteria.split('::')[1].replace(/ +/g, "");;
+                if (project.method.alphas[alphas].states[states].result) {
+                    is_complete = is_complete && true;
+                } else {
+                    is_complete = is_complete && false;
                 }
+            });
+
+            if (is_complete) {
+                var fields = {}
+                var appendString = "method.activityspaces." + activity_space.name + ".result";
+                fields[appendString] = true;
+                var appendString = "method.activityspaces." + activity_space.name + ".timestamp";
+                fields[appendString] = new Date();
+                var id = Session.get('project');
+                Projects.update({_id:id}, {$set : fields});
+            } else {
+                var fields = {}
+                var appendString = "method.activityspaces." + activity_space.name + ".result";
+                fields[appendString] = false;
+                var appendString = "method.activityspaces." + activity_space.name + ".timestamp";
+                fields[appendString] = '';
+                var id = Session.get('project');
+                Projects.update({_id:id}, {$set : fields});
             }
 
-            arr_activity_spaces.forEach(function(activity_space) {
-                var completion_criterias = activity_space.value.completioncriteria;
+            // UPDATE ACTIVITY
+            var arr_activities = arrayify(activity_space.value.activities);
+            arr_activities.forEach(function(activity) {
+                var completion_criterias = activity.value.completioncriteria;
                 var is_complete = true;
                 var id = Session.get('project');
                 var project = Projects.findOne({_id:id});
-                // console.log("activity_space : " + activity_space.name);
                 completion_criterias.forEach(function(completion_criteria) {
                     var alphas = completion_criteria.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
                     var states = completion_criteria.split('::')[1].replace(/ +/g, "");;
-                    // console.log("alphas : " + alphas);
-                    // console.log("states : " + states);
-                    // console.log(project.alphas[alphas].states[states].result);
                     if (project.method.alphas[alphas].states[states].result) {
                         is_complete = is_complete && true;
                     } else {
                         is_complete = is_complete && false;
                     }
                 });
-                // console.log(is_complete);
+
                 if (is_complete) {
                     var fields = {}
-                    var appendString = "method.activityspaces." + activity_space.name + ".result";
+                    var appendString = "method.activityspaces." + activity_space.name + ".activities." + activity.name + ".result";
                     fields[appendString] = true;
-                    var appendString = "method.activityspaces." + activity_space.name + ".timestamp";
+                    var appendString = "method.activityspaces." + activity_space.name + ".activities." + activity.name + ".timestamp";
                     fields[appendString] = new Date();
                     var id = Session.get('project');
                     Projects.update({_id:id}, {$set : fields});
                 } else {
                     var fields = {}
-                    var appendString = "method.activityspaces." + activity_space.name + ".result";
+                    var appendString = "method.activityspaces." + activity_space.name + ".activities." + activity.name + ".result";
                     fields[appendString] = false;
-                    var appendString = "method.activityspaces." + activity_space.name + ".timestamp";
-                    fields[appendString] = new Date();
+                    var appendString = "method.activityspaces." + activity_space.name + ".activities." + activity.name + ".timestamp";
+                    fields[appendString] = '';
                     var id = Session.get('project');
                     Projects.update({_id:id}, {$set : fields});
                 }
+            });
+        });
 
-                var arr_activities = arrayify(activity_space.value.activities);
-                arr_activities.forEach(function(activity) {
-                    var completion_criterias = activity.value.completioncriteria;
-                    var is_complete = true;
-                    var id = Session.get('project');
-                    var project = Projects.findOne({_id:id});
-                    // console.log("activity_space : " + activity_space.name);
-                    completion_criterias.forEach(function(completion_criteria) {
-                        var alphas = completion_criteria.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
-                        var states = completion_criteria.split('::')[1].replace(/ +/g, "");;
-                        // console.log("alphas : " + alphas);
-                        // console.log("states : " + states);
-                        // console.log(project.alphas[alphas].states[states].result);
-                        if (project.method.alphas[alphas].states[states].result) {
-                            is_complete = is_complete && true;
+        //UPDATE WORK PRODUCT
+        var id = Session.get('project');
+        var workproducts = arrayify(Projects.findOne({_id:id}).workproducts);
+
+        workproducts.forEach(function(workproduct) {
+            var alpha = workproduct.value.alpha;
+            var subalpha = workproduct.value.subalpha;
+
+            if (subalpha === "") {
+                var states = arrayify(Projects.findOne({_id:id}).method.alphas[alpha].states);
+                states.forEach(function(state) {
+                    if (state.value.name.replace(/\s/g,'') == (workproduct.value.states)[0].replace(/\s/g,'')) {
+                        if (state.value.result) {
+                            var fields = {}
+                            var appendString = "workproducts." + workproduct.name + ".result";
+                            fields[appendString] = true;
+                            var appendString = "workproducts." + workproduct.name + ".timestamp";
+                            fields[appendString] = new Date();
+                            Projects.update({_id:id}, {$set : fields});
                         } else {
-                            is_complete = is_complete && false;
+                            var fields = {}
+                            var appendString = "workproducts." + workproduct.name + ".result";
+                            fields[appendString] = false;
+                            var appendString = "workproducts." + workproduct.name + ".timestamp";
+                            fields[appendString] = '';
+                            Projects.update({_id:id}, {$set : fields});
                         }
-                    });
-                    // console.log(is_complete);
-                    if (is_complete) {
-                        var fields = {}
-                        var appendString = "method.activityspaces." + activity_space.name + ".activities." + activity.name + ".result";
-                        fields[appendString] = true;
-                        var appendString = "method.activityspaces." + activity_space.name + ".activities." + activity.name + ".timestamp";
-                        fields[appendString] = new Date();
-                        var id = Session.get('project');
-                        Projects.update({_id:id}, {$set : fields});
-                    } else {
-                        var fields = {}
-                        var appendString = "method.activityspaces." + activity_space.name + ".activities." + activity.name + ".result";
-                        fields[appendString] = false;
-                        var appendString = "method.activityspaces." + activity_space.name + ".activities." + activity.name + ".timestamp";
-                        fields[appendString] = new Date();
-                        var id = Session.get('project');
-                        Projects.update({_id:id}, {$set : fields});
                     }
                 });
-            });
-
-        // }
-        
+            } else {
+                var states = arrayify(Projects.findOne({_id:id}).subalpha[subalpha].states);
+                states.forEach(function(state) {
+                    if (state.value.name.replace(/\s/g,'') == (workproduct.value.states)[0].replace(/\s/g,'')) {
+                        if (state.value.result) {
+                            var fields = {}
+                            var appendString = "workproducts." + workproduct.name + ".result";
+                            fields[appendString] = true;
+                            var appendString = "workproducts." + workproduct.name + ".timestamp";
+                            fields[appendString] = new Date();
+                            Projects.update({_id:id}, {$set : fields});
+                        } else {
+                            var fields = {}
+                            var appendString = "workproducts." + workproduct.name + ".result";
+                            fields[appendString] = false;
+                            var appendString = "workproducts." + workproduct.name + ".timestamp";
+                            fields[appendString] = '';
+                            Projects.update({_id:id}, {$set : fields});
+                        }
+                    }
+                });
+            }
+        })
     },
     'click .activity_spaces': function(event) {
         Session.set('activity', event.currentTarget.id);
@@ -349,28 +443,30 @@ Template.update.events({
                 var alphas = entry.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
                 var states = entry.split('::')[1].replace(/ +/g, "");;
 
-                var arr_states = arrayify(project.method.alphas[alphas].states);
-                var idx_states = 0;
-                var i = 0;
-                var is_states = false;
-                while (!(is_states)) {
-                    if (arr_states[i].name === project.method.alphas[alphas].states[states].name.replace(/\s/g,'')) {
-                        idx_states = i + 1;
-                        is_states = true;
-                    }
-                    i++;
-                }
+                updateState(alphas, states);
 
-                for (var j = arr_states.length; j >= idx_states; j--) {   
-                    var fields = {}
-                    var appendString = "method.alphas." + alphas + ".states." + arr_states[j-1].name + ".result";
-                    fields[appendString] = false;
-                    var appendString = "method.alphas." + alphas + ".states." + arr_states[j-1].name + ".timestamp";
-                    fields[appendString] = new Date();
-                    console.log(fields);
-                    var id = Session.get('project');
-                    Projects.update({_id:id}, {$set : fields});
-                }
+                // var arr_states = arrayify(project.method.alphas[alphas].states);
+                // var idx_states = 0;
+                // var i = 0;
+                // var is_states = false;
+                // while (!(is_states)) {
+                //     if (arr_states[i].name === project.method.alphas[alphas].states[states].name.replace(/\s/g,'')) {
+                //         idx_states = i + 1;
+                //         is_states = true;
+                //     }
+                //     i++;
+                // }
+
+                // for (var j = arr_states.length; j >= idx_states; j--) {   
+                //     var fields = {}
+                //     var appendString = "method.alphas." + alphas + ".states." + arr_states[j-1].name + ".result";
+                //     fields[appendString] = false;
+                //     var appendString = "method.alphas." + alphas + ".states." + arr_states[j-1].name + ".timestamp";
+                //     fields[appendString] = new Date();
+                //     console.log(fields);
+                //     var id = Session.get('project');
+                //     Projects.update({_id:id}, {$set : fields});
+                // }
             });
             var fields = {}
             var appendString = "method.activityspaces." + activity + ".result";
@@ -381,6 +477,7 @@ Template.update.events({
             Projects.update({_id:id}, {$set : fields});
         } else {
             var is_complete = true;
+            var states_not_done = [];
             entryCriteria.forEach(function(entry) {
                 var alphas = entry.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
                 var states = entry.split('::')[1].replace(/ +/g, "");;
@@ -390,6 +487,7 @@ Template.update.events({
                 if (project.method.alphas[alphas].states[states].result) {
                     is_complete = is_complete && true;
                 } else {
+                    states_not_done.push(entry);
                     is_complete = is_complete && false;
                 }
             });
@@ -399,30 +497,31 @@ Template.update.events({
                     var alphas = entry.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
                     var states = entry.split('::')[1].replace(/ +/g, "");;
 
-                    var arr_states = arrayify(project.method.alphas[alphas].states);
-                    // console.log(arr_states);
-                    var idx_states = 0;
-                    var i = 0;
-                    var is_states = false;
-                    while (!(is_states)) {
-                        if (arr_states[i].name === project.method.alphas[alphas].states[states].name.replace(/\s/g,'')) {
-                            idx_states = i + 1;
-                            is_states = true;
-                        }
-                        i++;
-                    }
+                    updateState(alphas, states);
+                    // var arr_states = arrayify(project.method.alphas[alphas].states);
+                    // // console.log(arr_states);
+                    // var idx_states = 0;
+                    // var i = 0;
+                    // var is_states = false;
+                    // while (!(is_states)) {
+                    //     if (arr_states[i].name === project.method.alphas[alphas].states[states].name.replace(/\s/g,'')) {
+                    //         idx_states = i + 1;
+                    //         is_states = true;
+                    //     }
+                    //     i++;
+                    // }
 
-                    for (var j = 0; j < idx_states; j++) {
-                        var fields = {}
-                        var appendString = "method.alphas." + alphas + ".states." + arr_states[j].name + ".result";
-                        fields[appendString] = true;
-                        var appendString = "method.alphas." + alphas + ".states." + arr_states[j].name + ".timestamp";
-                        fields[appendString] = new Date();
-                        console.log(fields);
-                        var id = Session.get('project');
-                        Projects.update({_id:id}, {$set : fields});
-                        // console.log(streetaddress);
-                    }
+                    // for (var j = 0; j < idx_states; j++) {
+                    //     var fields = {}
+                    //     var appendString = "method.alphas." + alphas + ".states." + arr_states[j].name + ".result";
+                    //     fields[appendString] = true;
+                    //     var appendString = "method.alphas." + alphas + ".states." + arr_states[j].name + ".timestamp";
+                    //     fields[appendString] = new Date();
+                    //     console.log(fields);
+                    //     var id = Session.get('project');
+                    //     Projects.update({_id:id}, {$set : fields});
+                    //     // console.log(streetaddress);
+                    // }
                 });
                 var fields = {}
                 var appendString = "method.activityspaces." + activity + ".result";
@@ -432,7 +531,15 @@ Template.update.events({
                 var id = Session.get('project');
                 Projects.update({_id:id}, {$set : fields}); 
             } else {
-                alert("Cannot do this Activity!");
+                var err = "";
+
+                for (var i = 0; i < states_not_done.length; i++) {
+                    err += states_not_done[i];
+                    if ((states_not_done.length != 1) && (i != (states_not_done.length - 1))) {
+                        err += ", ";
+                    }
+                }
+                alert(err + " not done. Can not do this activity!");
             }
         }
     },
@@ -441,50 +548,45 @@ Template.update.events({
     'click .activities': function(event) {
         Session.set('activity', event.currentTarget.id);
         var activity = Session.get('activity');
-        console.log(activity);
         string_activity = 'activity_spaces' + activity;
         var activity_spaces = document.getElementById(string_activity).value;
-        console.log(activity_spaces);
         var id = Session.get('project');
         var project = Projects.findOne({_id:id});
         var activities = project.method.activityspaces[activity_spaces].activities;
-        console.log(activities);
         var completionCriteria = activities[activity].completioncriteria;
         var entryCriteria = activities[activity].entrycriteria;
 
-        console.log(completionCriteria);
-
-        //update activities -> ubah format
         var id = Session.get('project')
         var project = Projects.findOne({_id:id});
-        console.log(project.method.activityspaces[activity_spaces].activities[activity].result);
         if (project.method.activityspaces[activity_spaces].activities[activity].result) {
             completionCriteria.forEach(function(entry) {
                 var alphas = entry.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
                 var states = entry.split('::')[1].replace(/ +/g, "");;
 
-                var arr_states = arrayify(project.method.alphas[alphas].states);
-                var idx_states = 0;
-                var i = 0;
-                var is_states = false;
-                while (!(is_states)) {
-                    if (arr_states[i].name === project.method.alphas[alphas].states[states].name.replace(/\s/g,'')) {
-                        idx_states = i + 1;
-                        is_states = true;
-                    }
-                    i++;
-                }
+                updateState(alphas, states);
 
-                for (var j = arr_states.length; j >= idx_states; j--) {   
-                    var fields = {}
-                    var appendString = "method.alphas." + alphas + ".states." + arr_states[j-1].name + ".result";
-                    fields[appendString] = false;
-                    var appendString = "method.alphas." + alphas + ".states." + arr_states[j-1].name + ".timestamp";
-                    fields[appendString] = new Date();
-                    console.log(fields);
-                    var id = Session.get('project');
-                    Projects.update({_id:id}, {$set : fields});
-                }
+                // var arr_states = arrayify(project.method.alphas[alphas].states);
+                // var idx_states = 0;
+                // var i = 0;
+                // var is_states = false;
+                // while (!(is_states)) {
+                //     if (arr_states[i].name === project.method.alphas[alphas].states[states].name.replace(/\s/g,'')) {
+                //         idx_states = i + 1;
+                //         is_states = true;
+                //     }
+                //     i++;
+                // }
+
+                // for (var j = arr_states.length; j >= idx_states; j--) {   
+                //     var fields = {}
+                //     var appendString = "method.alphas." + alphas + ".states." + arr_states[j-1].name + ".result";
+                //     fields[appendString] = false;
+                //     var appendString = "method.alphas." + alphas + ".states." + arr_states[j-1].name + ".timestamp";
+                //     fields[appendString] = new Date();
+                //     console.log(fields);
+                //     var id = Session.get('project');
+                //     Projects.update({_id:id}, {$set : fields});
+                // }
             });
             var fields = {}
             var appendString = "method.activityspaces." + activity_spaces + ".activities." + activity + ".result";
@@ -513,30 +615,32 @@ Template.update.events({
                     var alphas = entry.split('::')[0].replace(/ +/g, "");; //o sbelum, 1 sesudah
                     var states = entry.split('::')[1].replace(/ +/g, "");;
 
-                    var arr_states = arrayify(project.method.alphas[alphas].states);
-                    // console.log(arr_states);
-                    var idx_states = 0;
-                    var i = 0;
-                    var is_states = false;
-                    while (!(is_states)) {
-                        if (arr_states[i].name === project.method.alphas[alphas].states[states].name.replace(/\s/g,'')) {
-                            idx_states = i + 1;
-                            is_states = true;
-                        }
-                        i++;
-                    }
+                    updateState(alphas, states);
 
-                    for (var j = 0; j < idx_states; j++) {
-                        var fields = {}
-                        var appendString = "method.alphas." + alphas + ".states." + arr_states[j].name + ".result";
-                        fields[appendString] = true;
-                        var appendString = "method.alphas." + alphas + ".states." + arr_states[j].name + ".timestamp";
-                        fields[appendString] = new Date();
-                        console.log(fields);
-                        var id = Session.get('project');
-                        Projects.update({_id:id}, {$set : fields});
-                        // console.log(streetaddress);
-                    }
+                    // var arr_states = arrayify(project.method.alphas[alphas].states);
+                    // // console.log(arr_states);
+                    // var idx_states = 0;
+                    // var i = 0;
+                    // var is_states = false;
+                    // while (!(is_states)) {
+                    //     if (arr_states[i].name === project.method.alphas[alphas].states[states].name.replace(/\s/g,'')) {
+                    //         idx_states = i + 1;
+                    //         is_states = true;
+                    //     }
+                    //     i++;
+                    // }
+
+                    // for (var j = 0; j < idx_states; j++) {
+                    //     var fields = {}
+                    //     var appendString = "method.alphas." + alphas + ".states." + arr_states[j].name + ".result";
+                    //     fields[appendString] = true;
+                    //     var appendString = "method.alphas." + alphas + ".states." + arr_states[j].name + ".timestamp";
+                    //     fields[appendString] = new Date();
+                    //     console.log(fields);
+                    //     var id = Session.get('project');
+                    //     Projects.update({_id:id}, {$set : fields});
+                    //     // console.log(streetaddress);
+                    // }
                 });
                 var fields = {}
                 var appendString = "method.activityspaces." + activity_spaces + ".activities." + activity + ".result";
@@ -562,15 +666,7 @@ Template.update.events({
         Session.set('alpha', alphas);
         alphas = alphas.replace(/\s/g,'');
 
-        // var arr_subalpha = arrayify(project.method.alphas[alphas].subalphas);
-        // if (arr_subalpha.length > 0) {
-        //     var string_subalpha = 'subalpha' + states;
-        //     var subalpha = document.getElementById(string_subalpha).value;
-        //     subalpha = subalpha.replace(/\s/g,'');
-        //     var checklist = project.method.alphas[alphas].subalphas[subalpha].states[states].checklists;
-        // } else {
-            var checklist = project.method.alphas[alphas].states[states].checklists;
-        // }
+        var checklist = project.method.alphas[alphas].states[states].checklists;
 
         var tbody = document.getElementById('checklist');
 
@@ -595,7 +691,6 @@ Template.update.events({
 
             if (i == arr_checklist.length - 1) {
                 tr += "</div>";
-                console.log(tr);
             }
 
             /* We add the table row to the table body */
@@ -612,7 +707,6 @@ Template.update.events({
         var checklist = event.currentTarget.id;
         var subalpha_state = Session.get('subalpha_state');
         var subalpha = Session.get('subalpha');
-             
 
         var project = Projects.findOne({_id:id});
 
@@ -624,8 +718,6 @@ Template.update.events({
             var i = 0;
             var is_checklists = false;
             while (!(is_checklists)) {
-                console.log('array : ' + arr_checklists[i].name.replace(/\s/g,''));
-                console.log('db : ' + project.subalpha[subalpha].states[subalpha_state].checklists[checklist].name.replace(/\s/g,''));
                 if (arr_checklists[i].name.replace(/\s/g,'') === project.subalpha[subalpha].states[subalpha_state].checklists[checklist].name.replace(/\s/g,'')) {
                     idx_checklists = i + 1;
                     is_checklists = true;
@@ -639,7 +731,7 @@ Template.update.events({
                     var appendString = "subalpha." + subalpha + ".states." + subalpha_state + ".checklists." + arr_checklists[j-1].name + ".result";
                     fields[appendString] = false;
                     var appendString = "subalpha." + subalpha + ".states." + subalpha_state + ".checklists." + arr_checklists[j-1].name + ".timestamp";
-                    fields[appendString] = new Date();
+                    fields[appendString] = '';
                     var id = Session.get('project');
                     Projects.update({_id:id}, {$set : fields});
                 }
@@ -706,13 +798,26 @@ Template.update.events({
             tbody.innerHTML += total;
 
             if (idx_checklists == arr_checklists.length) {
-                var fields = {}
-                var appendString = "subalpha." + subalpha + ".states." + subalpha_state + ".result";
-                fields[appendString] = true;
-                var appendString = "subalpha." + subalpha + ".states." + subalpha_state + ".timestamp";
-                fields[appendString] = new Date();
-                console.log(fields);
-                Projects.update({_id:id}, {$set : fields});
+                console.log(states);
+                console.log(Projects.findOne({_id:id}).subalpha[subalpha]);
+                if (Projects.findOne({_id:id}).subalpha[subalpha].states[states].checklists[arr_checklists[idx_checklists-1].name].result) {
+                    var fields = {}
+                    var appendString = "subalpha." + subalpha + ".states." + subalpha_state + ".result";
+                    fields[appendString] = true;
+                    var appendString = "subalpha." + subalpha + ".states." + subalpha_state + ".timestamp";
+                    fields[appendString] = new Date();
+                    console.log(fields);
+                    Projects.update({_id:id}, {$set : fields});
+                } else {
+                    console.log(subalpha);
+                    var fields = {}
+                    var appendString = "subalpha." + subalpha + ".states." + subalpha_state + ".result";
+                    fields[appendString] = false;
+                    var appendString = "subalpha." + subalpha + ".states." + subalpha_state + ".timestamp";
+                    fields[appendString] = '';
+                    console.log(fields);
+                    Projects.update({_id:id}, {$set : fields});
+                }
             } else {
                 var fields = {}
                 var appendString = "subalpha." + subalpha + ".states." + subalpha_state + ".result";
@@ -811,23 +916,37 @@ Template.update.events({
                 total += tr;
             }
             tbody.innerHTML += total;
+            console.log(idx_checklists);
 
             if (idx_checklists == arr_checklists.length) {
-                var fields = {}
-                var appendString = "method.alphas." + alphas + ".states." + states + ".result";
-                fields[appendString] = true;
-                var appendString = "method.alphas." + alphas + ".states." + states + ".timestamp";
-                fields[appendString] = new Date();
-                console.log(fields);
-                Projects.update({_id:id}, {$set : fields});
+                if (Projects.findOne({_id:id}).method.alphas[alphas].states[states].checklists[arr_checklists[idx_checklists-1].name].result) {
+                    updateState(alphas, states);
+                    // var fields = {}
+                    // var appendString = "method.alphas." + alphas + ".states." + states + ".result";
+                    // fields[appendString] = true;
+                    // var appendString = "method.alphas." + alphas + ".states." + states + ".timestamp";
+                    // fields[appendString] = new Date();
+                    // console.log(fields);
+                    // Projects.update({_id:id}, {$set : fields});
+                } else {
+                    updateState(alphas, states);
+                    // var fields = {}
+                    // var appendString = "method.alphas." + alphas + ".states." + states + ".result";
+                    // fields[appendString] = false;
+                    // var appendString = "method.alphas." + alphas + ".states." + states + ".timestamp";
+                    // fields[appendString] = '';
+                    // console.log(fields);
+                    // Projects.update({_id:id}, {$set : fields});
+                }   
             } else {
-                var fields = {}
-                var appendString = "method.alphas." + alphas + ".states." + states + ".result";
-                fields[appendString] = false;
-                var appendString = "method.alphas." + alphas + ".states." + states + ".timestamp";
-                fields[appendString] = new Date();
-                console.log(fields);
-                Projects.update({_id:id}, {$set : fields});
+                updateState(alphas, states);
+                // var fields = {}
+                // var appendString = "method.alphas." + alphas + ".states." + states + ".result";
+                // fields[appendString] = false;
+                // var appendString = "method.alphas." + alphas + ".states." + states + ".timestamp";
+                // fields[appendString] = new Date();
+                // console.log(fields);
+                // Projects.update({_id:id}, {$set : fields});
             }
         }
 
@@ -1080,6 +1199,7 @@ Template.update.events({
     'mouseenter .subalpha_states':function(event) {
         document.getElementById("checklist").innerHTML = "";
         Session.set('subalpha_state', event.currentTarget.id);
+        Session.set('state', event.currentTarget.id);
         Session.set('alpha', '');
         var subalpha_state = Session.get('subalpha_state');
 
