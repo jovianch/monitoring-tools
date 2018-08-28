@@ -976,7 +976,12 @@
                 "order": "2",
                 "alpha": "Work",
                 "subalpha": "Sprint",
-                "checklists": {}
+                "checklists": {
+                	"Start" :
+                	{	
+                		"name" : "Start"
+                	}
+                }
               },
               "Under Control":
               {
@@ -984,7 +989,12 @@
                 "order": "3",
                 "alpha": "Work",
                 "subalpha": "Sprint",
-                "checklists": {}
+                "checklists": {
+                	"Under Control" :
+                	{	
+                		"name" : "Under Control"
+                	}
+                }
               },
               "Concluded":
               {
@@ -992,7 +1002,12 @@
                 "order": "4",
                 "alpha": "Work",
                 "subalpha": "Sprint",
-                "checklists": {}
+                "checklists": {
+                	"Concluded" :
+                	{	
+                		"name" : "Concluded"
+                	}
+                }
               },
               "Closed":
               {
@@ -1000,7 +1015,12 @@
                 "order": "5",
                 "alpha": "Work",
                 "subalpha": "Sprint",
-                "checklists": {}
+                "checklists": {
+                	"Closed" :
+                	{	
+                		"name" : "Closed"
+                	}
+                }
               }
             }
           }
