@@ -104,9 +104,9 @@ function drawConcern() {
         }
 
         var data = [
-        ['Customer', done_customer/total_states_customer],
-        ['Solution', done_solution/total_states_solution],
-        ['Endeavor', done_endeavor/total_states_endeavor]
+        ['Customer', (done_customer/total_states_customer) * 100],
+        ['Solution', (done_solution/total_states_solution) * 100],
+        ['Endeavor', (done_endeavor/total_states_endeavor) * 100]
 
         ];
         chart = {
@@ -117,7 +117,13 @@ function drawConcern() {
         options: {
             'title':'Progress per Alpha',
             'width':400,
-            'height':300
+            'height':300,
+            'hAxis': {
+                'viewWindow' : {
+                    min: 0,
+                    max: 100
+                }
+            }
         }
     };
 
@@ -161,12 +167,12 @@ function drawAlpha() {
             'width':400,
             'height':300,
             'hAxis': {
-    'viewWindow' : {
-        min: 0,
-        max: 100
-    },
-}
-    }
+                'viewWindow' : {
+                    min: 0,
+                    max: 100
+                },
+            }
+        }
     };
 
     drawChart(chart);
@@ -177,25 +183,49 @@ function drawActivity() {
 
     var tbody = document.getElementById('table_activity');
 
-    var html = "<h3>Progress Activity</h3><table><tr><th>Number</th><th>Activity</th><th>Status</th></tr>";
+    var html = "<h3>Progress Activity</h3><table><tr><th>Number</th><th>Activity</th><th>Target</th><th>Reality</th><th>Status</th></tr>";
     
     var id = Session.get('project');
     var arr_activityspaces = arrayify(Projects.findOne({_id:id}).method.activityspaces);
 
     var idx = 1;
 
+    var month = new Array();
+    month[0] = "January";
+    month[1] = "February";
+    month[2] = "March";
+    month[3] = "April";
+    month[4] = "May";
+    month[5] = "June";
+    month[6] = "July";
+    month[7] = "August";
+    month[8] = "September";
+    month[9] = "October";
+    month[10] = "November";
+    month[11] = "December";
+
     arr_activityspaces.forEach(function(activityspace) {
-        var data = "<tr><td>" + idx + "</td>" + "<td>" + activityspace.name + "</td>";
+        if (activityspace.value.timestamp != '') {
+            var data = "<tr><td>" + idx + "</td>" + "<td>" + activityspace.name + "</td>" + "<td>" + activityspace.value.end_date.getDate() + " " + month[activityspace.value.end_date.getMonth()] + " " + activityspace.value.end_date.getFullYear() + "</td>" + "<td>" + activityspace.value.timestamp.getDate() + " " + month[activityspace.value.timestamp.getMonth()] + " " + activityspace.value.timestamp.getFullYear() + "</td>";
+        } else {
+            var data = "<tr><td>" + idx + "</td>" + "<td>" + activityspace.name + "</td>" + "<td>" + activityspace.value.end_date.getDate() + " " + month[activityspace.value.end_date.getMonth()] + " " + activityspace.value.end_date.getFullYear() + "</td>" + "<td>" + activityspace.value.timestamp + "</td>";
+
+        }
 
         // console.log("End Date : " + idx + " : " + activityspace.value.end_date.getTime());
         // console.log("End Date : " + idx + " : " + activityspace.value.timestamp.getTime());
         // var selisih = activityspace.value.end_date.getTime() - activityspace.value.timestamp.getTime();
         // console.log(selisih);
-        if (activityspace.value.end_date < activityspace.value.timestamp) {
-            data += "<td>Done</td></tr>";
+        if (activityspace.value.timestamp == '') {
+            data += "<td>Not Done</td></tr>"
         } else {
-            data += "<td>Not Done</td></tr>";
+            if (activityspace.value.end_date <= activityspace.value.timestamp) {
+                data += "<td>Late</td></tr>";
+            } else {
+                data += "<td>Done</td></tr>";
+            }
         }
+        
 
         html += data;
         // console.log(tbody.innerHTML);
@@ -338,7 +368,7 @@ function drawSubalpha() {
                     done_states += 1;
                 }
             });
-            count_state.push([subalpha.name, done_states/total_states]);
+            count_state.push([subalpha.name, (done_states/total_states) * 100]);
         });
 
         var data = count_state;
@@ -351,8 +381,14 @@ function drawSubalpha() {
         options: {
             'title':'Progress per Alpha',
             'width':400,
-            'height':300
-    }
+            'height':300,
+            'hAxis': {
+                'viewWindow' : {
+                    min: 0,
+                    max: 100
+                },
+            }
+        }
     };
 
     drawChart(chart);
