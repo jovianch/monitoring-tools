@@ -82,6 +82,20 @@ Template.project.events({
                 var id = Session.get('project');
                 Projects.update({_id:id}, {$set : fields});
             }
+
+            var sub_activities = arrayify(Projects.findOne({_id:project}).method.activityspaces[activity.name].activities);
+            sub_activities.forEach(function(sub_activity) {
+                var fields = {}
+                var appendString = "method.activityspaces." + activity.name + ".activities." + sub_activity.name + ".end_date";
+                var string_activity = "sub_activity" + sub_activity.name;
+                if (document.getElementById(string_activity).value == "") {
+
+                } else {
+                    fields[appendString] = new Date(document.getElementById(string_activity).value);
+                    var id = Session.get('project');
+                    Projects.update({_id:id}, {$set : fields});
+                }
+            });
         });
 
         var workproducts = arrayify(Projects.findOne({_id:project}).workproducts);
@@ -91,6 +105,7 @@ Template.project.events({
             var e = document.getElementById(workproduct.name);
             var arr_states = [];
             arr_states.push(e.options[e.selectedIndex].value);
+            // console.log(arr_states);
             fields[appendString] = arr_states;
             var id = Session.get('project');
             Projects.update({_id:id}, {$set : fields});

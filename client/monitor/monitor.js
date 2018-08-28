@@ -205,6 +205,7 @@ function drawActivity() {
     month[11] = "December";
 
     arr_activityspaces.forEach(function(activityspace) {
+        console.log(activityspace.name + activityspace.value.end_date + activityspace.value.timestamp);
         if (activityspace.value.timestamp != '') {
             var data = "<tr><td>" + idx + "</td>" + "<td>" + activityspace.name + "</td>" + "<td>" + activityspace.value.end_date.getDate() + " " + month[activityspace.value.end_date.getMonth()] + " " + activityspace.value.end_date.getFullYear() + "</td>" + "<td>" + activityspace.value.timestamp.getDate() + " " + month[activityspace.value.timestamp.getMonth()] + " " + activityspace.value.timestamp.getFullYear() + "</td>";
         } else {
@@ -229,6 +230,33 @@ function drawActivity() {
 
         html += data;
         // console.log(tbody.innerHTML);
+        idx++;
+
+        var arr_activities = arrayify(Projects.findOne({_id:id}).method.activityspaces[activityspace.name].activities);
+        arr_activities.forEach(function(activity) {
+            console.log(activity.name + activity.value.end_date);
+           if (activity.value.timestamp != '') {
+                var data = "<tr><td>" + idx + "</td>" + "<td>" + activity.name + "</td>" + "<td>" + activity.value.end_date.getDate() + " " + month[activity.value.end_date.getMonth()] + " " + activity.value.end_date.getFullYear() + "</td>" + "<td>" + activity.value.timestamp.getDate() + " " + month[activity.value.timestamp.getMonth()] + " " + activity.value.timestamp.getFullYear() + "</td>";
+            } else {
+                var data = "<tr><td>" + idx + "</td>" + "<td>" + activity.name + "</td>" + "<td>" + activity.value.end_date.getDate() + " " + month[activity.value.end_date.getMonth()] + " " + activity.value.end_date.getFullYear() + "</td>" + "<td>" + activity.value.timestamp + "</td>";
+
+            }
+
+            // console.log("End Date : " + idx + " : " + activityspace.value.end_date.getTime());
+            // console.log("End Date : " + idx + " : " + activityspace.value.timestamp.getTime());
+            // var selisih = activityspace.value.end_date.getTime() - activityspace.value.timestamp.getTime();
+            // console.log(selisih);
+            if (activity.value.timestamp == '') {
+                data += "<td>Not Done</td></tr>"
+            } else {
+                if (activity.value.end_date <= activity.value.timestamp) {
+                    data += "<td>Late</td></tr>";
+                } else {
+                    data += "<td>Done</td></tr>";
+                }
+            } 
+        })
+        html += data;
         idx++;
     });
     html += "</table>";

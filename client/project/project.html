@@ -93,6 +93,10 @@
                 {{#each arrayify Activities}}
                     <label>{{this.name}}</label>
                     <input id="activity{{this.name}}" type="date" name="end_date">
+                    {{#each arrayify this.value.activities}}
+                        <label>{{this.name}}</label>
+                        <input id="sub_activity{{this.name}}" type="date" name="end_date">
+                    {{/each}}
                     <br>
                 {{/each}}
                 </div>
