@@ -76,9 +76,20 @@ Template.project.events({
             var appendString = "method.activityspaces." + activity.name + ".end_date";
             var string_activity = "activity" + activity.name;
             if (document.getElementById(string_activity).value == "") {
-
+                var appendString ="method.activityspaces." + activity.name + ".result";
+                fields[appendString] = false;
+                var appendString ="method.activityspaces." + activity.name + ".timestamp";
+                fields[appendString] = "";
+                console.log(fields);
+                var id = Session.get('project');
+                Projects.update({_id:id}, {$set : fields});
             } else {
                 fields[appendString] = new Date(document.getElementById(string_activity).value);
+                var appendString ="method.activityspaces." + activity.name + ".result";
+                fields[appendString] = false;
+                var appendString ="method.activityspaces." + activity.name + ".timestamp";
+                fields[appendString] = "";
+                console.log(fields);
                 var id = Session.get('project');
                 Projects.update({_id:id}, {$set : fields});
             }
@@ -89,10 +100,21 @@ Template.project.events({
                 var appendString = "method.activityspaces." + activity.name + ".activities." + sub_activity.name + ".end_date";
                 var string_activity = "sub_activity" + sub_activity.name;
                 if (document.getElementById(string_activity).value == "") {
-
+                    var appendString ="method.activityspaces." + activity.name + ".activities." + sub_activity.name + ".result";
+                    fields[appendString] = false;
+                    var appendString ="method.activityspaces." + activity.name + ".activities." + sub_activity.name + ".timestamp";
+                    fields[appendString] = "";
+                    var id = Session.get('project');
+                    console.log(fields);
+                    Projects.update({_id:id}, {$set : fields});
                 } else {
                     fields[appendString] = new Date(document.getElementById(string_activity).value);
+                    var appendString ="method.activityspaces." + activity.name + ".activities." + sub_activity.name + ".result";
+                    fields[appendString] = false;
+                    var appendString ="method.activityspaces." + activity.name + ".activities." + sub_activity.name + ".timestamp";
+                    fields[appendString] = "";
                     var id = Session.get('project');
+                    console.log(fields);
                     Projects.update({_id:id}, {$set : fields});
                 }
             });

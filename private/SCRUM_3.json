@@ -1411,7 +1411,6 @@
         "concern": "Customer",
         "description": "Explore the possibilities presented by the creation of a new or improved software system. This includes the analysis of the opportunity to be addressed and the identification of the stakeholders",
         "isadded": false,
-        "end_date": "2018-08-25",
         "input": [
           
         ],
@@ -1429,7 +1428,6 @@
         "concern": "Customer",
         "description": "Engage with the stakeholders to understand their needs and ensure that the right results are produced. This includes identifying and working with the stakeholder representatives to progress the opportunity",
         "isadded": false,
-        "end_date": "2018-08-25",
         "input": [
           "Stakeholders",
           "Opportunity",
@@ -1451,7 +1449,6 @@
         "concern": "Customer",
         "description": "Share the results of the development work with the stakeholders to gain their acceptance of the system produced and verify that the opportunity has been successfully addressed",
         "isadded": false,
-        "end_date": "2018-08-25",
         "input": [
           "Stakeholders",
           "Opportunity",
@@ -1473,7 +1470,6 @@
         "concern": "Customer",
         "description": "Observe the use of the system in a live environment and how it benefits the stakeholders",
         "isadded": false,
-        "end_date": "2014-11-15T17:30:00.000Z",
         "input": [
           "Stakeholders",
           "Opportunity",
@@ -1495,7 +1491,6 @@
         "concern": "Solution",
         "description": "Establish a shared understanding of what the system to be produced must do",
         "isadded": false,
-        "end_date": "2018-08-25",
         "input": [
           "Stakeholders",
           "Opportunity",
@@ -1517,7 +1512,6 @@
         "concern": "Solution",
         "description": "Shape the system so that it is easy to develop, change and maintain, and can cope with current and expected future demands. This includes the overall design and architecting of the system to be produced",
         "isadded": false,
-        "end_date": "2018-08-25",
         "input": [
           "Stakeholders",
           "Opportunity",
@@ -1540,7 +1534,6 @@
         "concern": "Solution",
         "description": "Build a system by implementing, testing, and integrating one or more system elements. This includes bug fixing and unit testing",
         "isadded": false,
-        "end_date": "2018-08-25",
         "input": [
           "Requirements",
           "Software System",
@@ -1561,7 +1554,6 @@
         "concern": "Solution",
         "description": "Verify that the system produced meets the stakeholders’ requirements",
         "isadded": false,
-        "end_date": "2018-08-25",
         "input": [
           "Requirements",
           "Software System",
@@ -1582,7 +1574,6 @@
         "concern": "Solution",
         "description": "Take the tested system and make it available for use outside the development team",
         "isadded": false,
-        "end_date": "2018-08-25",
         "input": [
           "Stakeholders",
           "Software System",
@@ -1601,7 +1592,6 @@
         "concern": "Solution",
         "description": "Support the use of the software system in the live environment",
         "isadded": false,
-        "end_date": "2018-08-25",
         "input": [
           "Stakeholders",
           "Opportunity",
@@ -1622,7 +1612,6 @@
         "concern": "Endeavor",
         "description": "Set up the team and its working environment. Understand and commit to completing the work",
         "isadded": true,
-        "end_date": "2018-08-25",
         "input": [
           "Stakeholders",
           "Opportunity",
@@ -1644,7 +1633,6 @@
             "description": "A meeting to plan for a 2 week sprint lead by project manager",
             "nextactivity": "Daily Scrum",
             "isrepetitive": "No",
-            "end_date": "2018-08-25",
             "entrycriteria": [
               
             ],
@@ -1666,7 +1654,6 @@
         "concern": "Endeavor",
         "description": "Co-ordinate and direct the team’s work. This includes all on-going planning and re-planning of the work, and re-shaping of the team",
         "isadded": true,
-        "end_date": "2018-08-25",
         "input": [
           "Requirements",
           "Team",
@@ -1689,7 +1676,6 @@
             "description": "Lead by Scrum Master every day at 9.00 am",
             "nextactivity": "Sprint Review",
             "isrepetitive": "Yes",
-            "end_date": "2018-08-25",
             "entrycriteria": [
               "Team::Seeded"
             ],
@@ -1714,7 +1700,6 @@
         "concern": "Endeavor",
         "description": "Help the team members to help themselves, collaborate and improve their way of working",
         "isadded": true,
-        "end_date": "2018-08-25",
         "input": [
           "Team",
           "Work",
@@ -1736,7 +1721,6 @@
             "description": "Ask member if they have problems",
             "nextactivity": "Sprint Planning Meeting",
             "isrepetitive": "No",
-            "end_date": "2018-08-25",
             "entrycriteria": [
               
             ],
@@ -1758,7 +1742,6 @@
         "concern": "Endeavor",
         "description": "Measure and assess the progress made by the team",
         "isadded": true,
-        "end_date": "2018-08-25",
         "input": [
           "Requirements",
           "Team",
@@ -1783,7 +1766,6 @@
             "description": "Review the 2 week sprint, ask the member if they have problems or not",
             "nextactivity": "Sprint Retrospective",
             "isrepetitive": "No",
-            "end_date": "2018-08-25",
             "entrycriteria": [
               
             ],
@@ -1805,7 +1787,6 @@
         "concern": "Endeavor",
         "description": "Shut-down the software engineering endeavor and handover of the team’s responsibilities",
         "isadded": false,
-        "end_date": "2018-08-25",
         "input": [
           "Requirements",
           "Team",

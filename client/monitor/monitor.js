@@ -228,17 +228,18 @@ function drawActivity() {
         }
         
 
-        html += data;
+        // data += data;
         // console.log(tbody.innerHTML);
         idx++;
+        console.log(data);
 
         var arr_activities = arrayify(Projects.findOne({_id:id}).method.activityspaces[activityspace.name].activities);
         arr_activities.forEach(function(activity) {
             console.log(activity.name + activity.value.end_date);
            if (activity.value.timestamp != '') {
-                var data = "<tr><td>" + idx + "</td>" + "<td>" + activity.name + "</td>" + "<td>" + activity.value.end_date.getDate() + " " + month[activity.value.end_date.getMonth()] + " " + activity.value.end_date.getFullYear() + "</td>" + "<td>" + activity.value.timestamp.getDate() + " " + month[activity.value.timestamp.getMonth()] + " " + activity.value.timestamp.getFullYear() + "</td>";
+                data += "<tr><td>" + idx + "</td>" + "<td>" + activity.name + "</td>" + "<td>" + activity.value.end_date.getDate() + " " + month[activity.value.end_date.getMonth()] + " " + activity.value.end_date.getFullYear() + "</td>" + "<td>" + activity.value.timestamp.getDate() + " " + month[activity.value.timestamp.getMonth()] + " " + activity.value.timestamp.getFullYear() + "</td>";
             } else {
-                var data = "<tr><td>" + idx + "</td>" + "<td>" + activity.name + "</td>" + "<td>" + activity.value.end_date.getDate() + " " + month[activity.value.end_date.getMonth()] + " " + activity.value.end_date.getFullYear() + "</td>" + "<td>" + activity.value.timestamp + "</td>";
+                data += "<tr><td>" + idx + "</td>" + "<td>" + activity.name + "</td>" + "<td>" + activity.value.end_date.getDate() + " " + month[activity.value.end_date.getMonth()] + " " + activity.value.end_date.getFullYear() + "</td>" + "<td>" + activity.value.timestamp + "</td>";
 
             }
 
@@ -255,9 +256,11 @@ function drawActivity() {
                     data += "<td>Done</td></tr>";
                 }
             } 
+            idx++;
         })
         html += data;
-        idx++;
+        console.log(data);
+        console.log(html);
     });
     html += "</table>";
     tbody.innerHTML = html;
