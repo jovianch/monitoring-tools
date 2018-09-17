@@ -68,7 +68,7 @@ function arrayify(obj) {
 }
 
 Template.project.events({
-    'click .submit' : function(event) {
+    'click .btn-submit' : function(event) {
         var project = Session.get('project');
         var activities = arrayify(Projects.findOne({_id:project}).method.activityspaces);
         activities.forEach(function(activity) {
@@ -201,7 +201,7 @@ Template.project.events({
         element.style.visibility = "visible";
     },
 
-    'click .after_activity' : function(event) {
+    'click .btn-after-activity' : function(event) {
         var element = document.getElementById('after-activity');
         element.style.visibility = "visible";
     }

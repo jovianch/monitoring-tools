@@ -1,25 +1,37 @@
 <template name="monitor">
-  	<h2>Monitoring</h2>
+    <div class="jumbotron text-center">
+        <h1>CASE Tool for Monitoring with Essence</h1>
+        <h3>Jovian Christianto - 13514101</h3>
+        <a href="/home"><button class="btn-default">Back to Home</button></a>
+        <a href="/update"><button class="btn-default">Update</button></a>
+    </div>
 
-  	<h2>Progress Concern</h2>
-  	<label class="bar">Show Concern Bar</label>
-  	<div id="chart1" width="100%"></div>
+    <div class="container">
+      	<h2>Monitoring</h2>
 
-  	<h2>Progress Alpha</h2>
-  	<label class="alpha">Show Alpha Bar</label>
-  	<div id="alpha" width="100%"></div>
+        <div class="left-monitor">
+        	<h2>Progress Concern</h2>
+        	<div id="chart1" widht="100%"></div>
 
-  	<h2>Progress Activity</h2>
-  	<label class="activity_bar">Show Activity Bar</label>
-  	<div id="table_activity"></div>
+            <h2>Progress Subalpha</h2>
+            <div id="subalpha" width="100%"></div>
+        </div>
 
-    <h2>Progress Subalpha</h2>
-    <label class="subalpha">Show Subalpha Bar</label>
-    <div id="subalpha" width="100%"></div>
+        <!-- <div class="right-half">
+        	<h2>Progress Alpha</h2>
+        	<label class="alpha">Show Alpha Bar</label>
+        	<div id="alpha" width="100%"></div>
+        </div> -->
 
-  	<h2>Spider Chart</h2>
-  	<label class="spider_chart">Show Spider Chart</label>
-  	<canvas id="myChart2" width="400" height="400"></canvas>
-    
-  	<a href="/update">Update</a>
+        <div class="right-monitor">
+            <h2>Spider Chart</h2>
+            <canvas id="myChart2" width="500" height="400"></canvas>
+        </div>
+
+        <div class="activity-monitor">
+          	<h2>Progress Activity</h2>
+            <label class="activity_bar">Show Activity Bar</label>
+            <div id="table_activity"></div>
+        </div>
+    </div>
 </template>

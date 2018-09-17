@@ -55,7 +55,7 @@
     <div class="jumbotron text-center">
         <h1>CASE Tool for Monitoring with Essence</h1>
         <h3>Jovian Christianto - 13514101</h3>
-        <a href="/method"><button class="btn-default">Back to Home</button></a>
+        <a href="/home"><button class="btn-default">Back to Home</button></a>
     </div>
 
     <div class="container">
@@ -79,6 +79,7 @@
                 <a href="/project" class="clickable" onclick="showOpenModal()"><button class="btn btn-new-method">Add New Method</button></a>
             </div>
             <div class="left-half">
+                <br>
                 {{#each arrayify allMethods}}
                     <a href="" class="list-method" id="{{this.value.methodname}}" name="method" value="{{this.value.methodname}}" onclick="submit()"><li>{{this.value.methodname}}</li></a>
                 {{/each}}
@@ -105,7 +106,7 @@
                 {{/each}}
                 </div>
                 <br>
-                <button class="btn after_activity">Next</button>
+                <button class="btn btn-after-activity">Next</button>
             </div>
         </div>
 
@@ -156,7 +157,7 @@
                         <br>
                     {{/each}}
                 </div>
-                <a href="/method"><button class="btn submit" id="submit">Submit</button></a>
+                <a href="/home"><button class="btn btn-submit" id="submit">Submit</button></a>
             </div>
         </div>
     </div>

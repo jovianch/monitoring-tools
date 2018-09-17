@@ -212,3 +212,43 @@ tr:nth-child(even) {
 .list-method {
     font-size: 12pt;
 }
+
+.btn-after-activity {
+    position: relative;
+    left: 350px;
+}
+
+.submit_workproduct {
+    position: relative;
+    left: 350px;
+}
+
+.btn-submit {
+    position: relative;
+    left: 300px;
+    width: 150px;
+    height: 50px;
+    color: black;
+    background-color: white;
+    border: 2px solid #008CBA;
+    font-size: 12pt;
+}
+
+.left-monitor {
+  position: absolute;
+  left: 300px;
+  width: 50%;
+}
+
+.right-monitor {
+  position: absolute;
+  right: 0px;
+  width: 50%;
+}
+
+.activity-monitor {
+    position: absolute;
+    left: 300px;
+    right: 300px;
+    top : 1150px;
+}

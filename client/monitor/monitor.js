@@ -12,9 +12,9 @@ Template.monitor.helpers({
 });
 
 Template.monitor.onRendered(function() {
-    drawAlpha();
+    // drawAlpha();
     drawConcern();
-    // drawActivity();
+    drawActivity();
     drawSubalpha();
     drawSpider();
 });
@@ -124,8 +124,8 @@ function drawConcern() {
         rows: data,
         options: {
             'title':'Progress per Alpha',
-            'width':400,
-            'height':300,
+            'width':500,
+            'height':400,
             'hAxis': {
                 'viewWindow' : {
                     min: 0,
@@ -172,8 +172,8 @@ function drawAlpha() {
         rows: data,
         options: {
             'title':'Progress per Alpha',
-            'width':400,
-            'height':300,
+            'width':300,
+            'height':250,
             'hAxis': {
                 'viewWindow' : {
                     min: 0,
