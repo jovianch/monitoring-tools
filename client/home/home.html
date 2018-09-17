@@ -1,0 +1,23 @@
+<template name="home">
+    <div class="jumbotron text-center">
+        <h1>CASE Tool for Monitoring with Essence</h1>
+        <h3>Jovian Christianto - 13514101</h3>
+    </div>
+
+    <div class="container">
+        <div class="left-half">
+            <h3 class="title-home text-center">Choose Project to Monitor</h3>
+                <div class="div-list-project">
+                    {{#each arrayify allProjects}}
+                        <div>
+                	  		<a href="/update" class="project" id="{{this.value._id}}" name="project"><li>{{this.value.name}}</li></a>
+                        </div>
+            	    {{/each}}
+                </div>
+        </div>
+
+        <div class="right-half text-center">
+            <a href="/project"><button id="myBtn" class="btn btn-new-project">ADD NEW PROJECT</button></a>
+        </div>
+    </div>
+</template>

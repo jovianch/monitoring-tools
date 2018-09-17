@@ -146,3 +146,69 @@ td, th {
 tr:nth-child(even) {
     background-color: #dddddd;
 }
+
+.project {
+    font-family : "Times New Roman";
+    font-size: 17pt;
+    color: black;
+    text-transform: uppercase;
+}
+
+.title-home {
+    font-size: 30pt;
+}
+
+.btn-new-project {
+    width: 300px;
+    height: 70px;
+    color: black;
+    background-color: white;
+    border: 2px solid #008CBA;
+    font-size:  17pt;
+    position: relative;
+    top: 200px;
+}
+
+.btn-new-project:hover {
+    background-color: #008CBA;
+    color: white;
+}
+
+.project-box {
+    font-size: 25pt;
+}
+
+.left-project {
+    position: absolute;
+    width: 25%;
+    left: 300px;
+}
+
+.right-project {
+    position: absolute;
+    right: 300px;
+    width: 25%;
+}
+
+.div-list-project {
+    position: relative;
+    left: 350px;
+}
+
+.btn-new-method {
+    width: 150px;
+    height: 50px;
+    color: black;
+    background-color: white;
+    border: 2px solid #008CBA;
+    font-size:  12pt;
+}
+
+.btn-new-method:hover {
+    background-color: #008CBA;
+    color: white;
+}
+
+.list-method {
+    font-size: 12pt;
+}

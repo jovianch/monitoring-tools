@@ -12,22 +12,36 @@
     </div>
 
 	<div class="container">
-		<div class="text-center">
+		<div class="project-box text-center">
 			<h2>{{project.name}}</h2>
-			<h4>{{project.description}}</h4>
-			<h5>{{project.start_date}} - {{project.end_date}}</h5>
+			<h4>Description : {{project.description}}</h4>
+			<h4>Start Date : {{project.start_date}}</h4>
+			<h4>End Date : {{project.end_date}}</h4>
 		</div>
 
 		<br>
-		<h2>Update Your Project</h2>
+		<h2 class="text-center">Update Your Project</h2>
 
 		<div class="column">
 			<div id="checklist">
 			</div>
+
+			<h3 class="text-center">Work Product</h3>
+			<div class="workproduct-content">
+				{{#each arrayify workproducts}}
+					{{#if this.value.result}}
+						<a class="workproduct states-done" id="{{this.name}}" name="{{this.name}}">{{this.name}}</a>
+					{{else}}
+						<a class="workproduct" id="{{this.name}}" name="{{this.name}}">{{this.name}}</a>
+					{{/if}}
+					<input id="alpha{{this.name}}" type="hidden" name="workproduct" value="{{this.value.alpha}}">
+					<input id="subalpha{{this.name}}" type="hidden" name="workproduct" value="{{this.value.subalpha}}">
+				{{/each}}
+			</div>
 		</div>
 
 		<div class="column">
-			<h3>Alpha</h3>
+			<h3 class="text-center">Alpha</h3>
   			{{#each arrayify alphas}}
 		  	<div class="dropdown">
 			  	<a class="dropbtn" href="">{{this.name}}</a>
@@ -44,7 +58,7 @@
 			</div>
 			{{/each}}
 
-			<h3>SubAlpha</h3>
+			<h3 class="text-center">SubAlpha</h3>
 			{{#each arrayify subalphas}}
 				<div class="dropdown">
 					<a class="dropbtn subalpha_dropdown" id="{{this.name}}" href="">{{this.name}}</a>
@@ -61,23 +75,10 @@
 					</div>
 				</div>
 			{{/each}}
-
-			<h3>Work Product</h3>
-			<div class="workproduct-content">
-				{{#each arrayify workproducts}}
-					{{#if this.value.result}}
-						<a class="workproduct states-done" id="{{this.name}}" name="{{this.name}}">{{this.name}}</a>
-					{{else}}
-						<a class="workproduct" id="{{this.name}}" name="{{this.name}}">{{this.name}}</a>
-					{{/if}}
-					<input id="alpha{{this.name}}" type="hidden" name="workproduct" value="{{this.value.alpha}}">
-					<input id="subalpha{{this.name}}" type="hidden" name="workproduct" value="{{this.value.subalpha}}">
-				{{/each}}
-			</div>
 		</div>
 
 		<div class="column">
-		<h3>Activity</h3>
+		<h3 class="text-center">Activity</h3>
 			{{#each arrayify activities}}
 				<div class="dropdown">
 					{{#if this.value.result}}

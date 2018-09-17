@@ -2,13 +2,13 @@ Meteor.subscribe('Projects');
 Meteor.subscribe('Methods');
 Meteor.subscribe('AllProject');
 
-Template.method.helpers({
+Template.home.helpers({
     allProjects : function() {
         return Projects.find().fetch()
     }
 });
 
-Template.method.events({
+Template.home.events({
     'click .project' : function(event) {
         Session.set('project', event.currentTarget.id);
     }

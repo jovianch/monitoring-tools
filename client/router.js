@@ -2,8 +2,8 @@ Router.route('/monitor', function () {
 	this.render('monitor');
 });
 
-Router.route('/method', function () {
-	this.render('method');
+Router.route('/home', function () {
+	this.render('home');
 });
 
 Router.route('/update', function () {
