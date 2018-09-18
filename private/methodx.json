@@ -1,7 +1,7 @@
 [
 	{
-		"_id":"bNkP9pQLQTvocamnS",
-		"methodname":"SCRUM",
+		"_id":"bNkP9pQLQTvocamnP",
+		"methodname":"Method X",
 		"description":"This is SCRUM version 2.0",
 		"alphas":
 		{
@@ -518,13 +518,22 @@
           
         },
         "workproducts": {
-        	"Product Backlog": {
-            "name": "Product Backlog",
+        	"Requirement Plan": {
+            "name": "Requirement Plan",
             "alpha": "Requirements",
             "subalpha": "",
             "bound": "1",
             "states": [
-              "Bounded"
+              "Conceived"
+            ]
+          },
+          "Final Requirement": {
+            "name": "Final Requirement",
+            "alpha": "Requirements",
+            "subalpha": "",
+            "bound": "1",
+            "states": [
+              "Fullfilled"
             ]
           }
         }
@@ -718,15 +727,7 @@
           
         },
         "workproducts": {
-          "Increment":{
-            "name": "Increment",
-            "alpha": "SoftwareSystem",
-            "subalpha": "",
-            "bound": "1..*",
-            "states": [
-              "Architecture Selected"
-            ]
-          }
+         
         }
       },
       "Work": {
@@ -1031,7 +1032,7 @@
             "name": "Sprint Backlog",
             "alpha": "Work",
             "subalpha": "Sprint",
-            "bound": "1",
+            "bound": "1..*",
             "states": [
               "Sprint - Started"
             ]
@@ -1443,8 +1444,56 @@
           "Stakeholders::In Agreement",
           "Opportunity::Viable"
         ],
-        "activities": {}
-      },
+        "activities": {
+        	"Meeting with Stakeholders":{
+            "name": "Meeting with Stakeholders",
+            "activity_space":"UnderstandStakeholderNeeds",
+            "description": "A meeting to plan for a 2 week sprint lead by project manager",
+            "nextactivity": "Daily Scrum",
+            "isrepetitive": "No",
+            "entrycriteria": [
+             	"Stakeholders::Recognized",
+             	"Opportunity::Value Established"
+            ],
+            "completioncriteria": [
+              	"Stakeholders::Involved"
+            ],
+            "competencies": [
+              	{
+                "name": "Leadership",
+                "level": "Assists"
+              }
+            ],
+            "workproducts": [
+              
+            ]
+        },
+        	"Agree with Stakeholders":{
+            "name": "Agree with Stakeholders",
+            "activity_space":"UnderstandStakeholderNeeds",
+            "description": "A meeting to plan for a 2 week sprint lead by project manager",
+            "nextactivity": "Daily Scrum",
+            "isrepetitive": "No",
+            "entrycriteria": [
+             	"Stakeholders::Involved"
+            ],
+            "completioncriteria": [
+              	"Stakeholders::In Agreement",
+              	"Opportunity::Viable"
+            ],
+            "competencies": [
+              		{
+                "name": "Leadership",
+                "level": "Assists"
+              }
+            ],
+            "workproducts": [
+              
+            ]
+        }
+          }
+  
+       },
       "EnsureStakeholderSatisfaction": {
         "name": "Ensure Stakeholder Satisfaction",
         "concern": "Customer",
@@ -1546,9 +1595,7 @@
         "completioncriteria": [
           "Software System::Ready"
         ],
-        "activities": [
-          
-        ]
+        "activities": {}
       },
       "TesttheSystem": {
         "name": "Test the System",
@@ -1627,27 +1674,7 @@
           "Work::Prepared"
         ],
         "activities": 
-          {
-          	"Sprint Planning Meeting":{
-            "name": "Sprint Planning Meeting",
-            "activity_space":"PreparetodotheWork",
-            "description": "A meeting to plan for a 2 week sprint lead by project manager",
-            "nextactivity": "Daily Scrum",
-            "isrepetitive": "No",
-            "entrycriteria": [
-              
-            ],
-            "completioncriteria": [
-              
-            ],
-            "competencies": [
-              
-            ],
-            "workproducts": [
-              
-            ]
-        }
-          }
+          {}
         
       },
       "CoordinateActivity": {
@@ -1671,28 +1698,7 @@
         ],
         "activities": 
           {
-          	"Daily Scrum":{
-            "name": "Daily Scrum",
-            "activity_space":"CoordinateActivity",
-            "description": "Lead by Scrum Master every day at 9.00 am",
-            "nextactivity": "Sprint Review",
-            "isrepetitive": "Yes",
-            "entrycriteria": [
-              "Team::Seeded"
-            ],
-            "completioncriteria": [
-              "Work::Under Control"
-            ],
-            "competencies": [
-              {
-                "name": "Stakeholder Representation",
-                "level": "Assists"
-              }
-            ],
-            "workproducts": [
-              "Sprint Backlog"
-            ]
-        }
+          	
           }
         
       },
@@ -1716,25 +1722,7 @@
         ],
         "activities": 
           {
-          	"Sprint Retrospective":{
-            "name": "Sprint Retrospective",
-            "activity_space":"SupporttheTeam",
-            "description": "Ask member if they have problems",
-            "nextactivity": "Sprint Planning Meeting",
-            "isrepetitive": "No",
-            "entrycriteria": [
-              
-            ],
-            "completioncriteria": [
-             	"Team::Formed"
-            ],
-            "competencies": [
-              
-            ],
-            "workproducts": [
-              
-            ]
-        }
+          	
           }
         
       },
@@ -1761,25 +1749,7 @@
         ],
         "activities": 
           {
-          	"Sprint Review":{
-            "name": "Sprint Review",
-            "activity_space":"TrackProgress",
-            "description": "Review the 2 week sprint, ask the member if they have problems or not",
-            "nextactivity": "Sprint Retrospective",
-            "isrepetitive": "No",
-            "entrycriteria": [
-              
-            ],
-            "completioncriteria": [
-              
-            ],
-            "competencies": [
-              
-            ],
-            "workproducts": [
-              
-            ]
-        }
+          	
           }
         
       },

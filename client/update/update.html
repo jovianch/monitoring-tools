@@ -46,7 +46,11 @@
 			<h3 class="text-center">Alpha</h3>
   			{{#each arrayify alphas}}
 		  	<div class="dropdown">
-			  	<a class="dropbtn" href="">{{this.name}}</a>
+		  		{{#if this.value.result}}
+			  		<a class="dropbtn states-done" href="">{{this.name}}</a>
+			  	{{else}}
+			  		<a class="dropbtn" href="">{{this.name}}</a>
+			  	{{/if}}
 		  		<div class="dropdown-content">
 			   		{{#each arrayify this.value.states}}
 			   			{{#if this.value.result}}
@@ -63,7 +67,12 @@
 			<h3 class="text-center">SubAlpha</h3>
 			{{#each arrayify subalphas}}
 				<div class="dropdown">
-					<a class="dropbtn subalpha_dropdown" id="{{this.name}}" href="">{{this.name}}</a>
+					<label>{{this.value.alpha}}</label>
+					{{#if this.value.result}}
+						<a class="dropbtn subalpha_dropdown states-done" id="{{this.name}}" href="">{{this.name}}</a>
+					{{else}}
+						<a class="dropbtn subalpha_dropdown" id="{{this.name}}" href="">{{this.name}}</a>
+					{{/if}}
 					<input id="name{{this.name}}" type="hidden" name="name_subalpha" value="{{this.name}}">
 					<div class="dropdown-content">
 						{{#each arrayify this.value.states}}

@@ -44,29 +44,38 @@ function drawConcern() {
         var total_alpha_customer = 0;
         var total_alpha_solution = 0;
         var total_alpha_endeavor = 0;
-        var total_states_customer = 0;
-        var total_states_solution = 0;
-        var total_states_endeavor = 0;
+        var total_checklists_customer = 0;
+        var total_checklists_solution = 0;
+        var total_checklists_endeavor = 0;
         var alpha_customer = [];
         var alpha_solution = [];
         var alpha_endeavor = [];
         arr_alphas.forEach(function(alpha) {
             if (alpha.value.concern == "Customer") {
                 var alpha_states = arrayify(alpha.value.states)
-                var total_states = alpha_states.length;
-                total_states_customer = total_states_customer + total_states;
+                alpha_states.forEach(function(alpha_state) {
+                    var alpha_checklists = arrayify(alpha_state.value.checklists);
+                    var total_checklists = alpha_checklists.length;
+                    total_checklists_customer = total_checklists_customer + total_checklists;
+                })
                 total_alpha_customer = total_alpha_customer + 1;
                 alpha_customer.push(alpha);
             } else if (alpha.value.concern == "Solution") {
                 var alpha_states = arrayify(alpha.value.states)
-                var total_states = alpha_states.length;
-                total_states_solution = total_states_solution + total_states;
+                alpha_states.forEach(function(alpha_state) {
+                    var alpha_checklists = arrayify(alpha_state.value.checklists);
+                    var total_checklists = alpha_checklists.length;
+                    total_checklists_solution = total_checklists_solution + total_checklists;
+                })
                 total_alpha_solution = total_alpha_solution+ 1;
                 alpha_solution.push(alpha);
             } else if (alpha.value.concern == "Endeavor") {
                 var alpha_states = arrayify(alpha.value.states)
-                var total_states = alpha_states.length;
-                total_states_endeavor = total_states_endeavor + total_states;
+                alpha_states.forEach(function(alpha_state) {
+                    var alpha_checklists = arrayify(alpha_state.value.checklists);
+                    var total_checklists = alpha_checklists.length;
+                    total_checklists_endeavor = total_checklists_endeavor + total_checklists;
+                })
                 total_alpha_endeavor = total_alpha_endeavor + 1;
                 alpha_endeavor.push(alpha);
             }
@@ -74,47 +83,83 @@ function drawConcern() {
         
         var done_customer = 0;
         var latest_customer = 0;
-        var flag_customer = false;
+        var flag_customer = -1;
         for (var i = 0; i < total_alpha_customer; i++) {
             var arr_states = arrayify(alpha_customer[i].value.states);
             for (var j = 0; j < arr_states.length; j++) {
                 if (arr_states[j].value.result) {
-                    flag_customer = true;
-                    done_customer++;
+                    var arr_checklists = arrayify(arr_states[j].value.checklists)
+                    flag_customer = j;
+                    for (var k = 0; k < arr_checklists.length; k++) {
+                        done_customer++;
+                    }   
                 }
+            }
+
+            if (flag_customer != arr_states.length - 1) {
+                var arr_checklists = arrayify(arr_states[flag_customer+1].value.checklists)
+                for (var k = 0; k < arr_checklists.length; k++) {
+                    if (arr_checklists[k].value.result) {
+                        done_customer++;
+                    }
+                }   
             }
         }
 
         var done_solution = 0;
         var latest_solution = 0;
-        var flag_solution = false;
+        var flag_solution = -1;
         for (var i = 0; i < total_alpha_solution; i++) {
             var arr_states = arrayify(alpha_solution[i].value.states);
             for (var j = 0; j < arr_states.length; j++) {
                 if (arr_states[j].value.result) {
-                    flag_solution = true;
-                    done_solution++;
+                     var arr_checklists = arrayify(arr_states[j].value.checklists)
+                    for (var k = 0; k < arr_checklists,length; k++) {
+                        flag_solution = j;
+                        done_solution++;
+                    }   
                 }
             }
+
+            if (flag_solution != arr_states.length - 1) {
+                var arr_checklists = arrayify(arr_states[flag_solution+1].value.checklists)
+                    for (var k = 0; k < arr_checklists.length; k++) {
+                        if (arr_checklists[k].value.result) {
+                            done_solution++;
+                        }
+                    }
+                }
         }
 
         var done_endeavor = 0;
         var latest_endeavor = 0;
-        var flag_endeavor = false;
+        var flag_endeavor = -1;
         for (var i = 0; i < total_alpha_endeavor; i++) {
             var arr_states = arrayify(alpha_endeavor[i].value.states);
             for (var j = 0; j < arr_states.length; j++) {
                 if (arr_states[j].value.result) {
-                    flag_endeavor = true;
-                    done_endeavor++;
+                     var arr_checklists = arrayify(arr_states[j].value.checklists)
+                    for (var k = 0; k < arr_checklists.length; k++) {
+                        flag_endeavor = j;
+                        done_endeavor++;
+                    }   
                 }
             }
+
+            if (flag_endeavor != arr_states.length - 1) {
+                var arr_checklists = arrayify(arr_states[flag_endeavor+1].value.checklists)
+                    for (var k = 0; k < arr_checklists.length; k++) {
+                        if (arr_checklists[k].value.result) {
+                            done_endeavor++;
+                        }
+                    }
+                }
         }
 
         var data = [
-        ['Customer', (done_customer/total_states_customer) * 100],
-        ['Solution', (done_solution/total_states_solution) * 100],
-        ['Endeavor', (done_endeavor/total_states_endeavor) * 100]
+        ['Customer', (done_customer/total_checklists_customer) * 100],
+        ['Solution', (done_solution/total_checklists_solution) * 100],
+        ['Endeavor', (done_endeavor/total_checklists_endeavor) * 100]
 
         ];
         chart = {
@@ -267,8 +312,8 @@ function drawActivity() {
             idx++;
         })
         html += data;
-        console.log(data);
-        console.log(html);
+        // console.log(data);
+        // console.log(html);
     });
     html += "</table>";
     tbody.innerHTML = html;
@@ -357,14 +402,30 @@ function drawSpider() {
     arr_alphas.forEach(function(alpha) {
         var alpha_states = arrayify(alpha.value.states);
         var total_states = alpha_states.length;
-        var done_states = 0;
+        var total_checklists = 0;
         alpha_states.forEach(function(alpha) {
-            if (alpha.value.result) {
-                done_states += 1;
+            total_checklists += arrayify(alpha.value.checklists).length;
+        })
+        var done_checklists = 0;
+        var flag_state = -1;
+        for (i = 0; i < total_states; i++) {
+            if (alpha_states[i].value.result){
+                done_checklists += arrayify(alpha_states[i].value.checklists).length;
+                flag_state = i;
             }
-        });
+        }
+
+        if (flag_state != total_states - 1) {
+            var arr_checklists = arrayify(alpha_states[flag_state+1].value.checklists)
+            for (var k = 0; k < arr_checklists.length; k++) {
+                if (arr_checklists[k].value.result) {
+                    done_checklists++;
+                }
+            }
+        }
+
         name_state.push(alpha.name);
-        count_state.push(done_states/total_states *100);
+        count_state.push(done_checklists/total_checklists *100);
     });
 
     // console.log(count_state[][0]);
@@ -405,13 +466,29 @@ function drawSubalpha() {
         arr_subalphas.forEach(function(subalpha) {
             var subalpha_states = arrayify(subalpha.value.states);
             var total_states = subalpha_states.length;
-            var done_states = 0;
+            var total_checklists = 0;
             subalpha_states.forEach(function(subalpha) {
-                if (subalpha.value.result) {
-                    done_states += 1;
+                total_checklists += arrayify(subalpha.value.checklists).length;
+            })
+            var done_checklists = 0;
+            var flag_state = -1;
+
+            for (i = 0; i < total_states; i++) {
+                if (subalpha_states[i].value.result){
+                    done_checklists += arrayify(subalpha_states[i].value.checklists).length;
+                    flag_state = i;
                 }
-            });
-            count_state.push([subalpha.name, (done_states/total_states) * 100]);
+            }
+
+            if (flag_state != total_states - 1) {
+                var arr_checklists = arrayify(subalpha_states[flag_state+1].value.checklists)
+                for (var k = 0; k < arr_checklists.length; k++) {
+                    if (arr_checklists[k].value.result) {
+                        done_checklists++;
+                    }
+                }
+            }
+            count_state.push([subalpha.value.alpha + subalpha.name, (done_checklists/total_checklists) * 100]);
         });
 
         var data = count_state;
