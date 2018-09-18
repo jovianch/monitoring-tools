@@ -33,7 +33,7 @@ function arrayify(obj) {
 
 function drawConcern() {
      var columns = [
-        ['string', 'Alphas'],
+        ['string', 'Concern'],
         ['number', 'Progress'],
         ];
 
@@ -123,8 +123,8 @@ function drawConcern() {
         columns: columns,
         rows: data,
         options: {
-            'title':'Progress per Alpha',
-            'width':500,
+            'title':'Progress per Concern',
+            'width':550,
             'height':400,
             'hAxis': {
                 'viewWindow' : {
@@ -191,7 +191,7 @@ function drawActivity() {
 
     var tbody = document.getElementById('table_activity');
 
-    var html = "<h3>Progress Activity</h3><table><tr><th>Number</th><th>Activity</th><th>Target</th><th>Reality</th><th>Status</th></tr>";
+    var html = "<table><tr><th>Number</th><th>Activity</th><th>Target</th><th>Reality</th><th>Status</th></tr>";
     
     var id = Session.get('project');
     var arr_activityspaces = arrayify(Projects.findOne({_id:id}).method.activityspaces);
@@ -312,7 +312,7 @@ function drawSpider() {
         pointLabelFontStyle: "normal",
 
         //Number - Point label font size in pixels
-        pointLabelFontSize: 10,
+        pointLabelFontSize: 14,
 
         //String - Point label font colour
         pointLabelFontColor: "#666",
@@ -339,8 +339,12 @@ function drawSpider() {
         datasetFill: true,
 
         //String - A legend template
-        legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
+        legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
 
+        scaleOverride: true,
+        scaleSteps: 100,
+        scaleStepWidth: 1,
+        scaleStartValue: 0
     }
 
     var id = Session.get('project');
@@ -360,7 +364,7 @@ function drawSpider() {
             }
         });
         name_state.push(alpha.name);
-        count_state.push(done_states/total_states);
+        count_state.push(done_states/total_states *100);
     });
 
     // console.log(count_state[][0]);
@@ -371,8 +375,8 @@ function drawSpider() {
     var data2 = {
         labels: name_state,
         datasets: [{
-            label: "My First dataset",
-            fillColor: "rgba(220,220,220,0.2)",
+            label: "Progress Alpha",
+            fillColor: "rgba(255,255,0,0.2)",
             strokeColor: "rgba(220,220,220,1)",
             pointColor: "rgba(220,220,220,1)",
             pointStrokeColor: "#fff",
@@ -418,8 +422,8 @@ function drawSubalpha() {
         columns: columns,
         rows: data,
         options: {
-            'title':'Progress per Alpha',
-            'width':400,
+            'title':'Progress per Subalpha',
+            'width':500,
             'height':300,
             'hAxis': {
                 'viewWindow' : {

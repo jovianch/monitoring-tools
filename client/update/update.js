@@ -542,7 +542,7 @@ Template.update.events({
             var appendString = "method.activityspaces." + activity + ".result";
             fields[appendString] = false;
             var appendString = "method.activityspaces." + activity + ".timestamp";
-            fields[appendString] = new Date();
+            fields[appendString] = '';
             var id = Session.get('project');
             Projects.update({_id:id}, {$set : fields});
         } else {
@@ -662,7 +662,7 @@ Template.update.events({
             var appendString = "method.activityspaces." + activity_spaces + ".activities." + activity + ".result";
             fields[appendString] = false;
             var appendString = "method.activityspaces." + activity_spaces + ".activities." + activity + ".timestamp";
-            fields[appendString] = new Date();
+            fields[appendString] = '';
             console.log(fields);
             Projects.update({_id:id}, {$set : fields});
         } else {
@@ -741,7 +741,7 @@ Template.update.events({
         var tbody = document.getElementById('checklist');
 
         var arr_checklist = arrayify(checklist);
-        tbody.innerHTML = "<h3>Checklists</h3>";
+        tbody.innerHTML = "<h3 class='text-center'>Checklists</h3>";
         var total = "";
 
         for (var i = 0; i < arr_checklist.length; i++) {
@@ -839,7 +839,7 @@ Template.update.events({
             var tbody = document.getElementById('checklist');
 
             var arr_checklist = arrayify(checklist);
-            tbody.innerHTML = "<h3>Checklists</h3>";
+            tbody.innerHTML = "<h3 class='text-center'>Checklists</h3>";
             var total = "";
 
             for (var i = 0; i < arr_checklist.length; i++) {
@@ -959,7 +959,7 @@ Template.update.events({
             var tbody = document.getElementById('checklist');
 
             var arr_checklist = arrayify(checklist);
-            tbody.innerHTML = "<h3>Checklists</h3>";
+            tbody.innerHTML = "<h3 class='text-center'>Checklists</h3>";
             var total = "";
 
             for (var i = 0; i < arr_checklist.length; i++) {
@@ -1112,7 +1112,7 @@ Template.update.events({
 
         var tbody = document.getElementById('checklist');
 
-        tbody.innerHTML = "<h3>Competencies</h3>";
+        tbody.innerHTML = "<h3 class='text-center'>Competencies</h3>";
 
         for (var i = 0; i < competencies.length; i++) {
             var tr = "<li>" + competencies[i].name + "</li>";
@@ -1313,7 +1313,7 @@ Template.update.events({
         var tbody = document.getElementById('checklist');
 
         var arr_checklist = arrayify(checklist);
-        tbody.innerHTML = "<h3>Checklists</h3>";
+        tbody.innerHTML = "<h3 class='text-center'>Checklists</h3>";
         var total = "";
 
         for (var i = 0; i < arr_checklist.length; i++) {
