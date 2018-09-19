@@ -488,7 +488,7 @@ function drawSubalpha() {
                     }
                 }
             }
-            count_state.push([subalpha.value.alpha + subalpha.name, (done_checklists/total_checklists) * 100]);
+            count_state.push([subalpha.value.alpha + ':' + subalpha.name, (done_checklists/total_checklists) * 100]);
         });
 
         var data = count_state;
@@ -500,8 +500,8 @@ function drawSubalpha() {
         rows: data,
         options: {
             'title':'Progress per Subalpha',
-            'width':500,
-            'height':300,
+            'width':600,
+            'height':400,
             'hAxis': {
                 'viewWindow' : {
                     min: 0,

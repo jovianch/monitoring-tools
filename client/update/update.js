@@ -987,7 +987,7 @@ Template.update.events({
             if (idx_checklists == arr_checklists.length) {
                 console.log(states);
                 console.log(Projects.findOne({_id:id}).subalpha[subalpha]);
-                updateSubalphaState(subalpha, subalpha_state)
+                updateSubalphaState(subalpha, subalpha_state);
                 // if (Projects.findOne({_id:id}).subalpha[subalpha].states[subalpha_state].checklists[arr_checklists[idx_checklists-1].name].result) {
                 //     var fields = {}
                 //     var appendString = "subalpha." + subalpha + ".states." + subalpha_state + ".result";
@@ -1007,13 +1007,14 @@ Template.update.events({
                 //     Projects.update({_id:id}, {$set : fields});
                 // }
             } else {
-                var fields = {}
-                var appendString = "subalpha." + subalpha + ".states." + subalpha_state + ".result";
-                fields[appendString] = false;
-                var appendString = "subalpha." + subalpha + ".states." + subalpha_state + ".timestamp";
-                fields[appendString] = new Date();
-                console.log(fields);
-                Projects.update({_id:id}, {$set : fields});
+                updateSubalphaState(subalpha, subalpha_state);
+                // var fields = {}
+                // var appendString = "subalpha." + subalpha + ".states." + subalpha_state + ".result";
+                // fields[appendString] = false;
+                // var appendString = "subalpha." + subalpha + ".states." + subalpha_state + ".timestamp";
+                // fields[appendString] = new Date();
+                // console.log(fields);
+                // Projects.update({_id:id}, {$set : fields});
             }
 
         } else {
@@ -1127,14 +1128,14 @@ Template.update.events({
                     // Projects.update({_id:id}, {$set : fields});
                 }   
             } else {
-                // updateState(alphas, states);
-                var fields = {}
-                var appendString = "method.alphas." + alphas + ".states." + states + ".result";
-                fields[appendString] = false;
-                var appendString = "method.alphas." + alphas + ".states." + states + ".timestamp";
-                fields[appendString] = new Date();
-                console.log(fields);
-                Projects.update({_id:id}, {$set : fields});
+                updateState(alphas, states);
+                // var fields = {}
+                // var appendString = "method.alphas." + alphas + ".states." + states + ".result";
+                // fields[appendString] = false;
+                // var appendString = "method.alphas." + alphas + ".states." + states + ".timestamp";
+                // fields[appendString] = new Date();
+                // console.log(fields);
+                // Projects.update({_id:id}, {$set : fields});
             }
         }
 
